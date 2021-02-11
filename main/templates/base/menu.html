@@ -1,0 +1,36 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'index' %}" style="ont-style: normal;font-weight: 600;font-size: 23px;line-height: 36px;">Multistreamer<span style="color:#FF7C5D;">.</span></a>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        </ul>
+        <div class="form-inline my-2 my-lg-0">
+            {% if request.user.is_authenticated %}
+                <div class="dropdown">
+                    <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown">
+                        {% if request.user.avatar.image %}
+                            <img src="{{ request.user.avatar.image.url }}"
+                                 class="rounded-circle" style="width: 48px;height: 48px;" alt="">
+                        {% else %}
+                            <img src="{% static 'default_avatar.jpg' %}"
+                                 class="rounded-circle" style="width: 48px;height: 48px;" alt="">
+                        {% endif %}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="{% url 'profile' request.user.id %}">Профиль</a>
+                        <a class="dropdown-item" href="{% url 'profilesetting' %}">Настройки</a>
+                        {% if request.user.is_superuser %}
+                        <a class="dropdown-item" href="/admin/">Админка</a>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
+                    </div>
+                </div>
+            {% else %}
+                <a class="nav-link active" href="{% url 'django_registration_register' %}">Зарегистроваться</a>
+                <a class="nav-link active" href="{% url 'login' %}">Войти</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

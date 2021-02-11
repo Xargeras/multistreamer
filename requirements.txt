@@ -1,6 +1,8 @@
 # Engine
 Django==3.1.6
+Pillow==8.1.0
 django-bootstrap4==2.3.1
+django-registration==3.1.1
 
 # Documentation
 Sphinx==3.4.3
