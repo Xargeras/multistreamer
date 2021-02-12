@@ -15,14 +15,14 @@ import sys
 sys.path.insert(0, os.path.abspath('../../'))
 
 import django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'exchange_engine.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'multistreamer.settings')
 django.setup()
 
 # -- Project information -----------------------------------------------------
 
-project = 'Exchange Engine'
-copyright = '2021, SHP S105'
-author = 'SHP S105'
+project = 'Multistreamer'
+copyright = '2021, SHP S102'
+author = 'SHP S102'
 
 # The full version, including alpha/beta/rc tags
 release = 'v0.01'
