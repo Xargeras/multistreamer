@@ -49,7 +49,7 @@ class ProfileSettingView(View):
         avatar = Avatar.objects.filter(user=request.user)
         if avatar:
             self.context['user_avatar'] = avatar[0].image
-        return render(request, 'pages/profile/profilsetting.html', self.context)
+        return render(request, 'pages/profile/profilesettings.html', self.context)
 
     @method_decorator(login_required)
     def post(self, request):
