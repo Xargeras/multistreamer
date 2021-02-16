@@ -20,4 +20,9 @@ from main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_page, name='index'),
+    path('stream/', views.curp.as_view(), name='stream'),
+    path('stream/create_key', views.curp.as_view(create=True), name='create_key'),
+    path('stream/delete_key', views.curp.as_view(dele=True), name='delete_key'),
+    path('stream/update_key', views.curp.as_view(update=True), name='update_key'),
+    path('stream/copy_key', views.curp.as_view(copy=True), name='copy_key'),
 ]
