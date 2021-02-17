@@ -15,6 +15,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='Avatar',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('image', models.ImageField(null=True, upload_to='avatars/')),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),),
+        migrations.CreateModel(
             name='Broadcast',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -22,6 +28,7 @@ class Migration(migrations.Migration):
                 ('url', models.URLField(max_length=128)),
                 ('key', models.CharField(max_length=128)),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+>>>>>>> main/migrations/0001_initial.py
             ],
         ),
     ]
