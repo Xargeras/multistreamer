@@ -1,0 +1,52 @@
+#app {
+  display: flex;
+  height: 100vh;
+}
+
+.ms-menu {
+display: flex;
+flex-direction: column;
+padding: 14px 10px;
+border-right: 1px solid hsla(0, 0%, 100%, .09);
+}
+
+.ms-menu-container {
+  display: flex;
+  flex: 1 1;
+  flex-direction: column;
+}
+
+.ms-menu-item {
+  padding: 8px;
+  margin-bottom: 4px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color .2s;
+  position: relative;
+}
+
+        .ms-menu-item svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .ms-menu-item.active {
+            background: rgb(230, 230, 230);
+        }
+
+        .ms-logo {
+            text-align: center;
+            margin-bottom: 7px;
+            opacity: 1;
+            cursor: pointer;
+            transition: opacity .2s;
+        }
+
+        .ms-layout-content {
+            width: 100%;
+            overflow: auto;
+        }
