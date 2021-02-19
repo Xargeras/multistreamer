@@ -1,11 +1,11 @@
 from django import forms
 
-from main.models import Broadcast
+from main.models import OutputBroadcast
 
 
 class BroadcastSettings(forms.ModelForm):
     class Meta:
-        model = Broadcast
+        model = OutputBroadcast
         exclude = ['name', 'url', 'key', 'author']
         widgets = {
             'name': forms.TextInput(attrs={

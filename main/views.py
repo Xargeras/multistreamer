@@ -3,7 +3,7 @@ from builtins import object
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.hashers import make_password
-from main.models import Broadcast, Input
+from main.models import OutputBroadcast, InputBroadcast
 from django.views.generic.edit import CreateView
 from django.db import models
 from django.urls import reverse
@@ -23,7 +23,7 @@ def index_page(request):
 
 class CreateKey(CreateView):
     template_name = 'pages/curp.html'
-    model = Broadcast
+    model = OutputBroadcast
     model_form = BroadcastSettings
     fields = ['name', 'url', 'key']
 
@@ -54,9 +54,9 @@ class BroadcastKey(View):
         # return render(request, 'pages/curp.html', self.context)
 
     def create_key(self, request):
-        broadcast = Input.objects.filter(author=request.user)
+        broadcast = InputBroadcast.objects.filter(author=request.user)
         if not broadcast:
-            broadcast = Input()
+            broadcast = InputBroadcast()
             key = make_password(get_random_string())
             print(key)
             broadcast.author = request.user
@@ -64,7 +64,7 @@ class BroadcastKey(View):
             broadcast.save()
 
     def delete_key(self, request):
-        broadcast = Input.objects.filter(author=request.user)
+        broadcast = InputBroadcast.objects.filter(author=request.user)
         broadcast.delete()
 
     def update_key(self, requset):
