@@ -12,6 +12,7 @@ from main.forms import BroadcastSettings
 import random
 import string
 
+
 # Create your views here.
 def index_page(request):
     context = {
@@ -20,23 +21,20 @@ def index_page(request):
     return render(request, 'pages/index.html', context)
 
 
-
 class CreateKey(CreateView):
     template_name = 'pages/curp.html'
     model = Broadcast
     model_form = BroadcastSettings
-    fields = ['name', 'url', 'key', 'author']
-    print(2)
+    fields = ['name', 'url', 'key']
 
     def form_valid(self, form):
-        print(1)
         self.object = form.save()
         self.object.author = self.request.user
         self.object.save()
         return redirect('stream')
 
 
-#Для получения ключа куда стримить
+# Для получения ключа куда стримить
 class BroadcastKey(View):
     context = {
         'pagename': 'Ключ',
@@ -53,7 +51,7 @@ class BroadcastKey(View):
         elif self.copy:
             self.copy_key()
         return redirect('stream')
-        #return render(request, 'pages/curp.html', self.context)
+        # return render(request, 'pages/curp.html', self.context)
 
     def create_key(self, request):
         broadcast = Input.objects.filter(author=request.user)
@@ -80,6 +78,3 @@ class BroadcastKey(View):
 def get_random_string():
     str = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(20)])
     return str
-
-
-

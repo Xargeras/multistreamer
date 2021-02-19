@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.urls import path
 from main import views
 
@@ -21,8 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_page, name='index'),
     path('stream/', views.CreateKey.as_view(), name='stream'),
-    path('stream/create', views.CreateKey.as_view(), name='stream_create'),
-    path('stream/create_key', views.BroadcastKey.as_view(create=True), name='create_key'),
+    path('stream/create', login_required(views.CreateKey.as_view()), name='stream_create'),
+    path('stream/create_key', login_required(views.BroadcastKey.as_view(create=True)), name='create_key'),
     path('stream/delete_key', views.BroadcastKey.as_view(dele=True), name='delete_key'),
     path('stream/update_key', views.BroadcastKey.as_view(update=True), name='update_key'),
     path('stream/copy_key', views.BroadcastKey.as_view(copy=True), name='copy_key'),
