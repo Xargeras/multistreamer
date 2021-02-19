@@ -1,8 +1,13 @@
-from django.shortcuts import render
+from builtins import object
+
+from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.hashers import make_password
-from main.models import Broadcast
+from main.models import Broadcast, Input
+from django.views.generic.edit import CreateView
 from django.db import models
+from django.urls import reverse
+from main.forms import BroadcastSettings
 
 import random
 import string
@@ -15,7 +20,24 @@ def index_page(request):
     return render(request, 'pages/index.html', context)
 
 
-class curp(View):
+
+class CreateKey(CreateView):
+    template_name = 'pages/curp.html'
+    model = Broadcast
+    model_form = BroadcastSettings
+    fields = ['name', 'url', 'key', 'author']
+    print(2)
+
+    def form_valid(self, form):
+        print(1)
+        self.object = form.save()
+        self.object.author = self.request.user
+        self.object.save()
+        return redirect('stream')
+
+
+#Для получения ключа куда стримить
+class BroadcastKey(View):
     context = {
         'pagename': 'Ключ',
     }
@@ -30,12 +52,13 @@ class curp(View):
             self.update_key(request)
         elif self.copy:
             self.copy_key()
-        return render(request, 'pages/curp.html', self.context)
+        return redirect('stream')
+        #return render(request, 'pages/curp.html', self.context)
 
     def create_key(self, request):
-        broadcast = Broadcast.objects.filter(author=request.user)
+        broadcast = Input.objects.filter(author=request.user)
         if not broadcast:
-            broadcast = Broadcast()
+            broadcast = Input()
             key = make_password(get_random_string())
             print(key)
             broadcast.author = request.user
@@ -43,7 +66,7 @@ class curp(View):
             broadcast.save()
 
     def delete_key(self, request):
-        broadcast = Broadcast.objects.filter(author=request.user)
+        broadcast = Input.objects.filter(author=request.user)
         broadcast.delete()
 
     def update_key(self, requset):

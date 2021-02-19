@@ -12,6 +12,29 @@
             <a href="{% url 'update_key' %}">Обновить ключ</a>
             <a href="{% url 'copy_key' %}">Скопировать ключ</a>
             <a href="{% url 'delete_key' %}">Удалить ключ</a>
+            <hr>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                        <label for="broadcast_name">Имя трансляции</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="broadcast_url">Url трансляции</label>
+                        {{ form.url }}
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="broadcast_key">Ключ трансляции</label>
+                        {{ form.key }}
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="broadcast_key">Ключ трансляции</label>
+                        {{ form.author }}
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="submit">Сохранить</button>
+            </form>
         </div>
     </div>
 </div>

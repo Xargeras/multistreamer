@@ -8,3 +8,10 @@ class Broadcast(models.Model):
     url = models.URLField(max_length=128)
     key = models.CharField(max_length=128)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+
+
+class Input(models.Model):
+    objects = None
+    url = models.URLField(max_length=128)
+    key = models.CharField(max_length=128)
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
