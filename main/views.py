@@ -76,3 +76,14 @@ class ProfileSettingView(View):
                 form.save()
         return redirect(reverse('profile', kwargs={"id": request.user.id}))
 
+
+class IndexPage(View):
+    context = {
+        'pagename': 'Главная',
+    }
+
+    def get(self, request):
+        return render(request, 'pages/index.html', self.context)
+
+
+

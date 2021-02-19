@@ -21,6 +21,7 @@ from django_registration.backends.one_step.views import RegistrationView
 from main import views
 
 
+from main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_page, name='index'),
@@ -73,6 +74,8 @@ login_urlpatterns = [
         ),
         name="django_registration_complete",
     ),
+    path('', views.IndexPage.as_view(), name='index'),
+    path('setting', views.ProfileSettingView.as_view(), name='setting'),
 ]
 
 urlpatterns += login_urlpatterns
