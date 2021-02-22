@@ -21,8 +21,10 @@ from main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_page, name='index'),
-    path('stream/', views.CreateKey.as_view(), name='stream'),
-    path('stream/create', login_required(views.CreateKey.as_view()), name='stream_create'),
+    path('stream/', views.CreateBroadcastOutputKey.as_view(), name='stream'),
+    path('stream/create', login_required(views.CreateBroadcastOutputKey.as_view()), name='stream_create'),
+    path('stream/update/<pk>', login_required(views.UpdateBroadcastOutputKey.as_view()), name='stream_update'),
+    path('stream/delete/<pk>', login_required(views.DeleteBroadcastOutputKey.as_view()), name='stream_delete'),
     path('stream/create_key', login_required(views.BroadcastKey.as_view(create=True)), name='create_key'),
     path('stream/delete_key', views.BroadcastKey.as_view(dele=True), name='delete_key'),
     path('stream/update_key', views.BroadcastKey.as_view(update=True), name='update_key'),

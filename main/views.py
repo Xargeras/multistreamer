@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.hashers import make_password
 from main.models import OutputBroadcast, InputBroadcast
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.db import models
 from django.urls import reverse
 from main.forms import BroadcastSettings
@@ -21,17 +21,35 @@ def index_page(request):
     return render(request, 'pages/index.html', context)
 
 
-class CreateKey(CreateView):
+class CreateBroadcastOutputKey(CreateView):
     template_name = 'pages/curp.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
     fields = ['name', 'url', 'key']
 
     def form_valid(self, form):
-        self.object = form.save()
+        self.object = form.save(commit=False)
+        self.input_key = InputBroadcast.objects.filter(author=self.request.user)
         self.object.author = self.request.user
+        self.object.input = self.input_key[0]
         self.object.save()
         return redirect('stream')
+
+
+class UpdateBroadcastOutputKey(UpdateView):
+    template_name = 'pages/curp.html'
+    model = OutputBroadcast
+    model_form = BroadcastSettings
+    fields = ['name', 'url', 'key']
+    success_url = '/stream/'
+
+
+class DeleteBroadcastOutputKey(DeleteView):
+    template_name = 'pages/curp.html'
+    model = OutputBroadcast
+    model_form = BroadcastSettings
+    success_url = '/stream/'
+
 
 
 # Для получения ключа куда стримить

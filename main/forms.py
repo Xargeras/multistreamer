@@ -6,7 +6,7 @@ from main.models import OutputBroadcast
 class BroadcastSettings(forms.ModelForm):
     class Meta:
         model = OutputBroadcast
-        exclude = ['name', 'url', 'key', 'author']
+        exclude = ['name', 'url', 'key', 'author', 'input']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
