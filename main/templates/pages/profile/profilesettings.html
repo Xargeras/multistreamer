@@ -1,0 +1,106 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-light h-100">
+    <div class="container">
+        <h3 class="mb-4">Настройки профиля</h3>
+        <div class="row">
+            <div class="col">
+                <form method="POST" action="#">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">Имя</label>
+                            {{ form.first_name }}
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom02">Фамилия</label>
+                            {{ form.last_name }}
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustomUsername">Имя пользователя</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                </div>
+                                {{ form.username }}
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustomEmail">E-mail</label>
+                            {{ form.email }}
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-4">
+        <h3 class="mb-4">Изменить пароль</h3>
+        <div class="row">
+            <div class="col">
+                <form method="POST" action="#" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="change_password" value="1">
+                    <div class="form-row mb-3">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustomPassword">Новый Пароль</label>
+                            {{ change_password.password }}
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustomNewPassword">Повторите Пароль</label>
+                            {{ change_password.new_password }}
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-4">
+        <h3 class="mb-4">Настройки аватара</h3>
+        <div class="row">
+            <div class="col-12">
+                <form method="POST" action="#" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="avatar_form" value="1">
+                    <div class="form-row mb-3">
+                        <div class="col-auto">
+                            {% if request.user.avatar.image %}
+                            <div class="rounded-circle img-avatar" data-toggle="modal" data-target="#imgAvatar"
+                                 style="background-image: url({{ request.user.avatar.image.url }});">
+                            </div>
+                            {% else %}
+                            <div class="rounded-circle img-avatar" data-toggle="modal" data-target="#imgAvatar"
+                                 style="background-image: url({% static 'default_avatar.jpg' %});">
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col mb-3">
+                            <label for="validationImage">Аватар</label>
+                            {{ avatar_form.image }}
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="imgAvatar" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {% if request.user.avatar.image %}
+                <img class="img-modal" style=""
+                     src="{{ request.user.avatar.image.url }}" alt="">
+                {% else %}
+                <img class="img-modal" style="" src="{% static 'default_avatar.jpg' %}"
+                     alt="">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
