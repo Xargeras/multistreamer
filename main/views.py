@@ -21,6 +21,15 @@ def index_page(request):
     return render(request, 'pages/index.html', context)
 
 
+class StreamSettingView(View):
+    context = {
+        'pagename': 'Настройка стрима',
+    }
+
+    def get(self, request):
+        return render(request, 'pages/curp.html', self.context)
+
+
 class CreateBroadcastOutputKey(CreateView):
     template_name = 'pages/curp.html'
     model = OutputBroadcast
