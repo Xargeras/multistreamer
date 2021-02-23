@@ -1,6 +1,6 @@
 from builtins import object
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth.hashers import make_password
 from main.models import OutputBroadcast, InputBroadcast
@@ -27,6 +27,8 @@ class StreamSettingView(View):
     }
 
     def get(self, request):
+        places = OutputBroadcast.objects.all()
+        self.context['places'] = places
         return render(request, 'pages/curp.html', self.context)
 
 

@@ -32,6 +32,21 @@
                 <button class="btn btn-primary" type="submit">Сохранить</button>
             </form>
             <hr>
+            {% for place in places %}
+                <div class="col-md-12 mb-3">
+                    <label>Название трансляции:</label>
+                    {{ place.name }}
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label>Url трансляции:</label>
+                    {{ place.url }}
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label>Ключ трансляции:</label>
+                    {{ place.key }}
+                </div>
+                <hr>
+            {% endfor %}
         </div>
     </div>
 </div>
