@@ -21,7 +21,7 @@ from main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_page, name='index'),
-    path('stream/', views.CreateBroadcastOutputKey.as_view(), name='stream'),
+    path('stream/', views.StreamSettingView.as_view(), name='stream'),
     path('stream/create', login_required(views.CreateBroadcastOutputKey.as_view()), name='stream_create'),
     path('stream/update/<pk>', login_required(views.UpdateBroadcastOutputKey.as_view()), name='stream_update'),
     path('stream/delete/<pk>', login_required(views.DeleteBroadcastOutputKey.as_view()), name='stream_delete'),
