@@ -19,6 +19,8 @@
 <body>
 <div id="app">
     <header class="bg-light">
+      {% bootstrap_messages %}
+        {% block content %} {% endblock %}
         {% include 'base/menu.html' %}
     </header>
 
@@ -36,9 +38,11 @@
     </footer>
 </div>
 
-{% block extra_js %}
 {% bootstrap_javascript jquery='full' %}
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+{% block extra_js %}
+
 {% endblock %}
 </body>
 
