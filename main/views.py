@@ -27,7 +27,7 @@ class StreamSettingView(View):
     }
 
     def get(self, request):
-        places = OutputBroadcast.objects.all()
+        places = OutputBroadcast.objects.filter(author=request.user)
         self.context['places'] = places
         return render(request, 'pages/curp.html', self.context)
 
