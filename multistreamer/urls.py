@@ -15,20 +15,30 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
+from django.urls import path
 from django.views.generic import TemplateView
 from django_registration.backends.one_step.views import RegistrationView
+
 from main import views
 from multistreamer import settings
 
-from main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_page, name='index'),
     path('profile/<int:id>', views.profile_page, name='profile'),
     path('profile/setting', views.ProfileSettingView.as_view(), name='profilesetting'),
-
+    path('', views.IndexPage.as_view(), name='index'),
+    path('setting', views.ProfileSettingView.as_view(), name='setting'),
+    path('stream/', login_required(views.StreamSettingView.as_view()), name='stream'),
+    path('stream/create', login_required(views.CreateBroadcastOutputKey.as_view()), name='stream_create'),
+    path('stream/update/<pk>', login_required(views.UpdateBroadcastOutputKey.as_view()), name='stream_update'),
+    path('stream/delete/<pk>', login_required(views.DeleteBroadcastOutputKey.as_view()), name='stream_delete'),
+    path('stream/create_key', login_required(views.BroadcastKey.as_view(create=True)), name='create_key'),
+    path('stream/delete_key', views.BroadcastKey.as_view(dele=True), name='delete_key'),
+    path('stream/update_key', views.BroadcastKey.as_view(update=True), name='update_key'),
+    path('stream/copy_key', views.BroadcastKey.as_view(copy=True), name='copy_key'),
 ]
 
 login_urlpatterns = [
@@ -75,8 +85,6 @@ login_urlpatterns = [
         ),
         name="django_registration_complete",
     ),
-    path('', views.IndexPage.as_view(), name='index'),
-    path('setting', views.ProfileSettingView.as_view(), name='setting'),
 ]
 
 urlpatterns += login_urlpatterns
