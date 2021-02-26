@@ -1,12 +1,11 @@
 from django import forms
 from django.contrib.auth.backends import UserModel
 
-from main.models import Avatar
+from main.models import Avatar, OutputBroadcast
 
 
 class DateInput(forms.DateInput):
     input_type = 'date'
-
 
 
 class UserSettings(forms.ModelForm):
@@ -48,8 +47,9 @@ class PasswordSettings(forms.ModelForm):
                 'placeholder': "NewPassword",
             }),
         }
+
     new_password = forms.CharField(
-        label=("NewPassword"),
+        label="NewPassword",
         strip=False,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
@@ -67,5 +67,28 @@ class AvatarSettings(forms.ModelForm):
             'image': forms.FileInput(attrs={
                 'id': 'validationImage',
                 'placeholder': "Аватар",
+            }),
+        }
+
+
+class BroadcastSettings(forms.ModelForm):
+    class Meta:
+        model = OutputBroadcast
+        exclude = ['name', 'url', 'key', 'author', 'input']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'broadcast_name',
+                'placeholder': "Название трансляции",
+            }),
+            'url': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'broadcast_url',
+                'placeholder': "Url трансляции",
+            }),
+            'key': forms.PasswordInput(attrs={
+                'class': 'form-control',
+                'id': 'broadcast_key',
+                'placeholder': "Ключ трансляции",
             }),
         }
