@@ -26,6 +26,7 @@ from multistreamer import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('test/', views.StreamingTest.as_view(), name='test'),
     path('', views.index_page, name='index'),
     path('profile/<int:id>', views.profile_page, name='profile'),
     path('profile/setting', views.ProfileSettingView.as_view(), name='profilesetting'),

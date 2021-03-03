@@ -12,12 +12,41 @@ from django.urls import reverse
 
 from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings
 from main.models import Avatar, OutputBroadcast, InputBroadcast
+from scripts.run import Server
 
 
 def get_menu_context():
     return [
         {'url_name': 'votelist', 'name': 'Список голосований'},
     ]
+
+
+class StreamingTest(View):
+    internal_url = 'mystream'
+    key = '95hb-4hcj-5fpa-1063-4ws6'
+    server = Server()
+
+    def get_context(self, request):
+        return {
+            'menu': get_menu_context(),
+            'pagename': 'Тестовая трансляция',
+            'server_online': self.server.is_server_online(),
+            'url': f'{self.server.url}/{self.internal_url}',
+        }
+
+    @method_decorator(login_required)
+    def get(self, request):
+        return render(request, 'pages/streaming_test.html', self.get_context(request))
+
+    @method_decorator(login_required)
+    def post(self, request):
+        if not self.server.is_server_online():
+            self.server.start_server()
+            self.server.start_broadcast(self.internal_url, self.key)
+        else:
+            self.server.stop_server()
+            self.server.stop_broadcast()
+        return redirect(reverse('test'))
 
 
 def index_page(request):
@@ -130,7 +159,6 @@ class DeleteBroadcastOutputKey(DeleteView):
     model = OutputBroadcast
     model_form = BroadcastSettings
     success_url = '/stream/'
-
 
 
 # Для получения ключа куда стримить
