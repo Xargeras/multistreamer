@@ -2,7 +2,8 @@ import random
 import string
 
 from django.contrib.auth.hashers import make_password
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.http import HttpResponseRedirect
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
@@ -18,16 +19,6 @@ def get_menu_context():
     return [
         {'url_name': 'votelist', 'name': 'Список голосований'},
     ]
-
-
-def index_page(request):
-    context = {
-        'pagename': 'Главная',
-        'author': 'Andrew',
-        'pages': 4,
-        'menu': get_menu_context()
-    }
-    return render(request, 'pages/index.html', context)
 
 
 def profile_page(request, id):
@@ -132,46 +123,53 @@ class DeleteBroadcastOutputKey(DeleteView):
     success_url = '/stream/'
 
 
-
 # Для получения ключа куда стримить
-class BroadcastKey(View):
-    context = {
-        'pagename': 'Ключ',
-    }
-    dele = update = create = copy = False
+class ListBroadcastKey(ListView):
+    template_name = 'pages/curp.html'
+    model = InputBroadcast
 
-    def get(self, request):
-        if self.create:
-            self.create_key(request)
-        elif self.dele:
-            self.delete_key(request)
-        elif self.update:
-            self.update_key(request)
-        elif self.copy:
-            self.copy_key()
-        return redirect('stream')
-        # return render(request, 'pages/curp.html', self.context)
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_auntificated:
+            return queryset.filter(author=self.request.user)
+        return queryset.none()
 
-    def create_key(self, request):
-        broadcast = InputBroadcast.objects.filter(author=request.user)
-        if not broadcast:
-            broadcast = InputBroadcast()
-            key = make_password(get_random_string())
-            print(key)
-            broadcast.author = request.user
-            broadcast.key = key
-            broadcast.save()
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['pagename'] = 'Ключ'
+        return context
 
-    def delete_key(self, request):
-        broadcast = InputBroadcast.objects.filter(author=request.user)
-        broadcast.delete()
 
-    def update_key(self, requset):
-        self.delete_key(requset)
-        self.create_key(requset)
+class CreateInputBroadcastKey(CreateView):
+    template_name = 'pages/curp.html'
+    form_class = BroadcastSettings
+    success_url = '/stream/'
 
-    def copy_key(self):
-        pass
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.key = make_password(get_random_string())
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class DetailInputBroadcastKey(DetailView):
+    template_name = 'pages/curp.html'
+    model = InputBroadcast
+
+
+class UpdateInputBroadcastKey(UpdateView):
+    template_name = 'pages/curp.html'
+    form_class = BroadcastSettings
+    fields = ['name', 'url', 'key']
+    success_url = '/stream/'
+
+
+class DeleteInputBroadcastKey(DeleteView):
+    template_name = 'pages/curp.html'
+    model = InputBroadcast
+    model_form = BroadcastSettings
+    success_url = '/stream/'
 
 
 def get_random_string():

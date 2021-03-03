@@ -24,7 +24,6 @@ from multistreamer import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index_page, name='index'),
     path('profile/<int:id>', views.profile_page, name='profile'),
     path('profile/setting', views.ProfileSettingView.as_view(), name='profilesetting'),
     path('', views.IndexPage.as_view(), name='index'),
