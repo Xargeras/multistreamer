@@ -130,9 +130,7 @@ class ListBroadcastKey(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        if self.request.user.is_auntificated:
-            return queryset.filter(author=self.request.user)
-        return queryset.none()
+        return queryset.filter(author=self.request.user)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

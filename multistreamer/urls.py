@@ -18,8 +18,8 @@ from django.contrib import admin
 from django.urls import path
 
 from main import views
-from main.templates.sorted_urls.stream import Stream
-from main.templates.sorted_urls.login import Login
+from main.templates.urls.stream import Stream
+from main.templates.urls.login import Login
 from multistreamer import settings
 
 urlpatterns = [
@@ -30,9 +30,8 @@ urlpatterns = [
     path('setting', views.ProfileSettingView.as_view(), name='setting'),
 ]
 
-sorted_url = [Stream(), Login()]
-for element in sorted_url:
-    urlpatterns += element.get_url_list()
+urlpatterns += Stream().get_url_list()
+urlpatterns += Login().get_url_list()
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
