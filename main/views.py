@@ -81,7 +81,7 @@ class IndexPage(View):
 
 
 class ListBroadcast(ListView):
-    template_name = 'pages/curp.html'
+    template_name = 'pages/stream/list.html'
     model = OutputBroadcast
 
     def get_queryset(self):
@@ -95,12 +95,12 @@ class ListBroadcast(ListView):
 
 
 class DetailBroadcast(DetailView):
-    template_name = 'pages/curp.html'
+    template_name = 'pages/stream/detail.html'
     model = OutputBroadcast
 
 
 class CreateBroadcast(CreateView):
-    template_name = 'pages/curp.html'
+    template_name = 'pages/stream/create.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
     fields = ['name', 'url', 'output_key']
@@ -114,18 +114,18 @@ class CreateBroadcast(CreateView):
 
 
 class UpdateBroadcast(UpdateView):
-    template_name = 'pages/curp.html'
+    template_name = 'pages/stream/update.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
     fields = ['name', 'url', 'output_key']
-    success_url = '/stream/'
+    success_url = '/stream/detail/'
 
 
 class DeleteBroadcast(DeleteView):
-    template_name = 'pages/curp.html'
+    template_name = 'pages/stream/delete.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
-    success_url = '/stream/'
+    success_url = '/stream/my_list/'
 
 
 class UpdateInputKey(View):
@@ -137,11 +137,11 @@ class UpdateInputKey(View):
         stream.input_key = input_key
         self.context['input_key'] = input_key
         stream.save()
-        return render(request, 'pages/curm.html', self.context)
+        return render(request, 'pages/stream/update_key.html', self.context)
 
 
 class Broadcast(View):
     context = {'pagename': 'Трансляция'}
 
     def get(self, request):
-        return render(request, 'pages/broadcast/main.html', self.context)
+        return render(request, 'pages/stream/main.html', self.context)
