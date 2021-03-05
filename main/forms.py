@@ -74,7 +74,7 @@ class AvatarSettings(forms.ModelForm):
 class BroadcastSettings(forms.ModelForm):
     class Meta:
         model = OutputBroadcast
-        exclude = ['name', 'url', 'key', 'author', 'input']
+        exclude = ['name', 'url', 'output_key', 'author', 'input_key']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -86,7 +86,7 @@ class BroadcastSettings(forms.ModelForm):
                 'id': 'broadcast_url',
                 'placeholder': "Url трансляции",
             }),
-            'key': forms.PasswordInput(attrs={
+            'output_key': forms.PasswordInput(attrs={
                 'class': 'form-control',
                 'id': 'broadcast_key',
                 'placeholder': "Ключ трансляции",

@@ -1,8 +1,6 @@
-import random
 import string
 
-from django.contrib.auth.hashers import make_password
-from django.http import HttpResponseRedirect
+from django.utils.crypto import get_random_string
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
@@ -12,7 +10,7 @@ from django.views import View
 from django.urls import reverse
 
 from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings
-from main.models import Avatar, OutputBroadcast, InputBroadcast
+from main.models import Avatar, OutputBroadcast
 
 
 def get_menu_context():
@@ -82,51 +80,9 @@ class IndexPage(View):
         return render(request, 'pages/index.html', self.context)
 
 
-class StreamSettingView(View):
-    context = {
-        'pagename': 'Настройка стрима',
-    }
-
-    def get(self, request):
-        places = OutputBroadcast.objects.filter(author=request.user)
-        self.context['places'] = places
-        return render(request, 'pages/curp.html', self.context)
-
-
-class CreateBroadcastOutputKey(CreateView):
+class ListBroadcast(ListView):
     template_name = 'pages/curp.html'
     model = OutputBroadcast
-    model_form = BroadcastSettings
-    fields = ['name', 'url', 'key']
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.input_key = InputBroadcast.objects.filter(author=self.request.user)
-        self.object.author = self.request.user
-        self.object.input = self.input_key[0]
-        self.object.save()
-        return redirect('stream')
-
-
-class UpdateBroadcastOutputKey(UpdateView):
-    template_name = 'pages/curp.html'
-    model = OutputBroadcast
-    model_form = BroadcastSettings
-    fields = ['name', 'url', 'key']
-    success_url = '/stream/'
-
-
-class DeleteBroadcastOutputKey(DeleteView):
-    template_name = 'pages/curp.html'
-    model = OutputBroadcast
-    model_form = BroadcastSettings
-    success_url = '/stream/'
-
-
-# Для получения ключа куда стримить
-class ListBroadcastKey(ListView):
-    template_name = 'pages/curp.html'
-    model = InputBroadcast
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -134,42 +90,58 @@ class ListBroadcastKey(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['pagename'] = 'Ключ'
+        context['pagename'] = 'Список моих трансляций'
         return context
 
 
-class CreateInputBroadcastKey(CreateView):
+class DetailBroadcast(DetailView):
     template_name = 'pages/curp.html'
-    form_class = BroadcastSettings
-    success_url = '/stream/'
+    model = OutputBroadcast
+
+
+class CreateBroadcast(CreateView):
+    template_name = 'pages/curp.html'
+    model = OutputBroadcast
+    model_form = BroadcastSettings
+    fields = ['name', 'url', 'output_key']
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.author = self.request.user
-        self.object.key = make_password(get_random_string())
+        self.object.input_key = get_random_string(length=20, allowed_chars=string.ascii_letters + string.digits)
         self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
+        return redirect('stream')
 
 
-class DetailInputBroadcastKey(DetailView):
+class UpdateBroadcast(UpdateView):
     template_name = 'pages/curp.html'
-    model = InputBroadcast
-
-
-class UpdateInputBroadcastKey(UpdateView):
-    template_name = 'pages/curp.html'
-    form_class = BroadcastSettings
-    fields = ['name', 'url', 'key']
+    model = OutputBroadcast
+    model_form = BroadcastSettings
+    fields = ['name', 'url', 'output_key']
     success_url = '/stream/'
 
 
-class DeleteInputBroadcastKey(DeleteView):
+class DeleteBroadcast(DeleteView):
     template_name = 'pages/curp.html'
-    model = InputBroadcast
+    model = OutputBroadcast
     model_form = BroadcastSettings
     success_url = '/stream/'
 
 
-def get_random_string():
-    str = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(20)])
-    return str
+class UpdateInputKey(View):
+    context = {'pagename': 'Обновление ключа'}
+
+    def get(self, request, pk):
+        stream = get_object_or_404(OutputBroadcast, id=pk)
+        input_key = get_random_string(length=20, allowed_chars=string.ascii_letters + string.digits)
+        stream.input_key = input_key
+        self.context['input_key'] = input_key
+        stream.save()
+        return render(request, 'pages/curm.html', self.context)
+
+
+class Broadcast(View):
+    context = {'pagename': 'Трансляция'}
+
+    def get(self, request):
+        return render(request, 'pages/broadcast/main.html', self.context)
