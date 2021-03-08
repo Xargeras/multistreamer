@@ -1,0 +1,23 @@
+{% extends 'base/base.html' %}
+
+{% load bootstrap4 %}
+
+{% block content %}
+    <h3 class="text-center mt-4">Регистрация</h3>
+    <hr>
+
+    <div class="row">
+        <div class="col-4 offset-4">
+            <form method="POST" action="{% url 'registration' %}">
+                {% csrf_token %}
+
+                {% bootstrap_form form %}
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary float-right btn-block">Зарегестрироваться</button>
+                {% endbuttons %}
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}
