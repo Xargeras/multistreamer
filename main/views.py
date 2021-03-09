@@ -117,7 +117,16 @@ class IndexPage(View):
     }
 
     def get(self, request):
-        return render(request, 'pages/index.html', self.context)
+        return render(request, 'pages/stream/index.html', self.context)
+
+
+class StreamStorageView(View):
+    context = {
+        'pagename': 'Записи стримов',
+    }
+
+    def get(self, request):
+        return render(request, 'pages/stream/storage.html', self.context)
 
 
 class StreamSettingView(View):

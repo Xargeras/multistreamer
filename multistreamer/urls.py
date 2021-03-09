@@ -27,11 +27,11 @@ from multistreamer import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('test/', views.StreamingTest.as_view(), name='test'),
-    path('', views.index_page, name='index'),
     path('profile/<int:id>', views.profile_page, name='profile'),
     path('profile/setting', views.ProfileSettingView.as_view(), name='setting'),
-    path('', views.IndexPage.as_view(), name='index'),
+    path('', login_required(views.IndexPage.as_view()), name='index'),
     path('stream/', login_required(views.StreamSettingView.as_view()), name='stream'),
+    path('stream/storage', login_required(views.StreamStorageView.as_view()), name='storage'),
     path('stream/create', login_required(views.CreateBroadcastOutputKey.as_view()), name='stream_create'),
     path('stream/update/<pk>', login_required(views.UpdateBroadcastOutputKey.as_view()), name='stream_update'),
     path('stream/delete/<pk>', login_required(views.DeleteBroadcastOutputKey.as_view()), name='stream_delete'),

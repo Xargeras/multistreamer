@@ -1,0 +1,154 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+.controls {
+    padding: 1rem;
+    font-size: 0.1px;
+}
+
+.control {
+    position: relative;
+    display: inline-block;
+    width: 2.7rem;
+    height: 2.7rem;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background 150ms;
+}
+
+.control:hover {
+    color: white;
+    background: #3f3f3f;
+}
+
+.mixitup-control-active {
+    color: white;
+    background: #393939;
+}
+
+
+.mix{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.mix {
+    background: #fff;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+    position: relative;
+    font-family: 'helvetica-neue', arial, sans-serif;
+}
+
+.mix:before {
+    content: '';
+    display: inline-block;
+    padding-top: 56.25%;
+}
+
+.mix[data-published-date]:after {
+    position: absolute;
+    content: attr(data-published-date);
+    font-size: 1rem;
+    font-weight: bold;
+    color: #aaa;
+    padding: 1rem;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+
+/* 2 Columns */
+
+.mix,
+.gap {
+    width: calc(100%/2 - (((2 - 1) * 1rem) / 2));
+}
+
+/* 3 Columns */
+
+@media screen and (min-width: 541px) {
+    .mix,
+    .gap {
+        width: calc(100%/3 - (((3 - 1) * 1rem) / 3));
+    }
+}
+
+/* 4 Columns */
+
+@media screen and (min-width: 961px) {
+    .mix,
+    .gap {
+        width: calc(100%/4 - (((4 - 1) * 1rem) / 4));
+    }
+}
+
+/* 6 Columns */
+
+@media screen and (min-width: 1281px) {
+    .mix,
+    .gap {
+        width: calc(100%/6 - (((6 - 1) * 1rem) / 6));
+    }
+}
+
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <h3 class="pt-3 mb-2">Записи стримов</h3>
+    <div class="col-12">
+        <div data-ref="container">
+            <div class="d-flex">
+                <div class="d-flex align-items-center">
+                    <h5 class="m-0 p-0">Сортировка по дате:</h5>
+                </div>
+                <div class="controls">
+                    <button type="button" class="control btn btn-light" data-sort="published-date:asc"><i
+                        class="fa fa-angle-up" aria-hidden="true"></i></button>
+                    <button type="button" class="control btn btn-light" data-sort="published-date:desc"><i
+                        class="fa fa-angle-down" aria-hidden="true"></i></button>
+                </div>
+            </div>
+            <div class="container-fluid targets">
+                <div class="mix" data-published-date="2016-10-12"></div>
+                <div class="mix" data-published-date="2016-09-03"></div>
+                <div class="mix" data-published-date="2016-05-22"></div>
+                <div class="mix" data-published-date="2016-05-19"></div>
+                <div class="mix" data-published-date="2016-04-30"></div>
+                <div class="mix" data-published-date="2016-04-24"></div>
+                <div class="mix" data-published-date="2016-03-12"></div>
+                <div class="mix" data-published-date="2016-01-01"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'mixitup/mixitup.min.js' %}"></script>
+<script>
+            var containerEl = document.querySelector('[data-ref="container"]');
+
+            var config = {
+                controls: {
+                    scope: 'local'
+                },
+                load: {
+                    sort: 'published-date:desc'
+                }
+            };
+
+            var mixer1 = mixitup(containerEl, config);
+
+
+</script>
+{% endblock %}
+
