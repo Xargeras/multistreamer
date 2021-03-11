@@ -11,6 +11,14 @@ class Avatar(models.Model):
 class OutputBroadcast(models.Model):
     name = models.CharField(max_length=128)
     url = models.URLField(max_length=128)
-    output_key = models.CharField(max_length=128, default="")
+    key = models.CharField(max_length=128, default="")
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    input_key = models.CharField(max_length=128)
+
+    def get_absolute_url(self):
+        return f'/stream/{self.id}/detail/'
+
+
+class InputBroadcast(models.Model):
+    url = models.URLField(max_length=128, default="")
+    key = models.CharField(max_length=128, default="")
+    broadcast = models.ForeignKey(to=OutputBroadcast, on_delete=models.CASCADE)
