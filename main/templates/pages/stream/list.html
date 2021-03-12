@@ -14,7 +14,7 @@
             {% for el in object_list %}
             <tr class="text-center">
                 <td><b>{{el.id}}</b></td>
-                <td><a href="{{ el.get_absolute_url }}">{{el.name}}</a></td>
+                <td><a href="{% url 'stream_detail' el.id %}">{{el.name}}</a></td>
             </tr>
             {% endfor %}
             </tbody>
