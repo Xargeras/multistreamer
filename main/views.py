@@ -23,14 +23,13 @@ def get_menu_context():
 class StreamingTest(View):
     internal_url = 'mystream'
     key = '95hb-4hcj-5fpa-1063-4ws6'
-    server = Server()
+    server = Server.get_instance()
 
     def get_context(self, request):
         return {
             'menu': get_menu_context(),
             'pagename': 'Тестовая трансляция',
             'server_online': self.server.is_server_online(),
-            'url': f'{self.server.url}/{self.internal_url}',
         }
 
     @method_decorator(login_required)
@@ -41,10 +40,8 @@ class StreamingTest(View):
     def post(self, request):
         if not self.server.is_server_online():
             self.server.start_server()
-            self.server.start_broadcast(self.internal_url, self.key)
         else:
             self.server.stop_server()
-            self.server.stop_broadcast()
         return redirect(reverse('test'))
 
 
@@ -110,6 +107,24 @@ class IndexPage(View):
         return render(request, 'pages/index.html', self.context)
 
 
+class StartBroadcast(View):
+    context = {
+        'pagename': 'Запуск',
+    }
+
+    def get(self, request, id):
+        return redirect(reverse('stream_detail', kwargs={"id": id}))
+
+    def post(self, request, id):
+        server = Server.get_instance()
+        if server.is_broadcast_online(id):
+            server.stop_broadcast(id)
+        else:
+            broadcast = get_object_or_404(OutputBroadcast, id=id)
+            server.start_broadcast(id, broadcast.input_broadcast.url, broadcast.url, broadcast.key)
+        return redirect(reverse('stream_detail', kwargs={"id": id}))
+
+
 class ListBroadcast(ListView):
     template_name = 'pages/stream/list.html'
     model = OutputBroadcast
@@ -128,7 +143,7 @@ class DetailBroadcast(DetailView):
     template_name = 'pages/stream/detail.html'
     model = OutputBroadcast
     pk_url_kwarg = 'id'
-    extra_context = {'pagename': 'Просмотр параметров трансляции'}
+    extra_context = {'pagename': 'Просмотр параметров трансляции', 'server_url': Server.url}
 
 
 class CreateBroadcast(CreateView):
