@@ -1,0 +1,10 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+<h2>Название трансляции: {{object.name}}</h2>
+<h2>Выходящая ulr: {{object.url}}</h2>
+<h2>Ваш ключ: {{object.key}}</h2>
+<h2>Входной URL: {{object.broadcast.url}}</h2>
+<a href="{% url 'stream_update' object.id %}">Изменить трансляцию</a>
+{% endblock %}
