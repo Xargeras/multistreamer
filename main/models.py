@@ -20,6 +20,3 @@ class OutputBroadcast(models.Model):
     key = models.CharField(max_length=128, default="")
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
     broadcast = models.ForeignKey(to=InputBroadcast, on_delete=models.CASCADE)
-
-    def get_absolute_url(self):
-        return f'/stream/{self.id}/detail/'

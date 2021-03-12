@@ -6,5 +6,5 @@
 <h2>Выходящая ulr: {{object.url}}</h2>
 <h2>Ваш ключ: {{object.key}}</h2>
 <h2>Входной URL: {{object.broadcast.url}}</h2>
-<a href="/stream/{{object.id}}/update">Изменить трансляцию</a>
+<a href="{% url 'stream_update' object.id %}">Изменить трансляцию</a>
 {% endblock %}
