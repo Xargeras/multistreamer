@@ -26,6 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('profile/<int:id>/', views.profile_page, name='profile'),
     path('profile/setting/', views.ProfileSettingView.as_view(), name='profilesetting'),
+    path('test/', views.StreamingTest.as_view(), name='test'),
     path('', views.IndexPage.as_view(), name='index'),
     path('setting/', views.ProfileSettingView.as_view(), name='setting'),
 ]
