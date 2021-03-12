@@ -1,0 +1,23 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+<div class="row px-5">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr class="text-center">
+                    <th scope="col">ID</th>
+                    <th scope="col">Название трансляции</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for el in object_list %}
+            <tr class="text-center">
+                <td><b>{{el.id}}</b></td>
+                <td><a href="{% url 'stream_detail' el.id %}">{{el.name}}</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

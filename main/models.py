@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import URLValidator
 from django.db import models
 
 
@@ -9,14 +10,13 @@ class Avatar(models.Model):
 
 
 class InputBroadcast(models.Model):
-    url = models.URLField(max_length=128)
-    key = models.CharField(max_length=128)
-    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    url = models.URLField(max_length=128, default="")
+    key = models.CharField(max_length=128, default="")
 
 
 class OutputBroadcast(models.Model):
     name = models.CharField(max_length=128)
-    url = models.URLField(max_length=128)
-    key = models.CharField(max_length=128)
+    url = models.CharField(max_length=128, validators=[URLValidator(schemes=['http', 'https', 'ftp', 'ftps', 'rtmp'])])
+    key = models.CharField(max_length=128, default="")
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    input = models.ForeignKey(to=InputBroadcast, on_delete=models.CASCADE)
+    broadcast = models.ForeignKey(to=InputBroadcast, on_delete=models.CASCADE)
