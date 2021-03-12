@@ -24,10 +24,10 @@ from multistreamer import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('profile/<int:id>', views.profile_page, name='profile'),
-    path('profile/setting', views.ProfileSettingView.as_view(), name='profilesetting'),
+    path('profile/<int:id>/', views.profile_page, name='profile'),
+    path('profile/setting/', views.ProfileSettingView.as_view(), name='profilesetting'),
     path('', views.IndexPage.as_view(), name='index'),
-    path('setting', views.ProfileSettingView.as_view(), name='setting'),
+    path('setting/', views.ProfileSettingView.as_view(), name='setting'),
 ]
 
 urlpatterns += Stream().get_url_list()

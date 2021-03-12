@@ -105,15 +105,13 @@ class CreateBroadcast(CreateView):
     template_name = 'pages/stream/create.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
-    fields = ['name', 'url', 'key']
+    fields = ['name', 'url', 'key', 'broadcast']
     extra_context = {'pagename': 'Создание Трансляции'}
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.author = self.request.user
         self.object.save()
-        input_request = InputBroadcast(broadcast=self.object)
-        input_request.save()
         return redirect('list_stream')
 
 
@@ -122,7 +120,7 @@ class UpdateBroadcast(UpdateView):
     model = OutputBroadcast
     model_form = BroadcastSettings
     pk_url_kwarg = 'id'
-    fields = ['name', 'url', 'output_key']
+    fields = ['name', 'url', 'key', 'broadcast']
     extra_context = {'pagename': 'Обновление трансляции'}
 
     def form_valid(self, form):
@@ -139,13 +137,13 @@ class DeleteBroadcast(DeleteView):
     extra_context = {'pagename': 'Удаление трансляции'}
 
 
-class UpdateInputKey(View):
-    context = {'pagename': 'Обновление ключа'}
+class CreateInputKey(View):
+    context = {'pagename': 'Создание ключа'}
 
-    def get(self, request, pk):
-        stream = get_object_or_404(InputBroadcast, id=pk)
+    def get(self, request):
+        stream = InputBroadcast.objects.create()
         input_key = get_random_string(length=20, allowed_chars=string.ascii_letters + string.digits)
-        stream.input_key = input_key
+        stream.url = input_key
         self.context['input_key'] = input_key
         stream.save()
         return render(request, 'pages/stream/update_key.html', self.context)
