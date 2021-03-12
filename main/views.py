@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.urls import reverse
 
+
 from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings
 from main.models import Avatar, OutputBroadcast, InputBroadcast
 from scripts.run import Server
@@ -91,6 +92,10 @@ class ProfileSettingView(View):
             avatar = Avatar.objects.filter(user=request.user)
             if not avatar:
                 avatar = Avatar(user=request.user)
+                img = avatar.image##.open(self.image.path)
+                width, height = img.size
+                cropped = img.crop(width // 2 - 200, height // 2 - 200, width // 2 + 200, height // 2 + 200)
+                avatar = cropped
             else:
                 avatar = avatar[0]
             form = AvatarSettings(request.POST, request.FILES, instance=avatar)
