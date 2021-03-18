@@ -10,7 +10,7 @@ class Stream:
                 path('<int:id>/delete/', login_required(views.DeleteBroadcast.as_view()), name='stream_delete'),
                 path('<int:id>/detail/', login_required(views.DetailBroadcast.as_view()), name='stream_detail'),
                 path('<int:id>/start/', login_required(views.StartBroadcast.as_view()), name='stream_start'),
-                path('my_list/', login_required(views.ListBroadcast.as_view()), name='list_stream'),
+                path('', login_required(views.ListBroadcast.as_view()), name='list_stream'),
                 path('create_key/', login_required(views.CreateInputKey.as_view()), name='create_input_key'),
             ]))]
 

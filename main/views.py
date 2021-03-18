@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.urls import reverse
 
-from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings
+from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings, InputBroadcastSettings
 from main.models import Avatar, OutputBroadcast, InputBroadcast
 from scripts.run import Server
 
@@ -43,7 +43,6 @@ class StreamingTest(View):
         else:
             self.server.stop_server()
         return redirect(reverse('test'))
-
 
 
 def profile_page(request, id):
@@ -150,7 +149,7 @@ class CreateBroadcast(CreateView):
     template_name = 'pages/stream/create.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
-    fields = ['name', 'url', 'key', 'broadcast']
+    fields = ['name', 'url', 'key', 'input_broadcast']
     extra_context = {'pagename': 'Создание Трансляции'}
 
     def form_valid(self, form):
@@ -165,7 +164,7 @@ class UpdateBroadcast(UpdateView):
     model = OutputBroadcast
     model_form = BroadcastSettings
     pk_url_kwarg = 'id'
-    fields = ['name', 'url', 'key', 'broadcast']
+    fields = ['name', 'url', 'key', 'input_broadcast']
     extra_context = {'pagename': 'Обновление трансляции'}
 
     def form_valid(self, form):
@@ -182,13 +181,17 @@ class DeleteBroadcast(DeleteView):
     extra_context = {'pagename': 'Удаление трансляции'}
 
 
-class CreateInputKey(View):
-    context = {'pagename': 'Создание ключа'}
+class CreateInputKey(CreateView):
+    template_name = 'pages/stream/create_input_key.html'
+    model = InputBroadcast
+    model_form = InputBroadcastSettings
+    fields = ['name']
+    extra_context = {'pagename': 'Создание ключа'}
 
-    def get(self, request):
-        stream = InputBroadcast.objects.create()
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
         input_key = get_random_string(length=20, allowed_chars=string.ascii_letters + string.digits)
-        stream.url = input_key
-        self.context['input_key'] = input_key
-        stream.save()
-        return render(request, 'pages/stream/update_key.html', self.context)
+        self.object.key = input_key
+        self.object.author = self.request.user
+        self.object.save()
+        return redirect('list_stream')
