@@ -2,9 +2,13 @@
 
 
 {% block content %}
-<h2>Название трансляции: {{object.name}}</h2>
-<h2>Выходящая ulr: {{object.url}}</h2>
-<h2>Ваш ключ: {{object.key}}</h2>
-<h2>Входной URL: {{object.broadcast.url}}</h2>
-<a href="{% url 'stream_update' object.id %}">Изменить трансляцию</a>
+    <h2>Название трансляции: {{ object.name }}</h2>
+    <h2>Исходящий url: {{ object.url }}</h2>
+    <h2>Ваш ключ: {{ object.key }}</h2>
+    <h2>Входной URL: {{ server_url }}/{{ object.input_broadcast.key }}</h2>
+    <a href="{% url 'stream_update' object.id %}">Изменить трансляцию</a>
+    <form action="{% url 'stream_start' object.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit"><i class="bi bi-power"></i></button>
+    </form>
 {% endblock %}

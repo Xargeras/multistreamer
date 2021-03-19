@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.backends import UserModel
 
-from main.models import Avatar, OutputBroadcast
+from main.models import Avatar, OutputBroadcast, InputBroadcast
 
 
 class DateInput(forms.DateInput):
@@ -90,5 +90,18 @@ class BroadcastSettings(forms.ModelForm):
                 'class': 'form-control',
                 'id': 'broadcast_key',
                 'placeholder': "Ключ трансляции",
+            }),
+        }
+
+
+class InputBroadcastSettings(forms.ModelForm):
+    class Meta:
+        model = InputBroadcast
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'broadcast_name',
+                'placeholder': "Название трансляции",
             }),
         }

@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.urls import reverse
 
-from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings
+from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings, InputBroadcastSettings
 from main.models import Avatar, OutputBroadcast, InputBroadcast
 from scripts.run import Server
 
@@ -23,14 +23,13 @@ def get_menu_context():
 class StreamingTest(View):
     internal_url = 'mystream'
     key = '95hb-4hcj-5fpa-1063-4ws6'
-    server = Server()
+    server = Server.get_instance()
 
     def get_context(self, request):
         return {
             'menu': get_menu_context(),
             'pagename': 'Тестовая трансляция',
             'server_online': self.server.is_server_online(),
-            'url': f'{self.server.url}/{self.internal_url}',
         }
 
     @method_decorator(login_required)
@@ -41,12 +40,9 @@ class StreamingTest(View):
     def post(self, request):
         if not self.server.is_server_online():
             self.server.start_server()
-            self.server.start_broadcast(self.internal_url, self.key)
         else:
             self.server.stop_server()
-            self.server.stop_broadcast()
         return redirect(reverse('test'))
-
 
 
 def profile_page(request, id):
@@ -119,6 +115,24 @@ class StreamStorageView(View):
         return render(request, 'pages/stream/storage.html', self.context)
 
 
+class StartBroadcast(View):
+    context = {
+        'pagename': 'Запуск',
+    }
+
+    def get(self, request, id):
+        return redirect(reverse('stream_detail', kwargs={"id": id}))
+
+    def post(self, request, id):
+        server = Server.get_instance()
+        if server.is_broadcast_online(id):
+            server.stop_broadcast(id)
+        else:
+            broadcast = get_object_or_404(OutputBroadcast, id=id)
+            server.start_broadcast(id, broadcast.input_broadcast.url, broadcast.url, broadcast.key)
+        return redirect(reverse('stream_detail', kwargs={"id": id}))
+
+
 class ListBroadcast(ListView):
     template_name = 'pages/stream/list.html'
     model = OutputBroadcast
@@ -137,15 +151,20 @@ class DetailBroadcast(DetailView):
     template_name = 'pages/stream/detail.html'
     model = OutputBroadcast
     pk_url_kwarg = 'id'
-    extra_context = {'pagename': 'Просмотр параметров трансляции'}
+    extra_context = {'pagename': 'Просмотр параметров трансляции', 'server_url': Server.url}
 
 
 class CreateBroadcast(CreateView):
     template_name = 'pages/stream/create.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
-    fields = ['name', 'url', 'key', 'broadcast']
+    fields = ['name', 'url', 'key', 'input_broadcast']
     extra_context = {'pagename': 'Создание Трансляции'}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'].fields['input_broadcast'].queryset = InputBroadcast.objects.filter(author=self.request.user)
+        return context
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -159,8 +178,13 @@ class UpdateBroadcast(UpdateView):
     model = OutputBroadcast
     model_form = BroadcastSettings
     pk_url_kwarg = 'id'
-    fields = ['name', 'url', 'key', 'broadcast']
+    fields = ['name', 'url', 'key', 'input_broadcast']
     extra_context = {'pagename': 'Обновление трансляции'}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'].fields['input_broadcast'].queryset = InputBroadcast.objects.filter(author=self.request.user)
+        return context
 
     def form_valid(self, form):
         self.object = form.save()
@@ -176,13 +200,17 @@ class DeleteBroadcast(DeleteView):
     extra_context = {'pagename': 'Удаление трансляции'}
 
 
-class CreateInputKey(View):
-    context = {'pagename': 'Создание ключа'}
+class CreateInputKey(CreateView):
+    template_name = 'pages/stream/create_input_key.html'
+    model = InputBroadcast
+    model_form = InputBroadcastSettings
+    fields = ['name']
+    extra_context = {'pagename': 'Создание ключа'}
 
-    def get(self, request):
-        stream = InputBroadcast.objects.create()
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
         input_key = get_random_string(length=20, allowed_chars=string.ascii_letters + string.digits)
-        stream.url = input_key
-        self.context['input_key'] = input_key
-        stream.save()
-        return render(request, 'pages/stream/update_key.html', self.context)
+        self.object.key = input_key
+        self.object.author = self.request.user
+        self.object.save()
+        return redirect('list_stream')
