@@ -15,7 +15,11 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 from django.urls import path
+from django.views.generic import TemplateView
+from django_registration.backends.one_step.views import RegistrationView
 
 from main import views
 from main.templates.urls.stream import Stream
@@ -27,7 +31,7 @@ urlpatterns = [
     path('profile/<int:id>/', views.profile_page, name='profile'),
     path('profile/setting/', views.ProfileSettingView.as_view(), name='profilesetting'),
     path('test/', views.StreamingTest.as_view(), name='test'),
-    path('', views.IndexPage.as_view(), name='index'),
+    path('', login_required(views.IndexPage.as_view()), name='index'),
     path('setting/', views.ProfileSettingView.as_view(), name='setting'),
 ]
 

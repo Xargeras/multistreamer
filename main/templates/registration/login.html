@@ -1,25 +1,45 @@
-{% extends 'base/base.html' %}
-
+{% extends 'base/empty.html' %}
+{% load static %}
 
 {% load bootstrap4 %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
 
 {% block content %}
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <form class="login100-form validate-form" method="post">
+					<span class="login100-form-title pb-5">
+						С возвращением на <br> <h1>Multistreamer</h1>
+					</span>
 
-<div class="bg-light h-100">
-    <div class="container">
-        <h1 class="text-center mt-4">Авторизация (vasya-promprog)</h1>
-        <hr>
-        <div class="row">
-            <div class="col-4 offset-4">
-                <form action="#" method="POST">
-                    {% csrf_token %}
 
-                    {% bootstrap_form form %}
-                    {% buttons %}
-                    <button type="submit" class="btn btn-primary float-right btn-block">Войти</button>
-                    {% endbuttons %}
-                </form>
+                {% csrf_token %}
+
+                {% bootstrap_form form %}
+
+                <div class="d-flex justify-content-between">
+                    <div class="form-checkbox">
+                        <input class="input" type="checkbox" name="remember-me"> Запомнить меня
+                    </div>
+
+                    <div>
+                        <a href="#">
+                            Забыли пароль?
+                        </a>
+                    </div>
+                </div>
+
+                    <button class="btn btn-primary w-100">
+                        Войти
+                    </button>
+                <p>Новичок в Multistreamer? <a href="{% url 'django_registration_register' %}">Зарегистрироваться</a> </p>
+            </form>
+
+            <div class="login100-more" style="background-image: url({% static 'images/bg-01.jpg' %});">
             </div>
         </div>
     </div>

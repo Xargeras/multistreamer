@@ -5,6 +5,7 @@ from main import views
 
 class Stream:
     paths = [path('stream/', include([
+                path('storage/', login_required(views.StreamStorageView.as_view()), name='stream_create'),
                 path('create/', login_required(views.CreateBroadcast.as_view()), name='stream_create'),
                 path('<int:id>/update/', login_required(views.UpdateBroadcast.as_view()), name='stream_update'),
                 path('<int:id>/delete/', login_required(views.DeleteBroadcast.as_view()), name='stream_delete'),
