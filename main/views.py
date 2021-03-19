@@ -152,6 +152,11 @@ class CreateBroadcast(CreateView):
     fields = ['name', 'url', 'key', 'input_broadcast']
     extra_context = {'pagename': 'Создание Трансляции'}
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'].fields['input_broadcast'].queryset = InputBroadcast.objects.filter(author=self.request.user)
+        return context
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.author = self.request.user
@@ -166,6 +171,11 @@ class UpdateBroadcast(UpdateView):
     pk_url_kwarg = 'id'
     fields = ['name', 'url', 'key', 'input_broadcast']
     extra_context = {'pagename': 'Обновление трансляции'}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'].fields['input_broadcast'].queryset = InputBroadcast.objects.filter(author=self.request.user)
+        return context
 
     def form_valid(self, form):
         self.object = form.save()
