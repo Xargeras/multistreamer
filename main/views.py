@@ -1,8 +1,7 @@
-import random
 import string
 
-from django.contrib.auth.hashers import make_password
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.utils.crypto import get_random_string
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
@@ -48,15 +47,6 @@ class StreamingTest(View):
             self.server.stop_broadcast()
         return redirect(reverse('test'))
 
-
-def index_page(request):
-    context = {
-        'pagename': 'Главная',
-        'author': 'Andrew',
-        'pages': 4,
-        'menu': get_menu_context()
-    }
-    return render(request, 'pages/index.html', context)
 
 
 def profile_page(request, id):
@@ -129,88 +119,70 @@ class StreamStorageView(View):
         return render(request, 'pages/stream/storage.html', self.context)
 
 
-class StreamSettingView(View):
-    context = {
-        'pagename': 'Настройка стрима',
-    }
+class ListBroadcast(ListView):
+    template_name = 'pages/stream/list.html'
+    model = OutputBroadcast
 
-    def get(self, request):
-        places = OutputBroadcast.objects.filter(author=request.user)
-        self.context['places'] = places
-        return render(request, 'pages/curp.html', self.context)
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(author=self.request.user)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['pagename'] = 'Список моих трансляций'
+        return context
 
 
-class CreateBroadcastOutputKey(CreateView):
-    template_name = 'pages/curp.html'
+class DetailBroadcast(DetailView):
+    template_name = 'pages/stream/detail.html'
+    model = OutputBroadcast
+    pk_url_kwarg = 'id'
+    extra_context = {'pagename': 'Просмотр параметров трансляции'}
+
+
+class CreateBroadcast(CreateView):
+    template_name = 'pages/stream/create.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
-    fields = ['name', 'url', 'key']
+    fields = ['name', 'url', 'key', 'broadcast']
+    extra_context = {'pagename': 'Создание Трансляции'}
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.input_key = InputBroadcast.objects.filter(author=self.request.user)
         self.object.author = self.request.user
-        self.object.input = self.input_key[0]
         self.object.save()
-        return redirect('stream')
+        return redirect('list_stream')
 
 
-class UpdateBroadcastOutputKey(UpdateView):
-    template_name = 'pages/curp.html'
+class UpdateBroadcast(UpdateView):
+    template_name = 'pages/stream/update.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
-    fields = ['name', 'url', 'key']
-    success_url = '/stream/'
+    pk_url_kwarg = 'id'
+    fields = ['name', 'url', 'key', 'broadcast']
+    extra_context = {'pagename': 'Обновление трансляции'}
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return redirect('stream_detail', self.object.id)
 
 
-class DeleteBroadcastOutputKey(DeleteView):
-    template_name = 'pages/curp.html'
+class DeleteBroadcast(DeleteView):
+    template_name = 'pages/stream/delete.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
-    success_url = '/stream/'
+    pk_url_kwarg = 'id'
+    success_url = '/stream/my_list/'
+    extra_context = {'pagename': 'Удаление трансляции'}
 
 
-# Для получения ключа куда стримить
-class BroadcastKey(View):
-    context = {
-        'pagename': 'Ключ',
-    }
-    dele = update = create = copy = False
+class CreateInputKey(View):
+    context = {'pagename': 'Создание ключа'}
 
     def get(self, request):
-        if self.create:
-            self.create_key(request)
-        elif self.dele:
-            self.delete_key(request)
-        elif self.update:
-            self.update_key(request)
-        elif self.copy:
-            self.copy_key()
-        return redirect('stream')
-        # return render(request, 'pages/curp.html', self.context)
-
-    def create_key(self, request):
-        broadcast = InputBroadcast.objects.filter(author=request.user)
-        if not broadcast:
-            broadcast = InputBroadcast()
-            key = make_password(get_random_string())
-            print(key)
-            broadcast.author = request.user
-            broadcast.key = key
-            broadcast.save()
-
-    def delete_key(self, request):
-        broadcast = InputBroadcast.objects.filter(author=request.user)
-        broadcast.delete()
-
-    def update_key(self, requset):
-        self.delete_key(requset)
-        self.create_key(requset)
-
-    def copy_key(self):
-        pass
-
-
-def get_random_string():
-    str = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(20)])
-    return str
+        stream = InputBroadcast.objects.create()
+        input_key = get_random_string(length=20, allowed_chars=string.ascii_letters + string.digits)
+        stream.url = input_key
+        self.context['input_key'] = input_key
+        stream.save()
+        return render(request, 'pages/stream/update_key.html', self.context)
