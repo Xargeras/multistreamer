@@ -125,17 +125,18 @@ class StartBroadcast(View):
 
     def post(self, request, id):
         server = Server.get_instance()
-        if server.is_broadcast_online(id):
-            server.stop_broadcast(id)
+        broadcast = get_object_or_404(InputBroadcast, id=id)
+        outputs = OutputBroadcast.objects.filter(input_broadcast=broadcast)
+        if server.is_broadcast_online_list(outputs):
+            server.stop_broadcast_list(outputs)
         else:
-            broadcast = get_object_or_404(OutputBroadcast, id=id)
-            server.start_broadcast(id, broadcast.input_broadcast.url, broadcast.url, broadcast.key)
+            server.start_broadcast_list(outputs, broadcast.key)
         return redirect(reverse('stream_detail', kwargs={"id": id}))
 
 
 class ListBroadcast(ListView):
     template_name = 'pages/stream/list.html'
-    model = OutputBroadcast
+    model = InputBroadcast
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -149,9 +150,15 @@ class ListBroadcast(ListView):
 
 class DetailBroadcast(DetailView):
     template_name = 'pages/stream/detail.html'
-    model = OutputBroadcast
+    model = InputBroadcast
     pk_url_kwarg = 'id'
     extra_context = {'pagename': 'Просмотр параметров трансляции', 'server_url': Server.url}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['outputs'] = OutputBroadcast.objects.filter(input_broadcast=self.object)
+        context['is_online'] = Server.get_instance().is_broadcast_online_list(context['outputs'])
+        return context
 
 
 class CreateBroadcast(CreateView):
@@ -188,7 +195,7 @@ class UpdateBroadcast(UpdateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        return redirect('stream_detail', self.object.id)
+        return redirect('stream_detail', self.object.input_broadcast.id)
 
 
 class DeleteBroadcast(DeleteView):
@@ -196,8 +203,14 @@ class DeleteBroadcast(DeleteView):
     model = OutputBroadcast
     model_form = BroadcastSettings
     pk_url_kwarg = 'id'
-    success_url = '/stream/my_list/'
+    success_url = '/stream/'
     extra_context = {'pagename': 'Удаление трансляции'}
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.object.input_broadcast.id
+        self.object.delete()
+        return redirect('stream_detail', success_url)
 
 
 class CreateInputKey(CreateView):
@@ -214,3 +227,25 @@ class CreateInputKey(CreateView):
         self.object.author = self.request.user
         self.object.save()
         return redirect('list_stream')
+
+
+class UpdateInputKey(UpdateView):
+    template_name = 'pages/stream/create_input_key.html'
+    model = InputBroadcast
+    model_form = InputBroadcastSettings
+    fields = ['name']
+    extra_context = {'pagename': 'Изменение входящей трансляции'}
+    pk_url_kwarg = 'id'
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return redirect('stream_detail', self.object.input_broadcast.id)
+
+
+class DeleteInputBroadcast(DeleteView):
+    template_name = 'pages/stream/delete.html'
+    model = InputBroadcast
+    model_form = BroadcastSettings
+    pk_url_kwarg = 'id'
+    success_url = '/stream/'
+    extra_context = {'pagename': 'Удаление трансляции'}
