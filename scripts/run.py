@@ -46,3 +46,16 @@ class Server:
     def stop_broadcast(self, id):
         self.broadcasts[id].send_signal(SIGINT)
         self.broadcasts.pop(id)
+
+    def is_broadcast_online_list(self, broadcast_list):
+        return any(self.is_broadcast_online(broadcast.id) for broadcast in broadcast_list)
+
+    def start_broadcast_list(self, broadcast_list, key):
+        for broadcast in broadcast_list:
+            if not self.is_broadcast_online(broadcast):
+                self.start_broadcast(broadcast.id, key, broadcast.url, broadcast.key)
+
+    def stop_broadcast_list(self, broadcast_list):
+        for broadcast in broadcast_list:
+            if self.is_broadcast_online(broadcast.id):
+                self.stop_broadcast(broadcast.id)
