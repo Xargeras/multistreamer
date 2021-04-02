@@ -156,7 +156,7 @@ class DetailBroadcast(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['outputs'] = OutputBroadcast.objects.filter(author=self.request.user)
+        context['outputs'] = OutputBroadcast.objects.filter(input_broadcast=self.object)
         context['is_online'] = Server.get_instance().is_broadcast_online_list(context['outputs'])
         return context
 
@@ -240,3 +240,12 @@ class UpdateInputKey(UpdateView):
     def form_valid(self, form):
         self.object = form.save()
         return redirect('stream_detail', self.object.input_broadcast.id)
+
+
+class DeleteInputBroadcast(DeleteView):
+    template_name = 'pages/stream/delete.html'
+    model = InputBroadcast
+    model_form = BroadcastSettings
+    pk_url_kwarg = 'id'
+    success_url = '/stream/'
+    extra_context = {'pagename': 'Удаление трансляции'}

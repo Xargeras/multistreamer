@@ -8,6 +8,7 @@
                 <tr class="text-center">
                     <th scope="col">ID <a href="{% url 'create_input_key' %}">(Создать)</a></th>
                     <th scope="col">Название трансляции</th>
+                    <th scope="col">Удалить</th>
                 </tr>
             </thead>
             <tbody>
@@ -15,6 +16,7 @@
             <tr class="text-center">
                 <td><b>{{el.id}}</b></td>
                 <td><a href="{% url 'stream_detail' el.id %}">{{el.name}}</a></td>
+                <td><a href="{% url 'delete_input_key' el.id %}">Удалить</a></td>
             </tr>
             {% endfor %}
             </tbody>
