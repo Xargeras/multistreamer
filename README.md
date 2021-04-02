@@ -43,8 +43,6 @@ pip install -r requirements.txt
 
 ## Read more
 - FFMpeg: [https://ffmpeg.org/documentation.html](https://ffmpeg.org/documentation.html)
-- ffmpeg-python: [https://github.com/kkroening/ffmpeg-python](https://github.com/kkroening/ffmpeg-python)
-
 
 Для запуска видеопотока с помощью ffmpeg:
 ```bash
