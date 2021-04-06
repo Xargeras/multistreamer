@@ -1,52 +1,154 @@
-#app {
-  display: flex;
-  height: 100vh;
+body {
+	width: 100%;
+	min-height: 100vh;
+	background: radial-gradient(31.06% 57.27% at 60.21% 38.15%, rgba(20, 0, 255, 0.34) 0%, rgba(255, 255, 255, 0) 100%), radial-gradient(35.68% 68.31% at 35.68% 48.66%, rgba(250, 166, 89, 0.65) 0%, rgba(255, 255, 255, 0) 100%), #E7EDFC;
 }
-
-.ms-menu {
-display: flex;
-flex-direction: column;
-padding: 14px 10px;
-border-right: 1px solid hsla(0, 0%, 100%, .09);
+.card {
+	box-shadow: 0px 0px 20px 0px rgb(0 0 0 / 5%);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: 15px;
+	background: rgba(255, 255, 255, 0.48);
+	backdrop-filter: blur(15px);
+	border-radius: 15px;
+	border: none;
 }
-
-.ms-menu-container {
-  display: flex;
-  flex: 1 1;
-  flex-direction: column;
+.card.active {
+	background: #ffffffd7;
 }
-
-.ms-menu-item {
-  padding: 8px;
-  margin-bottom: 4px;
-  margin-top: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color .2s;
-  position: relative;
+ul.streams {
+	margin-top: 15px;
+	list-style-type: none;
+	padding: 0;
 }
-
-        .ms-menu-item svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .ms-menu-item.active {
-            background: rgb(230, 230, 230);
-        }
-
-        .ms-logo {
-            text-align: center;
-            margin-bottom: 7px;
-            opacity: 1;
-            cursor: pointer;
-            transition: opacity .2s;
-        }
-
-        .ms-layout-content {
-            width: 100%;
-            overflow: auto;
-        }
+ul.streams>li.stream {
+	margin-bottom: 15px;
+	box-shadow: 0px 0px 20px 0px rgb(0 0 0 / 5%);
+	padding: 15px;
+	background: rgba(255, 255, 255, 0.48);
+	backdrop-filter: blur(15px);
+	border-radius: 15px;
+	transition: all 0.5s;
+}
+ul.streams>li.active {
+	background: #ffffffd7;
+}
+li.stream > .row > div{
+	align-self: center;
+}
+.card>* {
+	width: 100%;
+}
+.switch {
+	--line: #E8EBFB;
+	--dot: #275EFE;
+	--circle: #D3D4EC;
+	--background: #fff;
+	--duration: 0.3s;
+	--text: #9EA0BE;
+	--shadow: 0 1px 3px rgba(0, 9, 61, 0.08);
+	cursor: pointer;
+	position: relative;
+}
+.switch:before {
+	content: '';
+	width: 60px;
+	height: 32px;
+	border-radius: 16px;
+	background: var(--background);
+	position: absolute;
+	left: 0;
+	top: 0;
+	box-shadow: var(--shadow);
+}
+.switch input {
+	display: none;
+}
+.switch input+div {
+	position: relative;
+}
+.switch input+div:before,.switch input+div:after {
+	--s: 1;
+	content: '';
+	position: absolute;
+	height: 4px;
+	top: 14px;
+	width: 24px;
+	background: var(--line);
+	transform: scaleX(var(--s));
+	transition: transform var(--duration) ease;
+}
+.switch input+div:before {
+	--s: 0;
+	left: 4px;
+	transform-origin: 0 50%;
+	border-radius: 2px 0 0 2px;
+}
+.switch input+div:after {
+	left: 32px;
+	transform-origin: 100% 50%;
+	border-radius: 0 2px 2px 0;
+}
+.switch input+div span {
+	padding-left: 60px;
+	line-height: 28px;
+	color: var(--text);
+}
+.switch input+div span:before {
+	--x: 0;
+	--b: var(--circle);
+	--s: 4px;
+	content: '';
+	position: absolute;
+	left: 4px;
+	top: 4px;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	box-shadow: inset 0 0 0 var(--s) var(--b);
+	transform: translateX(var(--x));
+	transition: box-shadow var(--duration) ease, transform var(--duration) ease;
+}
+.switch input+div span:not(:empty) {
+	padding-left: 68px;
+}
+.switch input:checked+div:before {
+	--s: 1;
+}
+.switch input:checked+div:after {
+	--s: 0;
+}
+.switch input:checked+div span:before {
+	--x: 28px;
+	--s: 12px;
+	--b: var(--dot);
+}
+.preview_video video {
+	border-radius: 15px;
+	position: relative;
+}
+.preview_video>.status {
+	top: 30px;
+	left: 30px;
+	position: absolute;
+	width: fit-content;
+	padding: 5px;
+	background-color: aqua;
+	z-index: 10;
+	border-radius: 10px;
+	font-weight: 400;
+}
+.preview_video>.status:after {
+	content: attr(data-text);
+	font-size: 0.8em;
+}
+.preview_video>.status[data-text="PREVIEW"] {
+	background-color: var(--bs-gray);
+	color: var(--bs-light);
+}
+.preview_video>.status[data-text="LIVE"] {
+	background-color: var(--bs-red);
+	color: var(--bs-light);
+	padding: 5px 10px 5px 10px;
+}

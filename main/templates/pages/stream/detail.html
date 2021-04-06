@@ -2,23 +2,159 @@
 
 
 {% block content %}
-    <h2>Название трансляции: {{ object.name }}</h2>
-    <h2>Входной URL: {{ server_url }}/{{ object.key }}</h2>
-    <a href="{% url 'update_input_key' object.id %}">Изменить трансляцию</a>
-    <form action="{% url 'stream_start' object.id %}" method="POST">
-        {% csrf_token %}
-        <button type="submit"><i class="bi bi-power"></i>{% if is_online %}Остановить{% else %}Запустить{% endif %}</button>
-    </form>
-    <a href="{% url 'stream_create' %}">Создать новый исходящий поток</a>
-    <table>
-    <tr><td>URL</td><td>Key</td><td>Изменить</td><td>Удалить</td></tr>
-    {% for output in outputs %}
-    <tr>
-        <td>{{ output.url }}</td>
-        <td>{{ output.key }}</td>
-        <td><a href="{% url 'stream_update' output.id %}">Изменить</a></td>
-        <td><a href="{% url 'stream_delete' output.id %}">Удалить</a></td>
-    </tr>
-    {% endfor %}
-    </table>
+
+<div class="row ">
+    <div class="mt-lg-5 mt-2 col-12">
+        <div class="row">
+            <div class="col-12">
+                <a href="{% url 'list_stream' %}">
+                    <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Назад
+                </a>
+            </div>
+            <div class="col-md col-12">
+                <h1>{{ object.name }}</h1>
+                <a href="{% url 'update_input_key' object.id %}">Изменить трансляцию</a>
+            </div>
+            <div class="col-md-auto col-12">
+                <form action="{% url 'stream_start' object.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="w-100 btn btn-danger" type="submit"><i class="bi bi-power"></i>{% if is_online %}Остановить трансляцию{% else %}Запустить трансляцию{% endif %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7 col-12 mt-lg-0 mt-5">
+        <div style="display: flex;justify-content: space-between;">
+            <h3>Аккаунты</h3>
+            <a href="{% url 'stream_create' %}">
+                <button type="button" class="btn btn-primary">
+                    <i class="fa fa-plus mr-md-2 mr-0" aria-hidden="true"></i><span class="d-none d-md-inline-block">Добавить аккаунт</span>
+                </button>
+            </a>
+        </div>
+        <ul class="streams">
+            {% for output in outputs %}
+            <li class="stream">
+                <div class="row">
+                    <div class="col-auto">
+                        <img
+                            src="https://www.pinclipart.com/picdir/big/88-881439_twitch-png-logo-twitch-logo-png-clipart.png"
+                            alt="" height="45">
+                    </div>
+                    <div class="col">
+                        <div style="display: flex;flex-direction: column;">
+                            <h5>twitch - nickname</h5>
+                            <p class="m-0">offline</p>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{% url 'stream_update' output.id %}">Изменить</a>
+                    </div>
+                    <div class="col-12 mt-2 mt-md-0 col-md-auto">
+                        <label class="switch" style="float: right;">
+                            <input type="checkbox">
+                            <div>
+                                <span></span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-lg-5 col-12">
+        <div class="card">
+            <div class="preview_video">
+                <div class="status" data-text="{% if is_online %}LIVE{% else %}PREVIEW{% endif %}">
+                </div>
+                <video width="100%" controls="controls">
+                    <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+                </video>
+            </div>
+
+        </div>
+        <div class="card mt-3">
+            <h4>Потоковое программное обеспечение (rtsp)</h4>
+            <div>
+                <div class="row">
+                    <div class="col">
+                        <p>Используйте программы, такие как OBS, Zoom и т. Д.</p>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#exampleModal">
+                            <i class="fa fa-cog d-md-none d-inline-block" aria-hidden="true"></i> <span class="d-none d-md-inline-block">Настройки RTMP</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Настройки </h5>
+            </div>
+            <div class="modal-body">
+                <h5>rtsp URL</h5>
+                <div class="input-group mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Recipient's username"
+                               aria-label="Recipient's username" aria-describedby="basic-addon2"
+                               value="{{ server_url }}/{{ object.key }}">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="button" id="copy"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <h5>Ключ потока</h5>
+                <div class="input-group mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Recipient's username"
+                               aria-label="Recipient's username" aria-describedby="basic-addon2"
+                               value="{{ server_url }}/{{ object.key }}">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="button" id="copy"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Готово</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            if ($('.switch input').is(':checked')) {
+                $('.switch input:checked').parent().parent().parent().parent().addClass('active')
+            }
+            $('.switch input').click(function () {
+                if ($(this).is(':checked')) {
+                    $(this).parent().parent().parent().parent().addClass('active')
+                } else {
+                    $(this).parent().parent().parent().parent().removeClass('active')
+                }
+            });
+            $('#copy').click(function(){
+                $(this).parent().children(button).click(function() {
+                    console.log($(this))
+                    $(this).parent().children(button).val($('#text').text()).select();
+                    document.execCommand("copy");
+                    alert('Ok');
+                });
+            });
+        });
+
+    </script>
 {% endblock %}
