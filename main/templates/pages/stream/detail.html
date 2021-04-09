@@ -9,15 +9,15 @@
         {% csrf_token %}
         <button type="submit"><i class="bi bi-power"></i>{% if is_online %}Остановить{% else %}Запустить{% endif %}</button>
     </form>
-    <a href="{% url 'stream_create' %}">Создать новый исходящий поток</a>
+    <a href="{% url 'stream_create' object.id %}">Создать новый исходящий поток</a>
     <table>
     <tr><td>URL</td><td>Key</td><td>Изменить</td><td>Удалить</td></tr>
     {% for output in outputs %}
     <tr>
         <td>{{ output.url }}</td>
         <td>{{ output.key }}</td>
-        <td><a href="{% url 'stream_update' output.id %}">Изменить</a></td>
-        <td><a href="{% url 'stream_delete' output.id %}">Удалить</a></td>
+        <td><a href="{% url 'stream_update' object.id output.id %}">Изменить</a></td>
+        <td><a href="{% url 'stream_delete' object.id output.id %}">Удалить</a></td>
     </tr>
     {% endfor %}
     </table>
