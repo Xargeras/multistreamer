@@ -59,11 +59,11 @@
                     <input type="hidden" name="change_password" value="1">
                     <div class="form-row mb-3">
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustomPassword">Новый Пароль</label>
+                            <label for="validationCustomPassword">{{ change_password.password.label }}</label>
                             {{ change_password.password }}
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label for="validationCustomNewPassword">Повторите Пароль</label>
+                            <label for="validationCustomNewPassword">{{ change_password.new_password.label }}</label>
                             {{ change_password.new_password }}
                         </div>
                     </div>
