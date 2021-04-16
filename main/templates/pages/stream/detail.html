@@ -82,7 +82,7 @@
                     </div>
                     <div class="col-12 mt-2 mt-md-0 col-md-auto">
                         <label class="switch" style="float: right;">
-                            <input type="checkbox">
+                            <input type="checkbox" {% if output.is_active %} checked {% endif %} name="{{ output.id }}">
                             <div>
                                 <span></span>
                             </div>
@@ -109,7 +109,7 @@
             <div>
                 <div class="row">
                     <div class="col">
-                        <p>Используйте программы, такие как OBS, Zoom и т. Д.</p>
+                        <p>Используйте программы, такие как OBS, Zoom и т. д.</p>
                     </div>
                     <div class="col-auto">
                         <button type="button" class="btn btn-primary" data-toggle="modal"
@@ -167,12 +167,18 @@
             if ($('.switch input').is(':checked')) {
                 $('.switch input:checked').parent().parent().parent().parent().addClass('active')
             }
-            $('.switch input').click(function () {
-                if ($(this).is(':checked')) {
-                    $(this).parent().parent().parent().parent().addClass('active')
-                } else {
-                    $(this).parent().parent().parent().parent().removeClass('active')
-                }
+            $('.switch input').click(function (e) {
+                $.ajax({
+                    url: '{% url "stream_change_state" object.id %}',
+                    data: {'out_id': e.currentTarget.name},
+                    success: () => {
+                        if ($(this).is(':checked')) {
+                            $(this).parent().parent().parent().parent().addClass('active')
+                        } else {
+                            $(this).parent().parent().parent().parent().removeClass('active')
+                        }
+                    }
+                })
             });
             $('[data-copy]').click(function(){
                 let copyText = document.getElementById($(this).attr('data-copy'));
