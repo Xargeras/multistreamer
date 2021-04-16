@@ -6,7 +6,11 @@ class Server:
     __instance = None
     server_uid = None
     broadcasts = {}
-    url = 'rtsp://localhost:8554'
+    RTSP = 1
+    RTMP = 2
+    host = 'localhost'
+    rtsp_url = f'rtsp://{host}:8554'
+    rtmp_url = f'rtmp://{host}'
 
     def __new__(cls, *args, **kwargs):
         if not cls.__instance:
@@ -39,8 +43,12 @@ class Server:
             return False
         return uid.poll() is None
 
-    def start_broadcast(self, id, internal_url, output_url, key):
-        input_url = f'{self.url}/{internal_url}'
+    def start_broadcast(self, id, internal_url, output_url, key, type):
+        if type == self.RTMP:
+            url = self.rtmp_url
+        else:
+            url = self.rtsp_url
+        input_url = f'{url}/{internal_url}'
         self.broadcasts[id] = subprocess.Popen(['python3', 'scripts/run_broadcaster.py', input_url, output_url, key])
 
     def stop_broadcast(self, id):
@@ -50,12 +58,18 @@ class Server:
     def is_broadcast_online_list(self, broadcast_list):
         return any(self.is_broadcast_online(broadcast.id) for broadcast in broadcast_list)
 
-    def start_broadcast_list(self, broadcast_list, key):
+    def start_broadcast_list(self, broadcast_list, key, type):
         for broadcast in broadcast_list:
             if not self.is_broadcast_online(broadcast):
-                self.start_broadcast(broadcast.id, key, broadcast.url, broadcast.key)
+                self.start_broadcast(broadcast.id, key, broadcast.url, broadcast.key, type)
 
     def stop_broadcast_list(self, broadcast_list):
         for broadcast in broadcast_list:
             if self.is_broadcast_online(broadcast.id):
                 self.stop_broadcast(broadcast.id)
+
+    def get_url(self, type):
+        if type == self.RTMP:
+            return self.rtmp_url
+        else:
+            return self.rtsp_url

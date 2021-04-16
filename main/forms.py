@@ -44,17 +44,20 @@ class PasswordSettings(forms.ModelForm):
             'password': forms.PasswordInput(attrs={
                 'class': 'form-control',
                 'id': 'validationCustomPassword',
-                'placeholder': "NewPassword",
+                'placeholder': "Новый пароль",
             }),
+        }
+        labels = {
+            'password': 'Новый пароль'
         }
 
     new_password = forms.CharField(
-        label="NewPassword",
+        label="Повторите пароль",
         strip=False,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'id': 'validationCustomNewPassword',
-            'placeholder': "RepeatNewPassword",
+            'placeholder': "Повторите пароль",
         }),
     )
 
@@ -97,11 +100,15 @@ class BroadcastSettings(forms.ModelForm):
 class InputBroadcastSettings(forms.ModelForm):
     class Meta:
         model = InputBroadcast
-        fields = ['name']
+        fields = ['name', 'type']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'broadcast_name',
                 'placeholder': "Название трансляции",
+            }),
+            'type': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'type',
             }),
         }

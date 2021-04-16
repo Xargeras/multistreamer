@@ -47,4 +47,5 @@ pip install -r requirements.txt
 Для запуска видеопотока с помощью ffmpeg:
 ```bash
 ffmpeg -re -stream_loop -1 -i file.ts -c copy -f rtsp rtsp://localhost:8554/mystream
+ffmpeg -re -stream_loop -1 -i file.ts -c copy -f flv rtmp://localhost/mystream
 ```
