@@ -30,4 +30,5 @@ class OutputBroadcast(models.Model):
     url = models.CharField(max_length=128, validators=[URLValidator(schemes=['http', 'https', 'ftp', 'ftps', 'rtmp'])])
     key = models.CharField(max_length=128, default="")
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=False)
     input_broadcast = models.ForeignKey(to=InputBroadcast, on_delete=models.CASCADE, blank=False, default=1)

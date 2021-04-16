@@ -11,12 +11,13 @@
     </form>
     <a href="{% url 'stream_create' object.id %}">Создать новый исходящий поток</a>
     <table>
-    <tr><td>URL</td><td>Key</td><td>Изменить</td><td>Удалить</td></tr>
+    <tr><td>URL</td><td>Key</td><td>Изменить</td><td>Статус</td><td>Удалить</td></tr>
     {% for output in outputs %}
     <tr>
         <td>{{ output.url }}</td>
         <td>{{ output.key }}</td>
         <td><a href="{% url 'stream_update' object.id output.id %}">Изменить</a></td>
+        <td><a href="{% url 'stream_change_state' object.id output.id %}">{% if output.is_active %}Активен{% else %}Не активен{% endif %}</a></td>
         <td><a href="{% url 'stream_delete' object.id output.id %}">Удалить</a></td>
     </tr>
     {% endfor %}

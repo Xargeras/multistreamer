@@ -126,7 +126,7 @@ class StartBroadcast(View):
     def post(self, request, id):
         server = Server.get_instance()
         broadcast = get_object_or_404(InputBroadcast, id=id)
-        outputs = OutputBroadcast.objects.filter(input_broadcast=broadcast)
+        outputs = OutputBroadcast.objects.filter(input_broadcast=broadcast, is_active=True)
         if server.is_broadcast_online_list(outputs):
             server.stop_broadcast_list(outputs)
         else:
@@ -203,6 +203,18 @@ class DeleteBroadcast(DeleteView):
         self.object = self.get_object()
         self.object.delete()
         return redirect('stream_detail', kwargs['id'])
+
+
+class ChangeState(View):
+    context = {
+        'pagename': 'Смена статуса',
+    }
+
+    def get(self, request, id, out_id):
+        output = get_object_or_404(OutputBroadcast, id=out_id)
+        output.is_active = not output.is_active
+        output.save()
+        return redirect(reverse('stream_detail', kwargs={"id": id}))
 
 
 class CreateInputKey(CreateView):
