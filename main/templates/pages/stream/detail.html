@@ -28,14 +28,15 @@
     <div class="col-lg-7 col-12 mt-lg-0 mt-5">
         <div style="display: flex;justify-content: space-between;">
             <h3>Аккаунты</h3>
-            <a href="{% url 'stream_create' %}">
+            <a href="{% url 'stream_create' object.id %}">
                 <button type="button" class="btn btn-primary">
-                    <i class="fa fa-plus mr-md-2 mr-0" aria-hidden="true"></i><span class="d-none d-md-inline-block">Добавить аккаунт</span>
+                    <i class="fa fa-plus mr-md-2 mr-0" aria-hidden="true"></i><span class="d-none d-md-inline-block">Создать новый исходящий поток</span>
                 </button>
             </a>
         </div>
         <ul class="streams">
             {% for output in outputs %}
+            <!--
             <li class="stream">
                 <div class="row">
                     <div class="col-auto">
@@ -50,7 +51,34 @@
                         </div>
                     </div>
                     <div class="col-auto">
-                        <a href="{% url 'stream_update' output.id %}">Изменить</a>
+                        <a href="{% url 'stream_update' object.id output.id%}">Изменить</a>
+                    </div>
+                    <div class="col-12 mt-2 mt-md-0 col-md-auto">
+                        <label class="switch" style="float: right;">
+                            <input type="checkbox">
+                            <div>
+                                <span></span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </li>
+            -->
+            <li class="stream">
+                <div class="row">
+                    <div class="col-auto">
+                        <img
+                            src="https://www.pinclipart.com/picdir/big/88-881439_twitch-png-logo-twitch-logo-png-clipart.png"
+                            alt="" height="45">
+                    </div>
+                    <div class="col">
+                        <div style="display: flex;flex-direction: column;">
+                            <h5>{{output.name}}</h5>
+                            <p class="m-0">{{output.url}}</p>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{% url 'stream_update' object.id output.id%}">Изменить</a>
                     </div>
                     <div class="col-12 mt-2 mt-md-0 col-md-auto">
                         <label class="switch" style="float: right;">
@@ -77,7 +105,7 @@
 
         </div>
         <div class="card mt-3">
-            <h4>Потоковое программное обеспечение (rtsp)</h4>
+            <h4>Потоковое программное обеспечение ({% if object.type == 1 %}RTSP{% else %}RTMP{% endif %})</h4>
             <div>
                 <div class="row">
                     <div class="col">
@@ -86,7 +114,7 @@
                     <div class="col-auto">
                         <button type="button" class="btn btn-primary" data-toggle="modal"
                                 data-target="#exampleModal">
-                            <i class="fa fa-cog d-md-none d-inline-block" aria-hidden="true"></i> <span class="d-none d-md-inline-block">Настройки RTMP</span>
+                            <i class="fa fa-cog d-md-none d-inline-block" aria-hidden="true"></i> <span class="d-none d-md-inline-block">Настройки {% if object.type == 1 %}RTSP{% else %}RTMP{% endif %}</span>
                         </button>
                     </div>
                 </div>
@@ -102,25 +130,25 @@
                 <h5 class="modal-title" id="exampleModalCenterTitle">Настройки </h5>
             </div>
             <div class="modal-body">
-                <h5>rtsp URL</h5>
+                <h5>{% if object.type == 1 %}RTSP{% else %}RTMP{% endif %} URL</h5>
                 <div class="input-group mb-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Recipient's username"
-                               aria-label="Recipient's username" aria-describedby="basic-addon2"
+                        <input type="text" class="form-control" placeholder="" id="stream_url"
+                               aria-label="" aria-describedby="basic-addon2" readonly
                                value="{{ server_url }}/{{ object.key }}">
                         <div class="input-group-prepend">
-                            <button class="btn btn-outline-secondary" type="button" id="copy"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+                            <button class="btn btn-outline-secondary" data-copy="stream_url" type="button"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
                         </div>
                     </div>
                 </div>
                 <h5>Ключ потока</h5>
                 <div class="input-group mb-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Recipient's username"
-                               aria-label="Recipient's username" aria-describedby="basic-addon2"
-                               value="{{ server_url }}/{{ object.key }}">
+                        <input type="text" class="form-control" placeholder="" id="stream_key"
+                               aria-label="" aria-describedby="basic-addon2" readonly disabled
+                               value="">
                         <div class="input-group-prepend">
-                            <button class="btn btn-outline-secondary" type="button" id="copy"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+                            <button class="btn btn-outline-secondary" type="button" data-copy="stream_key"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
                         </div>
                     </div>
                 </div>
@@ -146,13 +174,11 @@
                     $(this).parent().parent().parent().parent().removeClass('active')
                 }
             });
-            $('#copy').click(function(){
-                $(this).parent().children(button).click(function() {
-                    console.log($(this))
-                    $(this).parent().children(button).val($('#text').text()).select();
-                    document.execCommand("copy");
-                    alert('Ok');
-                });
+            $('[data-copy]').click(function(){
+                let copyText = document.getElementById($(this).attr('data-copy'));
+                copyText.select();
+                document.execCommand("copy");
+                alert("Copied the text: " + copyText.value);
             });
         });
 

@@ -1,14 +1,17 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light" style="border:none;height: 60px;z-index: 100;">
-    <a class="navbar-brand" href="/">Multistreamer</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+    <a class="navbar-brand" href="{% url 'index' %}">MultiStream.io</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarText">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="{% url 'list_stream' %}">Главная <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{% url 'index' %}">Главная</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'list_stream' %}">Список трансляций</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled" href="#">Записи стримов</a>
@@ -23,10 +26,10 @@
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.username }}</span>
                 {% if request.user.avatar.image %}
                 <img src="{{ request.user.avatar.image.url }}"
-                     height="50px" width="50px" class="img-profile rounded-circle" alt="">
+                     height="38px" width="38px" class="img-profile rounded-circle" alt="">
                 {% else %}
                 <img src="{% static 'default_avatar.jpg' %}"
-                     height="50px" width="50px" class="img-profile rounded-circle" alt="">
+                     height="38px" width="38px" class="img-profile rounded-circle" alt="">
                 {% endif %}
 
             </a>
@@ -41,7 +44,7 @@
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Настройки
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item disabled" href="#">
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     История действий
                 </a>
