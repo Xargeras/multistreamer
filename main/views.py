@@ -103,7 +103,7 @@ class IndexPage(View):
     }
 
     def get(self, request):
-        return render(request, 'pages/stream/index.html', self.context)
+        return render(request, 'pages/index.html', self.context)
 
 
 class StreamStorageView(View):
@@ -210,7 +210,8 @@ class ChangeState(View):
         'pagename': 'Смена статуса',
     }
 
-    def get(self, request, id, out_id):
+    def get(self, request, id):
+        out_id = request.GET.get('out_id', -1)
         output = get_object_or_404(OutputBroadcast, id=out_id)
         output.is_active = not output.is_active
         output.save()
