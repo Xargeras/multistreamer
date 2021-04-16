@@ -130,7 +130,7 @@ class StartBroadcast(View):
         if server.is_broadcast_online_list(outputs):
             server.stop_broadcast_list(outputs)
         else:
-            server.start_broadcast_list(outputs, broadcast.key)
+            server.start_broadcast_list(outputs, broadcast.key, broadcast.type)
         return redirect(reverse('stream_detail', kwargs={"id": id}))
 
 
@@ -152,10 +152,11 @@ class DetailBroadcast(DetailView):
     template_name = 'pages/stream/detail.html'
     model = InputBroadcast
     pk_url_kwarg = 'id'
-    extra_context = {'pagename': 'Просмотр параметров трансляции', 'server_url': Server.url}
+    extra_context = {'pagename': 'Просмотр параметров трансляции'}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['server_url'] = Server.get_instance().get_url(self.object.type)
         context['outputs'] = OutputBroadcast.objects.filter(input_broadcast=self.object)
         context['is_online'] = Server.get_instance().is_broadcast_online_list(context['outputs'])
         return context
@@ -208,7 +209,7 @@ class CreateInputKey(CreateView):
     template_name = 'pages/stream/create_input_key.html'
     model = InputBroadcast
     model_form = InputBroadcastSettings
-    fields = ['name']
+    fields = ['name', 'type']
     extra_context = {'pagename': 'Создание ключа'}
 
     def form_valid(self, form):
@@ -224,13 +225,13 @@ class UpdateInputKey(UpdateView):
     template_name = 'pages/stream/create_input_key.html'
     model = InputBroadcast
     model_form = InputBroadcastSettings
-    fields = ['name']
+    fields = ['name', 'type']
     extra_context = {'pagename': 'Изменение входящей трансляции'}
     pk_url_kwarg = 'id'
 
     def form_valid(self, form):
         self.object = form.save()
-        return redirect('stream_detail', self.object.input_broadcast.id)
+        return redirect('stream_detail', self.object.id)
 
 
 class DeleteInputBroadcast(DeleteView):
