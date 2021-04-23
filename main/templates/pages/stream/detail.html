@@ -80,7 +80,7 @@
                     <div class="col-auto">
                         <a href="{% url 'stream_update' object.id output.id%}">Изменить</a>
                     </div>
-                    <div class="col-12 mt-2 mt-md-0 col-md-auto">
+                    <div {% if is_online %} data-toggle="tooltip" data-placement="top" title="Для применения настроек потребуется перезапуск трансляции" {% endif %} class="col-12 mt-2 mt-md-0 col-md-auto">
                         <label class="switch" style="float: right;">
                             <input type="checkbox" {% if output.is_active %} checked {% endif %} name="{{ output.id }}">
                             <div>
@@ -177,7 +177,6 @@
                         } else {
                             $(this).parent().parent().parent().parent().removeClass('active')
                         }
-                        alert('Для применения настроек может потребоваться перезапуск трансляции')
                     }
                 })
             });
