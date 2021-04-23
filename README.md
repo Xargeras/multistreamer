@@ -49,3 +49,9 @@ pip install -r requirements.txt
 ffmpeg -re -stream_loop -1 -i file.ts -c copy -f rtsp rtsp://localhost:8554/mystream
 ffmpeg -re -stream_loop -1 -i file.ts -c copy -f flv rtmp://localhost/mystream
 ```
+
+
+Pylint:
+```bash
+pylint --load-plugins pylint_django --django-settings-module=multistreamer.settings main
+```

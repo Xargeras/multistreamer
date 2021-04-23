@@ -7,3 +7,7 @@ django-registration==3.1.1
 # Documentation
 Sphinx==3.4.3
 sphinx-rtd-theme==0.5.1
+
+# Pylint
+pylint-django==2.4.3
+pylint==2.7.4

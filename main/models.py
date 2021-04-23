@@ -15,13 +15,13 @@ class Avatar(models.Model):
         img = Image.open(self.image.path)  # Open image using self
 
         if img.height > 400 or img.width > 400:
-            m = min(img.height, img.weight)
+            m = min(img.height, img.width)
             new_img = img.crop(
-                (img.width // 2 - 200,
-                 img.height // 2 - 200,
-                 img.width // 2 + 200,
-                 img.height // 2 + 200))
-            new_img = new_img.resize(400, 400)
+                ((img.width - m) // 2,
+                 (img.height - m) // 2,
+                 img.width - (img.width - m) // 2,
+                 img.height - (img.height - m) // 2))
+            new_img = new_img.resize((400, 400))
             new_img.save(self.image.path)  # saving image at the same path
 
 

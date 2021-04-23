@@ -5,7 +5,7 @@ from main import views
 
 class Stream:
     paths = [path('stream/', include([
-                path('storage/', login_required(views.StreamStorageView.as_view()), name='stream_create'),
+                path('storage/', login_required(views.StreamStorageView.as_view())),
                 path('', login_required(views.ListBroadcast.as_view()), name='list_stream'),
                 path('<int:id>/', login_required(views.DetailBroadcast.as_view()), name='stream_detail'),
                 path('<int:id>/start/', login_required(views.StartBroadcast.as_view()), name='stream_start'),
@@ -15,7 +15,7 @@ class Stream:
                 path('<int:id>/output/create/', login_required(views.CreateBroadcast.as_view()), name='stream_create'),
                 path('<int:id>/output/<int:out_id>/update/', login_required(views.UpdateBroadcast.as_view()), name='stream_update'),
                 path('<int:id>/output/<int:out_id>/delete/', login_required(views.DeleteBroadcast.as_view()), name='stream_delete'),
-                path('<int:id>/output/<int:out_id>/change/', login_required(views.ChangeState.as_view()), name='stream_change_state'),
+                path('<int:id>/output/change/', login_required(views.ChangeState.as_view()), name='stream_change_state'),
             ]))]
 
     def get_url_list(self):
