@@ -11,3 +11,6 @@ sphinx-rtd-theme==0.5.1
 # Pylint
 pylint-django==2.4.3
 pylint==2.7.4
+
+# Debug
+django-debug-toolbar==3.2.1
