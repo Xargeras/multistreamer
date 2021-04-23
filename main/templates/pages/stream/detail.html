@@ -2,9 +2,24 @@
 
 
 {% block content %}
-<h2>Название трансляции: {{object.name}}</h2>
-<h2>Выходящая ulr: {{object.url}}</h2>
-<h2>Ваш ключ: {{object.key}}</h2>
-<h2>Входной URL: {{object.broadcast.url}}</h2>
-<a href="{% url 'stream_update' object.id %}">Изменить трансляцию</a>
+    <h2>Название трансляции: {{ object.name }}</h2>
+    <h2>Входной URL: {{ server_url }}/{{ object.key }}</h2>
+    <a href="{% url 'update_input_key' object.id %}">Изменить трансляцию</a>
+    <form action="{% url 'stream_start' object.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit"><i class="bi bi-power"></i>{% if is_online %}Остановить{% else %}Запустить{% endif %}</button>
+    </form>
+    <a href="{% url 'stream_create' object.id %}">Создать новый исходящий поток</a>
+    <table>
+    <tr><td>URL</td><td>Key</td><td>Изменить</td><td>Статус</td><td>Удалить</td></tr>
+    {% for output in outputs %}
+    <tr>
+        <td>{{ output.url }}</td>
+        <td>{{ output.key }}</td>
+        <td><a href="{% url 'stream_update' object.id output.id %}">Изменить</a></td>
+        <td><a href="{% url 'stream_change_state' object.id output.id %}">{% if output.is_active %}Активен{% else %}Не активен{% endif %}</a></td>
+        <td><a href="{% url 'stream_delete' object.id output.id %}">Удалить</a></td>
+    </tr>
+    {% endfor %}
+    </table>
 {% endblock %}
