@@ -76,7 +76,7 @@ class ProfileSettingView(View):
         if request.POST.get('avatar_form', None):
             avatar = Avatar.objects.filter(user=request.user)
             if not avatar:
-                avatar = Avatar.save_img()
+                avatar = Avatar(user=request.user)
             else:
                 avatar = avatar[0]
             form = AvatarSettings(request.POST, request.FILES, instance=avatar)

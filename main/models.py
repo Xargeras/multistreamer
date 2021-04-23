@@ -9,18 +9,19 @@ class Avatar(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='avatars/', null=True)
 
-    def save_img(self, *args, **kwargs):
-        super().save_img()
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
         img = Image.open(self.image.path)  # Open image using self
 
         if img.height > 400 or img.width > 400:
-            #img.thumbnail(new_img)
+            m = min(img.height, img.weight)
             new_img = img.crop(
                 (img.width // 2 - 200,
-                img.height // 2 - 200,
-                img.width // 2 + 200,
-                img.height // 2 + 200))
+                 img.height // 2 - 200,
+                 img.width // 2 + 200,
+                 img.height // 2 + 200))
+            new_img = new_img.resize(400, 400)
             new_img.save(self.image.path)  # saving image at the same path
 
 
