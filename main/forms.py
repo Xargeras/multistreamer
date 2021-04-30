@@ -101,11 +101,17 @@ class YoutubeBroadcastSettings(forms.ModelForm):
     class Meta:
         model = OutputBroadcast
         exclude = ['name', 'url', 'key', 'author']
+        include = ['Stream_name']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'broadcast_name',
                 'placeholder': "Название трансляции",
+            }),
+            'Stream_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'broadcast_name',
+                'placeholder': "Название трансляции2",
             })
         }
 
