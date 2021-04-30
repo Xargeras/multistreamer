@@ -47,7 +47,7 @@ class StreamingTest(View):
 
 def profile_page(request, id):
     context = {
-        'pagename': "Профиль",
+        'pagename': 'Профиль',
         'menu': get_menu_context(),
         'user': get_object_or_404(User, id=id),
     }
@@ -56,7 +56,7 @@ def profile_page(request, id):
 
 class ProfileSettingView(View):
     context = {
-        'pagename': "Настроки профиля",
+        'pagename': 'Настроки профиля',
         'menu': get_menu_context(),
     }
 
@@ -94,7 +94,7 @@ class ProfileSettingView(View):
             form = UserSettings(request.POST, instance=request.user)
             if form.is_valid():
                 form.save()
-        return redirect(reverse('profile', kwargs={"id": request.user.id}))
+        return redirect(reverse('profile', kwargs={'id': request.user.id}))
 
 
 class IndexPage(View):
@@ -121,7 +121,7 @@ class StartBroadcast(View):
     }
 
     def get(self, request, id):
-        return redirect(reverse('stream_detail', kwargs={"id": id}))
+        return redirect(reverse('stream_detail', kwargs={'id': id}))
 
     def post(self, request, id):
         server = Server.get_instance()
@@ -131,7 +131,7 @@ class StartBroadcast(View):
             server.stop_broadcast_list(outputs)
         else:
             server.start_broadcast_list(outputs, broadcast.key, broadcast.type)
-        return redirect(reverse('stream_detail', kwargs={"id": id}))
+        return redirect(reverse('stream_detail', kwargs={'id': id}))
 
 
 class ListBroadcast(ListView):
@@ -215,7 +215,7 @@ class ChangeState(View):
         output = get_object_or_404(OutputBroadcast, id=out_id)
         output.is_active = not output.is_active
         output.save()
-        return redirect(reverse('stream_detail', kwargs={"id": id}))
+        return redirect(reverse('stream_detail', kwargs={'id': id}))
 
 
 class CreateInputKey(CreateView):

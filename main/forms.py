@@ -16,22 +16,22 @@ class UserSettings(forms.ModelForm):
             'username': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'validationCustomUsername',
-                'placeholder': "Имя пользователя",
+                'placeholder': 'Имя пользователя',
             }),
             'first_name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'validationCustom01',
-                'placeholder': "Имя",
+                'placeholder': 'Имя',
             }),
             'last_name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'validationCustom02',
-                'placeholder': "Фамилия",
+                'placeholder': 'Фамилия',
             }),
             'email': forms.EmailInput(attrs={
                 'class': 'form-control',
                 'id': 'validationCustomEmail',
-                'placeholder': "E-mail",
+                'placeholder': 'E-mail',
             }),
         }
 
@@ -44,7 +44,7 @@ class PasswordSettings(forms.ModelForm):
             'password': forms.PasswordInput(attrs={
                 'class': 'form-control',
                 'id': 'validationCustomPassword',
-                'placeholder': "Новый пароль",
+                'placeholder': 'Новый пароль',
             }),
         }
         labels = {
@@ -52,12 +52,12 @@ class PasswordSettings(forms.ModelForm):
         }
 
     new_password = forms.CharField(
-        label="Повторите пароль",
+        label='Повторите пароль',
         strip=False,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'id': 'validationCustomNewPassword',
-            'placeholder': "Повторите пароль",
+            'placeholder': 'Повторите пароль',
         }),
     )
 
@@ -69,7 +69,7 @@ class AvatarSettings(forms.ModelForm):
         widgets = {
             'image': forms.FileInput(attrs={
                 'id': 'validationImage',
-                'placeholder': "Аватар",
+                'placeholder': 'Аватар',
             }),
         }
 
@@ -82,17 +82,17 @@ class BroadcastSettings(forms.ModelForm):
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'broadcast_name',
-                'placeholder': "Название трансляции",
+                'placeholder': 'Название трансляции',
             }),
             'url': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'broadcast_url',
-                'placeholder': "Url трансляции",
+                'placeholder': 'Url трансляции',
             }),
             'key': forms.PasswordInput(attrs={
                 'class': 'form-control',
                 'id': 'broadcast_key',
-                'placeholder': "Ключ трансляции",
+                'placeholder': 'Ключ трансляции',
             }),
         }
 
@@ -105,7 +105,7 @@ class InputBroadcastSettings(forms.ModelForm):
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'broadcast_name',
-                'placeholder': "Название трансляции",
+                'placeholder': 'Название трансляции',
             }),
             'type': forms.Select(attrs={
                 'class': 'form-control',
