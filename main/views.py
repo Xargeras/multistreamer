@@ -10,7 +10,8 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.urls import reverse
 
-from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings, InputBroadcastSettings
+from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings, InputBroadcastSettings, \
+    YoutubeBroadcastSettings
 from main.models import Avatar, OutputBroadcast, InputBroadcast
 from scripts.run import Server
 from scripts.youtube import main as youtube
@@ -182,7 +183,7 @@ class CreateBroadcast(CreateView):
 class CreateYoutubeBroadcast(CreateView):
     template_name = 'pages/stream/create.html'
     model = OutputBroadcast
-    model_form = BroadcastSettings
+    model_form = YoutubeBroadcastSettings
     fields = ['name']
     extra_context = {'pagename': 'Создание Трансляции'}
 
