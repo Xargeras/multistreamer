@@ -1,28 +1,47 @@
-{% extends 'base/base.html' %}
-
+{% extends 'base/empty.html' %}
+{% load static %}
 
 {% load bootstrap4 %}
 
+{% block extra_css %}
+{% endblock %}
 
 {% block content %}
+<div class="container-fluid pt-5">
+    <div class="row justify-content-around">
+        <div class="col-12 col-md-7 col-lg-3">
+            <form class="validate-form" method="post">
+                <p class="w-100 text-center">
+                    С возвращением на
+                </p>
+                <h1 class="text-center pb-5">MultiStream.io</h1>
 
-<div class="bg-light h-100">
-    <div class="container">
-        <h1 class="text-center mt-4">Авторизация (vasya-promprog)</h1>
-        <hr>
-        <div class="row">
-            <div class="col-4 offset-4">
-                <form action="#" method="POST">
-                    {% csrf_token %}
+                {% csrf_token %}
 
-                    {% bootstrap_form form %}
-                    {% buttons %}
-                    <button type="submit" class="btn btn-primary float-right btn-block">Войти</button>
-                    {% endbuttons %}
-                </form>
-            </div>
+                {% bootstrap_form form %}
+
+                <div class="d-flex justify-content-between">
+                    <div class="form-checkbox">
+                        <input class="input" type="checkbox" name="remember-me"> Запомнить меня
+                    </div>
+
+                    <div>
+                        <a href="#">
+                            Забыли пароль?
+                        </a>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary w-100">
+                    Войти
+                </button>
+
+                <p class="text-center mt-2">Новичок в MultiStream.io? <a
+                    href="{% url 'django_registration_register' %}">Зарегистрироваться</a></p>
+            </form>
         </div>
     </div>
 </div>
+
 
 {% endblock %}

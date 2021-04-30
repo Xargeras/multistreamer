@@ -3,11 +3,12 @@
 {% load static %}
 
 {% block content %}
-    <section class="page-block-top">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    {% if request.user.avatar.image %}
+<div class="row pt-3">
+    <div class="col">
+        <h2>Последние записи пользователя</h2>
+    </div>
+    <div class="col-5">
+        {% if request.user.avatar.image %}
                         <img src="{{ request.user.avatar.image.url }}"
                              class="rounded-circle mx-auto d-block" style="width: 172px;height: 172px" alt="">
                     {% else %}
@@ -17,8 +18,6 @@
                     <h2 class="text-center mt-4"> {{ user.username }} <a class="link" href="setting"><i
                             class="bi bi-pen"></i></a></h2>
                     <h5 class="text-center mt-2">{{ user.first_name }} {{ user.last_name }}</h5>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
+</div>
 {% endblock %}

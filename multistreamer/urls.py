@@ -13,9 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import debug_toolbar
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
+from django.urls import path, include
+from django.views.generic import TemplateView
+from django_registration.backends.one_step.views import RegistrationView
 
 from main import views
 from main.templates.urls.stream import Stream
@@ -27,7 +32,7 @@ urlpatterns = [
     path('profile/<int:id>/', views.profile_page, name='profile'),
     path('profile/setting/', views.ProfileSettingView.as_view(), name='profilesetting'),
     path('test/', views.StreamingTest.as_view(), name='test'),
-    path('', views.IndexPage.as_view(), name='index'),
+    path('', login_required(views.IndexPage.as_view()), name='index'),
     path('setting/', views.ProfileSettingView.as_view(), name='setting'),
 ]
 
@@ -36,3 +41,4 @@ urlpatterns += Login().get_url_list()
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += path('__debug__/', include(debug_toolbar.urls)),
