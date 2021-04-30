@@ -1,4 +1,5 @@
 import string
+import subprocess
 
 from django.utils.crypto import get_random_string
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
@@ -12,6 +13,7 @@ from django.urls import reverse
 from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings, InputBroadcastSettings
 from main.models import Avatar, OutputBroadcast, InputBroadcast
 from scripts.run import Server
+from scripts.youtube import main as youtube
 
 
 def get_menu_context():
@@ -172,6 +174,24 @@ class CreateBroadcast(CreateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.author = self.request.user
+        self.object.input_broadcast_id = self.kwargs['id']
+        self.object.save()
+        return redirect('stream_detail', self.kwargs['id'])
+
+
+class CreateYoutubeBroadcast(CreateView):
+    template_name = 'pages/stream/create.html'
+    model = OutputBroadcast
+    model_form = BroadcastSettings
+    fields = ['name']
+    extra_context = {'pagename': 'Создание Трансляции'}
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        key = subprocess.Popen(['python3', './scripts/youtube.py'], stdout=subprocess.PIPE)
+        self.object.author = self.request.user
+        self.object.url = 'rtmp://a.rtmp.youtube.com/live2'
+        self.object.key = key.stdout.read().decode('utf-8')
         self.object.input_broadcast_id = self.kwargs['id']
         self.object.save()
         return redirect('stream_detail', self.kwargs['id'])

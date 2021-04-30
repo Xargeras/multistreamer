@@ -33,6 +33,11 @@
                     <i class="fa fa-plus mr-md-2 mr-0" aria-hidden="true"></i><span class="d-none d-md-inline-block">Создать новый исходящий поток</span>
                 </button>
             </a>
+            <a href="{% url 'stream_create' object.id %}">
+                <button type="button" class="btn btn-primary">
+                    <i class="fa fa-plus mr-md-2 mr-0" aria-hidden="true"></i><span class="d-none d-md-inline-block">YouTube</span>
+                </button>
+            </a>
         </div>
         <ul class="streams">
             {% for output in outputs %}
