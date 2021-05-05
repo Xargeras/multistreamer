@@ -14,8 +14,8 @@
                 <a href="{% url 'create_input_key' %}" class="btn btn-outline-primary">Создать</a>
             </div>
             <div class="d-none d-sm-block">
-                <a type="button" class="btn btn-secondary switcher active" id="listview"><i class="fa fa-bars"></i></a>
-                <a type="button" class="btn btn-secondary switcher" id="gridview"><i class="fa fa-th-large"></i></a>
+                <a type="button"  class="btn btn-secondary switcher active" id="listview"><i class="fa fa-bars"></i></a>
+                <a type="button"  class="btn btn-secondary switcher" id="gridview"><i class="fa fa-th-large"></i></a>
             </div>
         </div>
     </div>
@@ -32,12 +32,12 @@
 
                     <section class="row w-100">
                         <div class="mt-4 col-md-6">
-                            <a class="w-100 btn btn-outline-primary">
+                            <a class="w-100 btn btn-outline-primary" href="{% url 'update_input_key' el.id %}">
                                 Изменить
                             </a>
                         </div>
-                        <div class="mt-4 col-md-6">
-                            <a class="w-100 btn btn-outline-danger">
+                        <div class="mt-4 col-md-6" >
+                            <a class="w-100 btn btn-outline-danger" href="{% url 'delete_input_key' el.id %}">
                                 Удалить
                             </a>
                         </div>

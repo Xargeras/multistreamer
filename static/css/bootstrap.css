@@ -45,7 +45,7 @@
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
 }
-.dark-theme {
+.theme-dark {
   --color-hr: rgb(41, 43, 63);
   --card-bg: 27, 30, 43;
   --bg-main: #20222C;
@@ -3271,7 +3271,7 @@ input[type="button"].btn-block {
   color: var(--text-small);
   text-align: left;
   list-style: none;
-  background-color: rgb(var(--bg-main));
+  background-color: var(--bg-main);
   background-clip: padding-box;
   border: 1px solid var(--color-hr);
   border-radius: 0.25rem;
