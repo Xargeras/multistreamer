@@ -275,23 +275,23 @@ ul.grid {
 	margin: 0 auto;
 	position: relative;
 }
-@media (max-width: 576px) {
-    ul.grid li {
-		min-width: 220px;
-		width: 100%;
-	}
-}
+
 ul.grid li {
     position: relative;
     display: inline-block;
 	min-width: 220px;
-	width: 22%;
+	width: 48%;
 	padding: 22px;
-	margin-right: 10px;
+	margin-right: 1%;
     margin-bottom: 20px;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
+}
+@media (max-width: 576px) {
+    ul.grid li {
+		width: 100%;
+	}
 }
 
 ul.grid li.third {
