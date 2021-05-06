@@ -77,7 +77,7 @@ class AvatarSettings(forms.ModelForm):
 class BroadcastSettings(forms.ModelForm):
     class Meta:
         model = OutputBroadcast
-        exclude = ['name', 'url', 'key', 'author']
+        exclude = ['name', 'url', 'key', 'author', 'bitrate']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -93,6 +93,11 @@ class BroadcastSettings(forms.ModelForm):
                 'class': 'form-control',
                 'id': 'broadcast_key',
                 'placeholder': 'Ключ трансляции',
+            }),
+            'bitrate': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'broadcast',
+                'placeholder': 'Битрейт',
             }),
         }
 

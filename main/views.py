@@ -166,7 +166,7 @@ class CreateBroadcast(CreateView):
     template_name = 'pages/stream/create.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
-    fields = ['name', 'url', 'key']
+    fields = ['name', 'url', 'key', 'bitrate']
     extra_context = {'pagename': 'Создание Трансляции'}
 
     def form_valid(self, form):
@@ -182,7 +182,7 @@ class UpdateBroadcast(UpdateView):
     model = OutputBroadcast
     model_form = BroadcastSettings
     pk_url_kwarg = 'out_id'
-    fields = ['name', 'url', 'key']
+    fields = ['name', 'url', 'key', 'bitrate']
     extra_context = {'pagename': 'Обновление трансляции'}
 
     def form_valid(self, form):
