@@ -43,13 +43,15 @@ class Server:
             return False
         return uid.poll() is None
 
-    def start_broadcast(self, id, internal_url, output_url, key, type):
+    def start_broadcast(self, id, internal_url, output_url, key, type, bitrate):
         if type == self.RTMP:
             url = self.rtmp_url
         else:
             url = self.rtsp_url
         input_url = f'{url}/{internal_url}'
-        self.broadcasts[id] = subprocess.Popen(['python3', 'scripts/run_broadcaster.py', input_url, output_url, key])
+        self.broadcasts[id] = subprocess.Popen(
+            ['python3', 'scripts/run_broadcaster.py', input_url, output_url, key, str(bitrate)]
+        )
 
     def stop_broadcast(self, id):
         self.broadcasts[id].send_signal(SIGINT)
@@ -61,7 +63,7 @@ class Server:
     def start_broadcast_list(self, broadcast_list, key, type):
         for broadcast in broadcast_list:
             if not self.is_broadcast_online(broadcast):
-                self.start_broadcast(broadcast.id, key, broadcast.url, broadcast.key, type)
+                self.start_broadcast(broadcast.id, key, broadcast.url, broadcast.key, bitrate=broadcast.bitrate, type=type)
 
     def stop_broadcast_list(self, broadcast_list):
         for broadcast in broadcast_list:
