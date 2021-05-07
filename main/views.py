@@ -20,31 +20,6 @@ def get_menu_context():
     ]
 
 
-class StreamingTest(View):
-    internal_url = 'mystream'
-    key = '95hb-4hcj-5fpa-1063-4ws6'
-    server = Server.get_instance()
-
-    def get_context(self, request):
-        return {
-            'menu': get_menu_context(),
-            'pagename': 'Тестовая трансляция',
-            'server_online': self.server.is_server_online(),
-        }
-
-    @method_decorator(login_required)
-    def get(self, request):
-        return render(request, 'pages/streaming_test.html', self.get_context(request))
-
-    @method_decorator(login_required)
-    def post(self, request):
-        if not self.server.is_server_online():
-            self.server.start_server()
-        else:
-            self.server.stop_server()
-        return redirect(reverse('test'))
-
-
 def profile_page(request, id):
     context = {
         'pagename': 'Профиль',
