@@ -192,7 +192,9 @@ class CreateYoutubeBroadcast(CreateView):
         key = subprocess.Popen(['python3', './scripts/youtube.py'], stdout=subprocess.PIPE)
         self.object.author = self.request.user
         self.object.url = 'rtmp://a.rtmp.youtube.com/live2'
-        self.object.key = key.stdout.read().decode('utf-8')
+        tmp = key.stdout.read().decode('utf-8')
+        tmp = tmp[1:]
+        self.object.key = tmp
         self.object.input_broadcast_id = self.kwargs['id']
         self.object.save()
         return redirect('stream_detail', self.kwargs['id'])

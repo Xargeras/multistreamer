@@ -101,7 +101,6 @@ class YoutubeBroadcastSettings(forms.ModelForm):
     class Meta:
         model = OutputBroadcast
         exclude = ['name', 'url', 'key', 'author']
-        include = ['Stream_name']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -114,6 +113,15 @@ class YoutubeBroadcastSettings(forms.ModelForm):
                 'placeholder': "Название трансляции2",
             })
         }
+    Stream_name = forms.CharField(
+        label="Повторите пароль",
+        strip=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'id': 'validationCustomNewPassword',
+            'placeholder': "Повторите пароль",
+        }),
+    )
 
 
 class InputBroadcastSettings(forms.ModelForm):
