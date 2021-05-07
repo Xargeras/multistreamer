@@ -12,9 +12,10 @@ google-api-python-client
 Sphinx==3.4.3
 sphinx-rtd-theme==0.5.1
 
-# Pylint
-pylint-django==2.4.3
+# Codestyle
 pylint==2.7.4
+pylint-django==2.4.3
+unify==0.5
 
 # Debug
 django-debug-toolbar==3.2.1
