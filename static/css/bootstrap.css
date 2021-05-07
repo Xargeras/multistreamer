@@ -18,7 +18,7 @@
   --bg-gradient: radial-gradient(33.39% 52.04% at 51.2% 87.22%, rgba(253, 0, 0, 0.34) 0%, rgba(255, 255, 255, 0) 100%), radial-gradient(31.06% 57.27% at 60.21% 38.15%, rgba(20, 0, 255, 0.34) 0%, rgba(255, 255, 255, 0) 100%), radial-gradient(35.68% 68.31% at 35.68% 48.66%, rgba(250, 166, 89, 0.65) 0%, rgba(255, 255, 255, 0) 100%), #E7EDFC;
   --text-main: #212529;
   --text-header: #343a40;
-  --text-small: #33363ac5; 
+  --text-small: #33363ac5;
   --text-disabled:#808080c5;
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
@@ -52,7 +52,7 @@
   --bg-gradient: radial-gradient(33.39% 52.04% at 51.2% 87.22%, rgba(253, 0, 0, 0.25) 0%, rgba(33, 36, 41, 0) 100%, rgba(33, 36, 41, 0) 100%), radial-gradient(31.06% 57.27% at 60.21% 38.15%, rgba(20, 0, 255, 0.25) 0%, rgba(33, 36, 41, 0) 100%), radial-gradient(35.68% 68.31% at 35.68% 48.66%, rgba(250, 166, 89, 0.25) 0%, rgba(33, 36, 41, 0) 100%), #20222C;
   --text-main: #e2e6ebe8;
   --text-header: #f7f7f7;
-  --text-small: #f0f0f0c5; 
+  --text-small: #f0f0f0c5;
   --text-disabled:#808080c5;
   --bs-blue: #2d80fd;
   --bs-indigo: #792bf7;
@@ -10369,10 +10369,6 @@ a.text-dark:hover, a.text-dark:focus {
 
 .navbar.bg-light.navbar-fixed-bottom {
   border-width: 1px 0 0;
-}
-
-p {
-  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
 blockquote {
