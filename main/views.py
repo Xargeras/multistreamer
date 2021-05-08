@@ -169,6 +169,7 @@ class UpdateBroadcast(UpdateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.input_broadcast_id = self.kwargs['id']
+        self.object.save()
         return redirect('stream_detail', self.kwargs['id'])
 
 
