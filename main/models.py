@@ -48,3 +48,36 @@ class OutputBroadcast(models.Model):
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=False)
     input_broadcast = models.ForeignKey(to=InputBroadcast, on_delete=models.CASCADE, blank=False, default=1)
+
+
+class YoutubeSettings(models.Model):
+    p1440 = 1
+    p1080 = 2
+    p720 = 3
+    p480 = 4
+    p360 = 5
+    RTSP = 1
+    RTMP = 2
+    public = 1
+    private = 2
+    choices = [
+        (p1440, '1440p'),
+        (p1080, '1080p'),
+        (p720, '720p'),
+        (p480, '480p'),
+        (p360, '360p'),
+    ]
+    type_choices = [
+        (RTSP, 'RTSP'),
+        (RTMP, 'RTMP'),
+    ]
+    privacy_choices = [
+        (public, 'public'),
+        (private, 'private'),
+    ]
+    title = models.CharField(max_length=128)
+    description = models.CharField(max_length=1024)
+    resolution = models.IntegerField(choices=choices, default=p1080)
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    type = models.IntegerField(choices=type_choices, default=RTMP)
+    privacy = models.IntegerField(choices=privacy_choices, default=public)
