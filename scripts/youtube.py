@@ -91,7 +91,7 @@ def bind_broadcast(youtube, broadcast, stream):
 def main():
     settings = {
         "title": "Stream",
-        "description": "Restream via Multistream",
+        "description": "Restream via Multistream https://multistream.io",
         "resolution": "1080p",
         "type": "rtmp",
         "privacy": "public"

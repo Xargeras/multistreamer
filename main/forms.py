@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.backends import UserModel
 
-from main.models import Avatar, OutputBroadcast, InputBroadcast
+from main.models import Avatar, OutputBroadcast, InputBroadcast, YoutubeSettings
 
 
 class DateInput(forms.DateInput):
@@ -99,29 +99,32 @@ class BroadcastSettings(forms.ModelForm):
 
 class YoutubeBroadcastSettings(forms.ModelForm):
     class Meta:
-        model = OutputBroadcast
-        exclude = ['name', 'url', 'key', 'author']
+        model = YoutubeSettings
+        exclude = ['title', 'description', 'resolution', 'type', 'privacy', 'author']
         widgets = {
-            'name': forms.TextInput(attrs={
+            'title': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'broadcast_name',
                 'placeholder': "Название трансляции",
             }),
-            'Stream_name': forms.TextInput(attrs={
+            'description': forms.TextInput(attrs={
                 'class': 'form-control',
-                'id': 'broadcast_name',
-                'placeholder': "Название трансляции2",
-            })
+                'id': 'youtube_description',
+                'placeholder': "Описание трансляции",
+            }),
+            'resolution': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'type',
+            }),
+            'type': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'type',
+            }),
+            'privacy': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'type',
+            }),
         }
-    Stream_name = forms.CharField(
-        label="Повторите пароль",
-        strip=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'id': 'validationCustomNewPassword',
-            'placeholder': "Повторите пароль",
-        }),
-    )
 
 
 class InputBroadcastSettings(forms.ModelForm):
