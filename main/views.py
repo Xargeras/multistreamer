@@ -20,34 +20,9 @@ def get_menu_context():
     ]
 
 
-class StreamingTest(View):
-    internal_url = 'mystream'
-    key = '95hb-4hcj-5fpa-1063-4ws6'
-    server = Server.get_instance()
-
-    def get_context(self, request):
-        return {
-            'menu': get_menu_context(),
-            'pagename': 'Тестовая трансляция',
-            'server_online': self.server.is_server_online(),
-        }
-
-    @method_decorator(login_required)
-    def get(self, request):
-        return render(request, 'pages/streaming_test.html', self.get_context(request))
-
-    @method_decorator(login_required)
-    def post(self, request):
-        if not self.server.is_server_online():
-            self.server.start_server()
-        else:
-            self.server.stop_server()
-        return redirect(reverse('test'))
-
-
 def profile_page(request, id):
     context = {
-        'pagename': "Профиль",
+        'pagename': 'Профиль',
         'menu': get_menu_context(),
         'user': get_object_or_404(User, id=id),
     }
@@ -56,7 +31,7 @@ def profile_page(request, id):
 
 class ProfileSettingView(View):
     context = {
-        'pagename': "Настроки профиля",
+        'pagename': 'Настроки профиля',
         'menu': get_menu_context(),
     }
 
@@ -94,7 +69,7 @@ class ProfileSettingView(View):
             form = UserSettings(request.POST, instance=request.user)
             if form.is_valid():
                 form.save()
-        return redirect(reverse('profile', kwargs={"id": request.user.id}))
+        return redirect(reverse('profile', kwargs={'id': request.user.id}))
 
 
 class IndexPage(View):
@@ -121,17 +96,17 @@ class StartBroadcast(View):
     }
 
     def get(self, request, id):
-        return redirect(reverse('stream_detail', kwargs={"id": id}))
+        return redirect(reverse('stream_detail', kwargs={'id': id}))
 
     def post(self, request, id):
         server = Server.get_instance()
-        broadcast = get_object_or_404(InputBroadcast, id=id)
+        broadcast = get_object_or_404(InputBroadcast, id=id, author=request.user)
         outputs = OutputBroadcast.objects.filter(input_broadcast=broadcast, is_active=True)
         if server.is_broadcast_online_list(outputs):
             server.stop_broadcast_list(outputs)
         else:
             server.start_broadcast_list(outputs, broadcast.key, broadcast.type)
-        return redirect(reverse('stream_detail', kwargs={"id": id}))
+        return redirect(reverse('stream_detail', kwargs={'id': id}))
 
 
 class ListBroadcast(ListView):
@@ -154,6 +129,9 @@ class DetailBroadcast(DetailView):
     pk_url_kwarg = 'id'
     extra_context = {'pagename': 'Просмотр параметров трансляции'}
 
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['server_url'] = Server.get_instance().get_url(self.object.type)
@@ -166,7 +144,7 @@ class CreateBroadcast(CreateView):
     template_name = 'pages/stream/create.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
-    fields = ['name', 'url', 'key']
+    fields = ['name', 'url', 'key', 'bitrate']
     extra_context = {'pagename': 'Создание Трансляции'}
 
     def form_valid(self, form):
@@ -182,12 +160,16 @@ class UpdateBroadcast(UpdateView):
     model = OutputBroadcast
     model_form = BroadcastSettings
     pk_url_kwarg = 'out_id'
-    fields = ['name', 'url', 'key']
+    fields = ['name', 'url', 'key', 'bitrate']
     extra_context = {'pagename': 'Обновление трансляции'}
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.input_broadcast_id = self.kwargs['id']
+        self.object.save()
         return redirect('stream_detail', self.kwargs['id'])
 
 
@@ -198,6 +180,9 @@ class DeleteBroadcast(DeleteView):
     pk_url_kwarg = 'out_id'
     success_url = '/stream/'
     extra_context = {'pagename': 'Удаление трансляции'}
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -215,7 +200,7 @@ class ChangeState(View):
         output = get_object_or_404(OutputBroadcast, id=out_id)
         output.is_active = not output.is_active
         output.save()
-        return redirect(reverse('stream_detail', kwargs={"id": id}))
+        return redirect(reverse('stream_detail', kwargs={'id': id}))
 
 
 class CreateInputKey(CreateView):
@@ -242,6 +227,9 @@ class UpdateInputKey(UpdateView):
     extra_context = {'pagename': 'Изменение входящей трансляции'}
     pk_url_kwarg = 'id'
 
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
+
     def form_valid(self, form):
         self.object = form.save()
         return redirect('stream_detail', self.object.id)
@@ -254,3 +242,6 @@ class DeleteInputBroadcast(DeleteView):
     pk_url_kwarg = 'id'
     success_url = '/stream/'
     extra_context = {'pagename': 'Удаление трансляции'}
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
