@@ -103,7 +103,7 @@ class StartBroadcast(View):
 
     def post(self, request, id):
         server = Server.get_instance()
-        broadcast = get_object_or_404(InputBroadcast, id=id)
+        broadcast = get_object_or_404(InputBroadcast, id=id, author=request.user)
         outputs = OutputBroadcast.objects.filter(input_broadcast=broadcast, is_active=True)
         if server.is_broadcast_online_list(outputs):
             server.stop_broadcast_list(outputs)
@@ -131,6 +131,9 @@ class DetailBroadcast(DetailView):
     model = InputBroadcast
     pk_url_kwarg = 'id'
     extra_context = {'pagename': 'Просмотр параметров трансляции'}
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -183,9 +186,13 @@ class UpdateBroadcast(UpdateView):
     fields = ['name', 'url', 'key', 'bitrate']
     extra_context = {'pagename': 'Обновление трансляции'}
 
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.input_broadcast_id = self.kwargs['id']
+        self.object.save()
         return redirect('stream_detail', self.kwargs['id'])
 
 
@@ -196,6 +203,9 @@ class DeleteBroadcast(DeleteView):
     pk_url_kwarg = 'out_id'
     success_url = '/stream/'
     extra_context = {'pagename': 'Удаление трансляции'}
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -240,6 +250,9 @@ class UpdateInputKey(UpdateView):
     extra_context = {'pagename': 'Изменение входящей трансляции'}
     pk_url_kwarg = 'id'
 
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
+
     def form_valid(self, form):
         self.object = form.save()
         return redirect('stream_detail', self.object.id)
@@ -252,3 +265,6 @@ class DeleteInputBroadcast(DeleteView):
     pk_url_kwarg = 'id'
     success_url = '/stream/'
     extra_context = {'pagename': 'Удаление трансляции'}
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
