@@ -23,34 +23,9 @@ def get_menu_context():
     ]
 
 
-class StreamingTest(View):
-    internal_url = 'mystream'
-    key = '95hb-4hcj-5fpa-1063-4ws6'
-    server = Server.get_instance()
-
-    def get_context(self, request):
-        return {
-            'menu': get_menu_context(),
-            'pagename': 'Тестовая трансляция',
-            'server_online': self.server.is_server_online(),
-        }
-
-    @method_decorator(login_required)
-    def get(self, request):
-        return render(request, 'pages/streaming_test.html', self.get_context(request))
-
-    @method_decorator(login_required)
-    def post(self, request):
-        if not self.server.is_server_online():
-            self.server.start_server()
-        else:
-            self.server.stop_server()
-        return redirect(reverse('test'))
-
-
 def profile_page(request, id):
     context = {
-        'pagename': "Профиль",
+        'pagename': 'Профиль',
         'menu': get_menu_context(),
         'user': get_object_or_404(User, id=id),
     }
@@ -59,7 +34,7 @@ def profile_page(request, id):
 
 class ProfileSettingView(View):
     context = {
-        'pagename': "Настроки профиля",
+        'pagename': 'Настроки профиля',
         'menu': get_menu_context(),
     }
 
@@ -97,7 +72,7 @@ class ProfileSettingView(View):
             form = UserSettings(request.POST, instance=request.user)
             if form.is_valid():
                 form.save()
-        return redirect(reverse('profile', kwargs={"id": request.user.id}))
+        return redirect(reverse('profile', kwargs={'id': request.user.id}))
 
 
 class IndexPage(View):
@@ -124,7 +99,7 @@ class StartBroadcast(View):
     }
 
     def get(self, request, id):
-        return redirect(reverse('stream_detail', kwargs={"id": id}))
+        return redirect(reverse('stream_detail', kwargs={'id': id}))
 
     def post(self, request, id):
         server = Server.get_instance()
@@ -134,7 +109,7 @@ class StartBroadcast(View):
             server.stop_broadcast_list(outputs)
         else:
             server.start_broadcast_list(outputs, broadcast.key, broadcast.type)
-        return redirect(reverse('stream_detail', kwargs={"id": id}))
+        return redirect(reverse('stream_detail', kwargs={'id': id}))
 
 
 class ListBroadcast(ListView):
@@ -169,7 +144,7 @@ class CreateBroadcast(CreateView):
     template_name = 'pages/stream/create.html'
     model = OutputBroadcast
     model_form = BroadcastSettings
-    fields = ['name', 'url', 'key']
+    fields = ['name', 'url', 'key', 'bitrate']
     extra_context = {'pagename': 'Создание Трансляции'}
 
     def form_valid(self, form):
@@ -205,7 +180,7 @@ class UpdateBroadcast(UpdateView):
     model = OutputBroadcast
     model_form = BroadcastSettings
     pk_url_kwarg = 'out_id'
-    fields = ['name', 'url', 'key']
+    fields = ['name', 'url', 'key', 'bitrate']
     extra_context = {'pagename': 'Обновление трансляции'}
 
     def form_valid(self, form):
@@ -238,7 +213,7 @@ class ChangeState(View):
         output = get_object_or_404(OutputBroadcast, id=out_id)
         output.is_active = not output.is_active
         output.save()
-        return redirect(reverse('stream_detail', kwargs={"id": id}))
+        return redirect(reverse('stream_detail', kwargs={'id': id}))
 
 
 class CreateInputKey(CreateView):
