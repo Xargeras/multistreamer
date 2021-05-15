@@ -63,7 +63,7 @@ def start_stream(youtube, settings):
             cdn=dict(
                 resolution=settings["resolution"],
                 frameRate="60fps",
-                ingestionType=settings["type"]
+                ingestionType='rtmp'
             )
         )
     )

@@ -68,10 +68,6 @@ class YoutubeSettings(models.Model):
         (p480, '480p'),
         (p360, '360p'),
     ]
-    type_choices = [
-        (RTSP, 'RTSP'),
-        (RTMP, 'RTMP'),
-    ]
     privacy_choices = [
         (public, 'public'),
         (private, 'private'),
@@ -81,6 +77,5 @@ class YoutubeSettings(models.Model):
     description = models.CharField(max_length=1024)
     resolution = models.IntegerField(choices=choices, default=p1080)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    type = models.IntegerField(choices=type_choices, default=RTMP)
     privacy = models.IntegerField(choices=privacy_choices, default=public)
     output_broadcast_id = models.ForeignKey(to=OutputBroadcast, on_delete=models.CASCADE)
