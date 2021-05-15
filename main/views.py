@@ -9,7 +9,8 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.urls import reverse
 
-from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings, InputBroadcastSettings
+from main.forms import (UserSettings, AvatarSettings, PasswordSettings,
+                        BroadcastSettings, InputBroadcastSettings)
 from main.models import Avatar, OutputBroadcast, InputBroadcast
 from scripts.run import Server
 
