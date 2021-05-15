@@ -105,7 +105,7 @@ class BroadcastSettings(forms.ModelForm):
 class YoutubeBroadcastSettings(forms.ModelForm):
     class Meta:
         model = YoutubeSettings
-        exclude = ['title', 'description', 'resolution', 'type', 'privacy', 'author']
+        exclude = ['title', 'description', 'resolution', 'privacy', 'author']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -118,10 +118,6 @@ class YoutubeBroadcastSettings(forms.ModelForm):
                 'placeholder': "Описание трансляции",
             }),
             'resolution': forms.Select(attrs={
-                'class': 'form-control',
-                'id': 'type',
-            }),
-            'type': forms.Select(attrs={
                 'class': 'form-control',
                 'id': 'type',
             }),
