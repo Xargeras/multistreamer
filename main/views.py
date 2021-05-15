@@ -162,18 +162,28 @@ class CreateYoutubeBroadcast(CreateView):
     template_name = 'pages/stream/create_youtube.html'
     model = YoutubeSettings
     model_form = YoutubeBroadcastSettings
-    fields = ['name']
+    fields = ['name', 'title', 'description', 'resolution', 'type', 'privacy']
     extra_context = {'pagename': 'Создание Трансляции'}
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        key = subprocess.Popen(['python3', './scripts/youtube.py'], stdout=subprocess.PIPE)
+        settings = {
+            "title": self.object.title,
+            "description": self.object.description + " Restream via Multistream https://multistream.io",
+            "resolution": self.object.resolution,
+            "type": self.object.type,
+            "privacy": self.object.privacy
+        }
+        #key = subprocess.Popen(['python3', './scripts/youtube.py'], stdout=subprocess.PIPE)
+        key = youtube(None)
         self.object.author = self.request.user
-        self.object.url = 'rtmp://a.rtmp.youtube.com/live2'
-        tmp = key.stdout.read().decode('utf-8')
-        tmp = tmp[1:]
-        self.object.key = tmp
-        self.object.input_broadcast_id = self.kwargs['id']
+        # tmp = key.stdout.read().decode('utf-8')
+        # tmp = tmp[1:]
+        self.object.key = key
+        new_broadcast = OutputBroadcast.objects.create(name=self.object.name, author=self.request.user,
+                                                       url="rtmp://a.rtmp.youtube.com/live2", key=self.object.key,
+                                                       input_broadcast_id=self.kwargs['id'])
+        self.object.output_broadcast_id = new_broadcast
         self.object.save()
         return redirect('stream_detail', self.kwargs['id'])
 
