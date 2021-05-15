@@ -98,9 +98,10 @@ def main(settings):
             "privacy": "public"
         }
     print(settings)
-    youtube = get_user_credentials()
-    broadcast = start_broadcast(youtube, settings)
-    stream = start_stream(youtube, settings)
-    bind_broadcast(youtube, broadcast, stream)
-    key = stream["cdn"]["ingestionInfo"]["streamName"]
+    # youtube = get_user_credentials()
+    # broadcast = start_broadcast(youtube, settings)
+    # stream = start_stream(youtube, settings)
+    # bind_broadcast(youtube, broadcast, stream)
+    # key = stream["cdn"]["ingestionInfo"]["streamName"]
+    key = ''
     return key
