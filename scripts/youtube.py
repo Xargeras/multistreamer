@@ -88,22 +88,19 @@ def bind_broadcast(youtube, broadcast, stream):
     return response
 
 
-def main():
-    settings = {
-        "title": "Stream",
-        "description": "Restream via Multistream https://multistream.io",
-        "resolution": "1080p",
-        "type": "rtmp",
-        "privacy": "public"
-    }
+def main(settings):
+    if settings == None:
+        settings = {
+            "title": "Stream",
+            "description": "Restream via Multistream https://multistream.io",
+            "resolution": "1080p",
+            "type": "rtmp",
+            "privacy": "public"
+        }
+    print(settings)
     youtube = get_user_credentials()
     broadcast = start_broadcast(youtube, settings)
     stream = start_stream(youtube, settings)
     bind_broadcast(youtube, broadcast, stream)
     key = stream["cdn"]["ingestionInfo"]["streamName"]
-    print(key, end="")
     return key
-
-
-if __name__ == "__main__":
-    main()
