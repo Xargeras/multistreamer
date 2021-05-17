@@ -1,5 +1,5 @@
 import string
-import subprocess
+import os
 
 from django.utils.crypto import get_random_string
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
@@ -162,7 +162,7 @@ class CreateYoutubeBroadcast(CreateView):
     template_name = 'pages/stream/create_youtube.html'
     model = YoutubeSettings
     model_form = YoutubeBroadcastSettings
-    fields = ['name', 'title', 'description', 'resolution', 'type', 'privacy']
+    fields = ['name', 'title', 'description', 'resolution', 'privacy']
     extra_context = {'pagename': 'Создание Трансляции'}
 
     def form_valid(self, form):
@@ -171,15 +171,16 @@ class CreateYoutubeBroadcast(CreateView):
             "title": self.object.title,
             "description": self.object.description + " Restream via Multistream https://multistream.io",
             "resolution": self.object.resolution,
-            "type": self.object.type,
             "privacy": self.object.privacy
         }
-        #key = subprocess.Popen(['python3', './scripts/youtube.py'], stdout=subprocess.PIPE)
-        key = youtube(None)
         self.object.author = self.request.user
-        # tmp = key.stdout.read().decode('utf-8')
-        # tmp = tmp[1:]
-        self.object.key = key
+        self.object.key = ''
+        USER_TOKEN_FILE = './scripts/client_tokens/'+'client_token_' + str(self.request.user.id) + '.json'
+        if os.path.exists(USER_TOKEN_FILE):
+            self.object.user_credentials = USER_TOKEN_FILE
+        else:
+            key = youtube(None, self.request.user.id)
+            self.object.user_credentials = USER_TOKEN_FILE
         new_broadcast = OutputBroadcast.objects.create(name=self.object.name, author=self.request.user,
                                                        url="rtmp://a.rtmp.youtube.com/live2", key=self.object.key,
                                                        input_broadcast_id=self.kwargs['id'])

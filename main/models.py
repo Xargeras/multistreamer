@@ -79,3 +79,4 @@ class YoutubeSettings(models.Model):
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
     privacy = models.IntegerField(choices=privacy_choices, default=public)
     output_broadcast_id = models.ForeignKey(to=OutputBroadcast, on_delete=models.CASCADE)
+    user_credentials = models.FileField(upload_to='client_tokens/', null=True)
