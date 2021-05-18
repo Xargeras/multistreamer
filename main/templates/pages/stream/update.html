@@ -3,8 +3,10 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<form action="" class="mt-5" method="post">{% csrf_token %}
-      {{ form|crispy }}
-    <input type="submit" class="btn btn-primary" value="Обновить"/>
-</form>
+<div class="mt-4 ">
+    <form action="" class="mt-5" method="post">{% csrf_token %}
+        {{ form|crispy }}
+      <input type="submit" class="btn btn-primary" value="Обновить"/>
+  </form>
+</div>
 {% endblock %}

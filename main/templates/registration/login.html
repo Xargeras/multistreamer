@@ -11,10 +11,10 @@
     <div class="row justify-content-around">
         <div class="col-12 col-md-7 col-lg-3">
             <form class="validate-form" method="post">
-                <p class="w-100 text-center">
+                <p class="w-100 text-center m-0">
                     С возвращением на
                 </p>
-                <h1 class="text-center pb-5">MultiStream.io</h1>
+                <h1 class="text-center mt-2">MultiStream.io</h1>
 
                 {% csrf_token %}
 
@@ -32,11 +32,11 @@
                     </div>
                 </div>
 
-                <button class="btn btn-primary w-100">
+                <button class="btn btn-primary mt-2 w-100">
                     Войти
                 </button>
 
-                <p class="text-center mt-2">Новичок в MultiStream.io? <a
+                <p class="text-center mt-4">Новичок в MultiStream.io? <a
                     href="{% url 'django_registration_register' %}">Зарегистрироваться</a></p>
             </form>
         </div>

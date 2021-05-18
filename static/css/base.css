@@ -42,45 +42,18 @@ body {
 }
 
 .stream>.stream__body {
-    padding-right: 15px;
-    padding-left: 15px;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
+
 }
 
 .stream>.stream__body>.stream__body-img {
-    padding-right: 15px;
-    padding-left: 15px;
-    -ms-flex: 0 0 auto;
-    flex: 0 0 auto;
-    width: auto;
-    max-width: 100%;
-    align-self: center;
+
 }
 
-.stream>.stream__body>.stream__body-main {
-    padding-right: 15px;
-    padding-left: 15px;
-    -ms-flex-preferred-size: 0;
-    flex-basis: 0;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
+.stream>.stream__body>.stream__body-main> *{
+    text-overflow: clip
 }
 
 .stream>.stream__body>.stream__body-actions {
-    padding-right: 15px;
-    padding-left: 15px;
-    -ms-flex: 0 0 auto;
-    flex: 0 0 auto;
-    width: auto;
-    max-width: 100%;
     align-self: center;
     display: flex;
     flex-direction: inherit;
@@ -91,14 +64,6 @@ body {
     padding-left: 8px;
     padding-right: 8px;
 }
-
-@media (max-width: 576px) {
-    .stream>.stream__body>.stream__body-actions {
-        width: 100%;
-    }
-}
-
-
 
 .switch {
     --line: #E8EBFB;
@@ -233,12 +198,23 @@ body {
 
 /** list view **/
 ul.list {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
     list-style: none;
     width: 100%;
 }
 
-ul.list li{
-	margin: 10px;
+ul.list li {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
 }
 
 
@@ -271,27 +247,23 @@ ul.list li span.meta {
 
 /** grid view **/
 ul.grid {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
     list-style: none;
-	margin: 0 auto;
-	position: relative;
+    width: 100%;
 }
 
 ul.grid li {
     position: relative;
-    display: inline-block;
-	min-width: 220px;
-	width: 48%;
-	padding: 22px;
-	margin-right: 1%;
-    margin-bottom: 20px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-}
-@media (max-width: 576px) {
-    ul.grid li {
-		width: 100%;
-	}
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
 }
 
 ul.grid li.third {
