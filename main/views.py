@@ -168,12 +168,12 @@ class CreateYoutubeBroadcast(CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        settings = {
-            "title": self.object.title,
-            "description": "Restream via MultiStream https://multistream.io " + self.object.description,
-            "resolution": self.object.choices[self.object.resolution][1],
-            "privacy": self.object.privacy_choices[self.object.privacy][1]
-        }
+        # settings = {
+        #     "title": self.object.title,
+        #     "description": "Restream via MultiStream https://multistream.io " + self.object.description,
+        #     "resolution": self.object.choices[self.object.resolution][1],
+        #     "privacy": self.object.privacy_choices[self.object.privacy][1]
+        # }
         self.object.author = self.request.user
         token = get_user_credentials()
         self.object.user_credentials = token

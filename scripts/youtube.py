@@ -22,7 +22,6 @@ def get_user_credentials():
 
 def start_broadcast(youtube, settings):
     time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-    #print(time)
     broadcast = youtube.liveBroadcasts().insert(
         part="snippet, status, contentDetails",
         body={
@@ -86,6 +85,17 @@ def refresh_token(credentials):
             flow = InstalledAppFlow.from_client_secrets_file('./scripts/client_secrets.json', scopes)
             credentials = flow.run_local_server(port=4000)
     return credentials.to_json()
+
+
+def stream(credentials, settings):
+    api_service_name = "youtube"
+    api_version = "v3"
+    youtube = build(api_service_name, api_version, credentials=credentials)
+    broadcast = start_broadcast(youtube, settings)
+    stream = start_stream(youtube, settings)
+    bind_broadcast(youtube, broadcast, stream)
+    key = stream["cdn"]["ingestionInfo"]["streamName"]
+    return key
 
 
 def main(settings):
