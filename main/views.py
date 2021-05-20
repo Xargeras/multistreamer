@@ -14,7 +14,7 @@ from main.forms import UserSettings, AvatarSettings, PasswordSettings, Broadcast
     YoutubeBroadcastSettings
 from main.models import Avatar, OutputBroadcast, InputBroadcast, YoutubeSettings
 from scripts.run import Server
-from scripts.youtube import main as youtube, authorization
+from scripts.youtube import main as youtube, get_user_credentials
 
 
 def get_menu_context():
@@ -175,7 +175,7 @@ class CreateYoutubeBroadcast(CreateView):
             "privacy": self.object.privacy_choices[self.object.privacy][1]
         }
         self.object.author = self.request.user
-        token = authorization(self.request.user.id)
+        token = get_user_credentials()
         self.object.user_credentials = token
         print(token)
         new_broadcast = OutputBroadcast.objects.create(name=self.object.name, author=self.request.user,
