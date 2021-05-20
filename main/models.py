@@ -52,15 +52,13 @@ class OutputBroadcast(models.Model):
 
 
 class YoutubeSettings(models.Model):
-    p1440 = 1
-    p1080 = 2
-    p720 = 3
-    p480 = 4
-    p360 = 5
-    RTSP = 1
-    RTMP = 2
-    public = 1
-    private = 2
+    p1440 = 0
+    p1080 = 1
+    p720 = 2
+    p480 = 3
+    p360 = 4
+    public = 0
+    private = 1
     choices = [
         (p1440, '1440p'),
         (p1080, '1080p'),
@@ -75,8 +73,8 @@ class YoutubeSettings(models.Model):
     name = models.CharField(max_length=128)
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=1024)
-    resolution = models.IntegerField(choices=choices, default=p1080)
+    resolution = models.IntegerField(choices=choices, default=0)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    privacy = models.IntegerField(choices=privacy_choices, default=public)
+    privacy = models.IntegerField(choices=privacy_choices, default=0)
     output_broadcast_id = models.ForeignKey(to=OutputBroadcast, on_delete=models.CASCADE)
     user_credentials = models.FileField(upload_to='client_tokens/', null=True)

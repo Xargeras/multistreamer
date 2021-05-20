@@ -4,6 +4,7 @@ import json
 
 import googleapiclient.discovery
 import googleapiclient.errors
+from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -12,25 +13,11 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 scopes = ["https://www.googleapis.com/auth/youtube", "https://www.googleapis.com/auth/youtube.force-ssl"]
 
 
-# def get_user_credentials(user):
-#     api_service_name = "youtube"
-#     api_version = "v3"
-#     client_secrets_file = "client_tokens.json"
-#     #disable this in production
-#     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-#
-#     #Get credentials and create an API client
-#     flow = InstalledAppFlow.from_client_secrets_file("./scripts/client_tokens.json", scopes=scopes)
-#     flow.run_local_server(port=4000, prompt='consent', authorization_prompt_message='')
-#     credentials = flow.credentials
-#     #print(credentials.to_json())
-#     credentials.to_json()
-#     youtube = googleapiclient.discovery.build(
-#         api_service_name, api_version, credentials=credentials)
-#     return youtube
-
 def get_user_credentials(user):
     credentials = None
+    api_service_name = "youtube"
+    api_version = "v3"
+
     USER_TOKEN_FILE = './scripts/client_tokens/' + 'client_token_' + str(user) + '.json'
     if os.path.exists(USER_TOKEN_FILE):
         credentials = Credentials.from_authorized_user_file(USER_TOKEN_FILE, scopes)
@@ -43,7 +30,8 @@ def get_user_credentials(user):
             credentials = flow.run_local_server(port=4000)
         with open(USER_TOKEN_FILE, 'w') as token:
             token.write(credentials.to_json())
-    return credentials
+    #youtube = build(api_service_name, api_version, credentials=credentials)
+    return credentials.to_json()
 
 
 def start_broadcast(youtube, settings):
@@ -68,7 +56,6 @@ def start_broadcast(youtube, settings):
     )
 
     response = broadcast.execute()
-    #print(response)
     return response
 
 
@@ -88,7 +75,6 @@ def start_stream(youtube, settings):
     )
 
     response = stream.execute()
-    #print(response)
     return response
 
 
@@ -103,8 +89,12 @@ def bind_broadcast(youtube, broadcast, stream):
         streamId=stream["id"]
     )
     response = bind.execute()
-    #print(response)
     return response
+
+
+def authorization(user):
+    token = get_user_credentials(user)
+    return token
 
 
 def main(settings, user):
@@ -117,9 +107,8 @@ def main(settings, user):
         }
     print(settings)
     youtube = get_user_credentials(user)
-    # broadcast = start_broadcast(youtube, settings)
-    # stream = start_stream(youtube, settings)
-    # bind_broadcast(youtube, broadcast, stream)
-    # key = stream["cdn"]["ingestionInfo"]["streamName"]
-    key = ''
+    broadcast = start_broadcast(youtube, settings)
+    stream = start_stream(youtube, settings)
+    bind_broadcast(youtube, broadcast, stream)
+    key = stream["cdn"]["ingestionInfo"]["streamName"]
     return key

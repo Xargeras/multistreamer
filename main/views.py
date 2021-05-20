@@ -14,7 +14,7 @@ from main.forms import UserSettings, AvatarSettings, PasswordSettings, Broadcast
     YoutubeBroadcastSettings
 from main.models import Avatar, OutputBroadcast, InputBroadcast, YoutubeSettings
 from scripts.run import Server
-from scripts.youtube import main as youtube
+from scripts.youtube import main as youtube, authorization
 
 
 def get_menu_context():
@@ -102,6 +102,7 @@ class StartBroadcast(View):
         return redirect(reverse('stream_detail', kwargs={'id': id}))
 
     def post(self, request, id):
+
         server = Server.get_instance()
         broadcast = get_object_or_404(InputBroadcast, id=id, author=request.user)
         outputs = OutputBroadcast.objects.filter(input_broadcast=broadcast, is_active=True)
@@ -169,20 +170,16 @@ class CreateYoutubeBroadcast(CreateView):
         self.object = form.save(commit=False)
         settings = {
             "title": self.object.title,
-            "description": self.object.description + " Restream via Multistream https://multistream.io",
-            "resolution": self.object.resolution,
-            "privacy": self.object.privacy
+            "description": "Restream via MultiStream https://multistream.io " + self.object.description,
+            "resolution": self.object.choices[self.object.resolution][1],
+            "privacy": self.object.privacy_choices[self.object.privacy][1]
         }
         self.object.author = self.request.user
-        self.object.key = ''
-        USER_TOKEN_FILE = './scripts/client_tokens/'+'client_token_' + str(self.request.user.id) + '.json'
-        if os.path.exists(USER_TOKEN_FILE):
-            self.object.user_credentials = USER_TOKEN_FILE
-        else:
-            key = youtube(None, self.request.user.id)
-            self.object.user_credentials = USER_TOKEN_FILE
+        token = authorization(self.request.user.id)
+        self.object.user_credentials = token
+        print(token)
         new_broadcast = OutputBroadcast.objects.create(name=self.object.name, author=self.request.user,
-                                                       url="rtmp://a.rtmp.youtube.com/live2", key=self.object.key,
+                                                       url="rtmp://a.rtmp.youtube.com/live2", key='self.object.key',
                                                        input_broadcast_id=self.kwargs['id'])
         self.object.output_broadcast_id = new_broadcast
         self.object.save()
