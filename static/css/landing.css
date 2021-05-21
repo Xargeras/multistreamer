@@ -25,6 +25,16 @@ h6 {
     font-size: inherit;
 }
 
+h1{
+    font-size: 4vw;
+    font-weight: 600;
+}
+p{
+    font-size: 2vw;
+    font-style: normal;
+    font-weight: normal;
+}
+
 html,
 body {
     height: 100%;
@@ -108,7 +118,14 @@ body {
     position: relative;
     z-index: 2;
 }
-
+.screen__content .bg{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -100;
+}
 .screen__body {
     position: absolute;
     width: 100%;

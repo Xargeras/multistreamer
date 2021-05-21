@@ -12,7 +12,7 @@
         <div class="page__wrapper">
             <div class="page__screen screen">
                 <div class="screen__content">
-                    <div style="width: 100%;height: 100%;position: absolute;top: 0;left: 0;">
+                    <div class="bg">
                         <img style="    top: 0;
                             right: 0;
                             position: absolute;" src="{% static 'images/landing/bg/Group 91 (1).png' %}" alt="">
@@ -24,8 +24,7 @@
                         <div class="row h-100">
                             <div class="col-6 h-100" style="display: flex;align-items: center;">
                                 <div class="p-5">
-                                    <h1 class="mb-4"
-                                        style="font-family: Source Sans Pro;font-style: normal;font-weight: 600;font-size: 98px;line-height: 52px;">
+                                    <h1 class="mb-4">
                                         MultiStream.io</h1>
                                     <p class="mt-4" style="font-family: Source Sans Pro;
                                             font-style: normal;
@@ -35,13 +34,17 @@
                                         и
                                         удобние.</p>
                                     <div class="row">
-                                        <div class="col-3">
-                                            <button type="button"
-                                                    class="btn btn-outline-primary w-100">Войти</button>
+                                        <div class="col-auto">
+                                            <a href="{% url 'login' %}">
+                                                <button type="button"
+                                                        class="btn btn-outline-primary w-100">Войти</button>
+                                            </a>
                                         </div>
-                                        <div class="col-4">
-                                            <button type="button"
-                                                    class="btn btn-primary w-100">Зарегистрироваться</button>
+                                        <div class="col-auto">
+                                            <a href="{% url 'django_registration_register' %}">
+                                                <button type="button"
+                                                        class="btn btn-primary w-100">Зарегистрироваться</button>
+                                            </a>
                                         </div>
                                     </div>
 
@@ -60,7 +63,7 @@
             </div>
             <div class="page__screen screen">
                 <div class="screen__content">
-                    <div style="width: 100%;height: 100%;position: absolute;top: 0;left: 0;">
+                    <div class="bg">
                         <img style="    top: 0;
                             right: 0;
                             position: absolute;" src="{% static 'images/landing/bg/Mosaics2.png' %}" alt="">
@@ -70,11 +73,7 @@
                     </div>
                     <div class="container-fluid h-100">
                         <div class="h-100">
-                            <h1 class="text-center" style="font-family: Source Sans Pro;
-                                font-style: normal;
-                                font-weight: bold;
-                                font-size: 69px;
-                                line-height: 76px;">Будьте везде и сразу</h1>
+                            <h1 class="text-center">Будьте везде и сразу</h1>
                             <p class="text-center" style="font-family: Source Sans Pro;
                                 font-style: normal;
                                 font-weight: normal;
@@ -126,11 +125,7 @@
             </div>
             <div class="page__screen screen">
                 <div class="screen__content">
-                    <h1 class="text-center" style="font-family: Source Sans Pro;
-                            font-style: normal;
-                            font-weight: bold;
-                            font-size: 69px;
-                            line-height: 76px;">Присоединяйся сейчас</h1>
+                    <h1 class="text-center">Присоединяйся сейчас</h1>
                     <div class="container">
                         <div class="row mt-5">
                             <div class="col-8">
@@ -172,5 +167,7 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'js/swiper.js' %}"></script>
 <script src="{% static 'js/landing.js' %}"></script>
+
 {% endblock %}
