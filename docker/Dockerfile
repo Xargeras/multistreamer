@@ -3,6 +3,7 @@ MAINTAINER Andrew Smirnov <smirnov@informatics.ru>
 
 # https://rtfm.co.ua/docker-nastrojka-tzdata-i-timezone-vo-vremya-bilda/
 ENV TZ=Europe/Moscow
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 ADD ./ /ps102_multistreamer
 WORKDIR /ps102_multistreamer/
