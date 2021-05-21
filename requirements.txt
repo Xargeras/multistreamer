@@ -1,6 +1,20 @@
 # Engine
 Django==3.1.6
+Pillow==8.1.0
+django-registration==3.1.1
+
+# Frontend
+django-bootstrap4==2.3.1
+django-crispy-forms==1.11.2
 
 # Documentation
 Sphinx==3.4.3
 sphinx-rtd-theme==0.5.1
+
+# Codestyle
+pylint==2.7.4
+pylint-django==2.4.3
+unify==0.5
+
+# Debug
+django-debug-toolbar==3.2.1

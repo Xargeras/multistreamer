@@ -3,8 +3,13 @@
 import os
 import sys
 
+from scripts.run import Server
+
 
 def main():
+    if "runrtsp" in sys.argv:
+        Server.get_instance().start_server()
+        sys.argv.remove("runrtsp")
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'multistreamer.settings')
     try:

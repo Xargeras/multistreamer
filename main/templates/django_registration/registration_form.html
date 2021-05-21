@@ -1,0 +1,35 @@
+{% extends 'base/empty.html' %}
+
+
+{% load bootstrap4 %}
+
+
+{% block content %}
+
+
+<div style="min-height: 100vh;">
+    <div class="container">
+        <h1 class="text-center pt-5">Регистрация</h1>
+        <div class="row">
+            <div class="col-12">
+                <div class="card mt-5">
+                    <div class="card-body w-100">
+                        <form action="#" method="POST">
+                            {% csrf_token %}
+
+                            {% bootstrap_form form %}
+                            {% buttons %}
+                            <button type="submit" class="btn btn-primary float-right btn-block">Зарегистрироваться
+                            </button>
+                            {% endbuttons %}
+                        </form>
+                        <p class="w-100 text-center pt-5 mb-1">Не в первый раз на MultiStream.io? <a href="{% url 'login' %}">Войти</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
