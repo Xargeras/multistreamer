@@ -8,5 +8,5 @@ RUN pip install --no-cache-dir -r ./requirements.txt
 
 RUN mkdir -p /var/log/supervisor
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-CMD ["/usr/bin/supervisord"]
 
+CMD exec /usr/bin/supervisord --nodaemon
