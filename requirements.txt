@@ -18,3 +18,9 @@ unify==0.5
 
 # Debug
 django-debug-toolbar==3.2.1
+
+# webserver
+daphne
+
+# Database
+mysqlclient
