@@ -1,6 +1,6 @@
 import string
-import os
 
+from itertools import chain
 from django.utils.crypto import get_random_string
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.contrib.auth.decorators import login_required
@@ -14,7 +14,7 @@ from main.forms import UserSettings, AvatarSettings, PasswordSettings, Broadcast
     YoutubeBroadcastSettings
 from main.models import Avatar, OutputBroadcast, InputBroadcast, YoutubeSettings
 from scripts.run import Server
-from scripts.youtube import main as youtube, get_user_credentials
+from scripts.youtube import main as youtube, get_user_credentials, refresh_token
 
 
 def get_menu_context():
@@ -139,7 +139,7 @@ class DetailBroadcast(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['server_url'] = Server.get_instance().get_url(self.object.type)
-        context['outputs'] = OutputBroadcast.objects.filter(input_broadcast=self.object)
+        context['outputs'] = list(chain(OutputBroadcast.objects.filter(input_broadcast=self.object), YoutubeSettings.objects.filter(input_broadcast=self.object)))
         context['is_online'] = Server.get_instance().is_broadcast_online_list(context['outputs'])
         return context
 
@@ -160,7 +160,7 @@ class CreateBroadcast(CreateView):
 
 
 class CreateYoutubeBroadcast(CreateView):
-    template_name = 'pages/stream/create_youtube.html'
+    template_name = 'pages/stream/create.html'
     model = YoutubeSettings
     model_form = YoutubeBroadcastSettings
     fields = ['name', 'title', 'description', 'resolution', 'privacy']
@@ -175,13 +175,32 @@ class CreateYoutubeBroadcast(CreateView):
         #     "privacy": self.object.privacy_choices[self.object.privacy][1]
         # }
         self.object.author = self.request.user
-        token = get_user_credentials()
+        if YoutubeSettings.objects.filter(author=self.object.author):
+            user = YoutubeSettings.objects.filter(author=self.object.author)
+            token = user[0].user_credentials
+        else:
+            token = get_user_credentials()
         self.object.user_credentials = token
         print(token)
-        new_broadcast = OutputBroadcast.objects.create(name=self.object.name, author=self.request.user,
-                                                       url="rtmp://a.rtmp.youtube.com/live2", key='self.object.key',
-                                                       input_broadcast_id=self.kwargs['id'])
-        self.object.output_broadcast_id = new_broadcast
+        self.object.input_broadcast_id = self.kwargs['id']
+        self.object.save()
+        return redirect('stream_detail', self.kwargs['id'])
+
+
+class UpdateYoutubeBroadcast(UpdateView):
+    template_name = 'pages/stream/update.html'
+    model = YoutubeSettings
+    model_form = YoutubeBroadcastSettings
+    pk_url_kwarg = 'out_id'
+    fields = ['name', 'title', 'description', 'resolution', 'privacy']
+    extra_context = {'pagename': 'Обновление трансляции'}
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.input_broadcast_id = self.kwargs['id']
         self.object.save()
         return redirect('stream_detail', self.kwargs['id'])
 

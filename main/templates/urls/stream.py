@@ -14,6 +14,7 @@ class Stream:
                 path('create/', login_required(views.CreateInputKey.as_view()), name='create_input_key'),
                 path('<int:id>/output/create/', login_required(views.CreateBroadcast.as_view()), name='stream_create'),
                 path('<int:id>/output/create_youtube/', login_required(views.CreateYoutubeBroadcast.as_view()), name='youtube_create'),
+                path('<int:id>/output/<int:out_id>/update_youtube/', login_required(views.UpdateYoutubeBroadcast.as_view()), name='youtube_update'),
                 path('<int:id>/output/<int:out_id>/update/', login_required(views.UpdateBroadcast.as_view()), name='stream_update'),
                 path('<int:id>/output/<int:out_id>/delete/', login_required(views.DeleteBroadcast.as_view()), name='stream_delete'),
                 path('<int:id>/output/change/', login_required(views.ChangeState.as_view()), name='stream_change_state'),

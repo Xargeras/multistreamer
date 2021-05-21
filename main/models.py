@@ -70,11 +70,16 @@ class YoutubeSettings(models.Model):
         (public, 'public'),
         (private, 'private'),
     ]
-    name = models.CharField(max_length=128)
+    #youtube
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=1024)
     resolution = models.IntegerField(choices=choices, default=0)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
     privacy = models.IntegerField(choices=privacy_choices, default=0)
-    output_broadcast_id = models.ForeignKey(to=OutputBroadcast, on_delete=models.CASCADE)
     user_credentials = models.FileField(upload_to='client_tokens/', null=True)
+    #broadcast
+    name = models.CharField(max_length=128)
+    is_active = models.BooleanField(default=False)
+    url = models.CharField(max_length=128, default='rtmp://a.rtmp.youtube.com/live2')
+    key = models.CharField(max_length=128, default='')
+    input_broadcast = models.ForeignKey(to=InputBroadcast, on_delete=models.CASCADE, blank=False, default=1)
