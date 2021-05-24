@@ -17,6 +17,8 @@ def get_user_credentials():
     credentials = None
     flow = InstalledAppFlow.from_client_secrets_file('./scripts/client_secrets.json', scopes)
     credentials = flow.run_local_server(port=4000)
+    flow.authorization_url(access_type="offline", include_granted_scopes="true")
+    print(credentials.to_json())
     return credentials.to_json()
 
 
@@ -78,16 +80,18 @@ def bind_broadcast(youtube, broadcast, stream):
 
 
 def refresh_token(credentials):
+    credentials = None
     if not credentials or not credentials.valid:
         if credentials and credentials.expired and credentials.refresh_token:
             credentials.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file('./scripts/client_secrets.json', scopes)
             credentials = flow.run_local_server(port=4000)
-    return credentials.to_json()
+    return credentials
 
 
 def stream(credentials, settings):
+    credentials = refresh_token(credentials)
     api_service_name = "youtube"
     api_version = "v3"
     youtube = build(api_service_name, api_version, credentials=credentials)

@@ -1,3 +1,4 @@
+import json
 import string
 
 from itertools import chain
@@ -14,7 +15,7 @@ from main.forms import UserSettings, AvatarSettings, PasswordSettings, Broadcast
     YoutubeBroadcastSettings
 from main.models import Avatar, OutputBroadcast, InputBroadcast, YoutubeSettings
 from scripts.run import Server
-from scripts.youtube import main as youtube, get_user_credentials, refresh_token
+from scripts.youtube import main as youtube, get_user_credentials, refresh_token, stream
 
 
 def get_menu_context():
@@ -106,6 +107,16 @@ class StartBroadcast(View):
         server = Server.get_instance()
         broadcast = get_object_or_404(InputBroadcast, id=id, author=request.user)
         outputs = OutputBroadcast.objects.filter(input_broadcast=broadcast, is_active=True)
+        youtubes = YoutubeSettings.objects.filter(input_broadcast=broadcast, is_active=True)
+        for youtube in youtubes:
+            settings = {
+                "title": youtube.title,
+                "description": "Restream via MultiStream https://multistream.io " + youtube.description,
+                "resolution": youtube.choices[youtube.resolution][1],
+                "privacy": youtube.privacy_choices[youtube.privacy][1]
+            }
+            youtube.key = stream(youtube.user_credentials, settings)
+        outputs = list(chain(youtubes, outputs))
         if server.is_broadcast_online_list(outputs):
             server.stop_broadcast_list(outputs)
         else:
@@ -139,7 +150,8 @@ class DetailBroadcast(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['server_url'] = Server.get_instance().get_url(self.object.type)
-        context['outputs'] = list(chain(OutputBroadcast.objects.filter(input_broadcast=self.object), YoutubeSettings.objects.filter(input_broadcast=self.object)))
+        context['youtube'] = YoutubeSettings.objects.filter(input_broadcast=self.object)
+        context['outputs'] = list(chain(OutputBroadcast.objects.filter(input_broadcast=self.object), context['youtube']))
         context['is_online'] = Server.get_instance().is_broadcast_online_list(context['outputs'])
         return context
 
@@ -175,13 +187,14 @@ class CreateYoutubeBroadcast(CreateView):
         #     "privacy": self.object.privacy_choices[self.object.privacy][1]
         # }
         self.object.author = self.request.user
-        if YoutubeSettings.objects.filter(author=self.object.author):
-            user = YoutubeSettings.objects.filter(author=self.object.author)
-            token = user[0].user_credentials
-        else:
-            token = get_user_credentials()
-        self.object.user_credentials = token
-        print(token)
+        # if YoutubeSettings.objects.filter(author=self.object.author):
+        #     user = YoutubeSettings.objects.filter(author=self.object.author)
+        #     token = user[0].user_credentials
+        # else:
+        #     token = get_user_credentials()
+        token = get_user_credentials()
+        self.object.user_credentials = json.loads(token)
+        print(type(json.loads(token)))
         self.object.input_broadcast_id = self.kwargs['id']
         self.object.save()
         return redirect('stream_detail', self.kwargs['id'])
@@ -247,9 +260,14 @@ class ChangeState(View):
 
     def get(self, request, id):
         out_id = request.GET.get('out_id', -1)
-        output = get_object_or_404(OutputBroadcast, id=out_id)
-        output.is_active = not output.is_active
-        output.save()
+        try:
+            youtube_output = YoutubeSettings.objects.get(id=out_id)
+            youtube_output.is_active = not youtube_output.is_active
+            youtube_output.save()
+        except YoutubeSettings.DoesNotExist:
+            output = get_object_or_404(OutputBroadcast, id=out_id)
+            output.is_active = not output.is_active
+            output.save()
         return redirect(reverse('stream_detail', kwargs={'id': id}))
 
 

@@ -76,9 +76,10 @@ class YoutubeSettings(models.Model):
     resolution = models.IntegerField(choices=choices, default=0)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
     privacy = models.IntegerField(choices=privacy_choices, default=0)
-    user_credentials = models.FileField(upload_to='client_tokens/', null=True)
+    user_credentials = models.JSONField(null=True)
     #broadcast
     name = models.CharField(max_length=128)
+    bitrate = models.IntegerField(default=20000)
     is_active = models.BooleanField(default=False)
     url = models.CharField(max_length=128, default='rtmp://a.rtmp.youtube.com/live2')
     key = models.CharField(max_length=128, default='')

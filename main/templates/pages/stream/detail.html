@@ -72,9 +72,15 @@
             <li class="stream">
                 <div class="row">
                     <div class="col-auto">
+                        {% if output in youtube %}
+                        <img
+                            src="https://clipart.info/images/ccovers/1590430872small-youtube-logo.png"
+                            alt="" height="45">
+                        {% else %}
                         <img
                             src="https://www.pinclipart.com/picdir/big/88-881439_twitch-png-logo-twitch-logo-png-clipart.png"
                             alt="" height="45">
+                        {% endif %}
                     </div>
                     <div class="col">
                         <div style="display: flex;flex-direction: column;">
@@ -83,7 +89,11 @@
                         </div>
                     </div>
                     <div class="col-auto">
-                        <a href="{% url 'stream_update' object.id output.id%}">Изменить</a>
+                        {% if output in youtube %}
+                            <a href="{% url 'youtube_update' object.id output.id%}">Изменить</a>
+                        {% else %}
+                            <a href="{% url 'stream_update' object.id output.id%}">Изменить</a>
+                        {% endif %}
                     </div>
                     <div {% if is_online %} data-toggle="tooltip" data-placement="top" title="Для применения настроек потребуется перезапуск трансляции" {% endif %} class="col-12 mt-2 mt-md-0 col-md-auto">
                         <label class="switch" style="float: right;">
