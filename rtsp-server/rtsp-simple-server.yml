@@ -3,11 +3,11 @@
 # General options
 
 # sets the verbosity of the program; available values are "warn", "info", "debug".
-logLevel: info
+logLevel: debug
 # destinations of log messages; available values are "stdout", "file" and "syslog".
-logDestinations: [stdout]
+logDestinations: [file]
 # if "file" is in logDestinations, this is the file which will receive the logs.
-logFile: rtsp-simple-server.log
+logFile: /var/log/ps102_multistreamer/rtsp-simple-server.log
 
 # timeout of read operations.
 readTimeout: 10s
