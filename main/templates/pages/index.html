@@ -1,14 +1,173 @@
-{% extends 'base/base.html' %}
+{% extends 'base/empty.html' %}
 
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/landing.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row mt-3">
-        <div class="col">
-            <h1>Wellcome!</h1>
-            <hr>
-            <p>Это маленький и очень простой сайт</p>
+<div class="wrapper">
+    <main class="page">
+        <div class="page__wrapper">
+            <div class="page__screen screen">
+                <div class="screen__content">
+                    <div class="bg">
+                        <img style="    top: 0;
+                            right: 0;
+                            position: absolute;" src="{% static 'images/landing/bg/Group 91 (1).png' %}" alt="">
+                        <img  style="    position: absolute;
+                            top: 60%;" src="{% static 'images/landing/bg/Mosaics.png' %}" alt="">
+
+                    </div>
+                    <div class="container-fluid h-100">
+                        <div class="row h-100">
+                            <div class="col-6 h-100" style="display: flex;align-items: center;">
+                                <div class="p-5">
+                                    <h1 class="mb-4">
+                                        MultiStream.io</h1>
+                                    <p class="mt-4" style="font-family: Source Sans Pro;
+                                            font-style: normal;
+                                            font-weight: normal;
+                                            font-size: 36px;
+                                            line-height: 52px;">С нами вести трансляци на нескольких платформах быстрее
+                                        и
+                                        удобние.</p>
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a href="{% url 'login' %}">
+                                                <button type="button"
+                                                        class="btn btn-outline-primary w-100">Войти</button>
+                                            </a>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="{% url 'django_registration_register' %}">
+                                                <button type="button"
+                                                        class="btn btn-primary w-100">Зарегистрироваться</button>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-6 h-100 p-5" style="display: flex;align-items: center;">
+                                <div class="p-5">
+                                    <img src="{% static 'images/landing/Slide 16_9 - 39 (3).png' %}" alt="" class="w-100"
+                                                      style="border-radius: 25px;filter: drop-shadow(0px 5px 15px rgba(0, 0, 0, 0.15));">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="page__screen screen">
+                <div class="screen__content">
+                    <div class="bg">
+                        <img style="    top: 0;
+                            right: 0;
+                            position: absolute;" src="{% static 'images/landing/bg/Mosaics2.png' %}" alt="">
+                        <img  style="    position: absolute;
+                            top: 60%;" src="{% static 'images/landing/bg/Group 92.png' %}" alt="">
+
+                    </div>
+                    <div class="container-fluid h-100">
+                        <div class="h-100">
+                            <h1 class="text-center">Будьте везде и сразу</h1>
+                            <p class="text-center" style="font-family: Source Sans Pro;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 20px;
+                                line-height: 24px;">Увеличьте свою аудиторию с помощью одного потока на несколько
+                                платформ.
+                            </p>
+                            <div class="d-flex justify-content-center mt-5">
+                                <img src="{% static 'images/landing/Group 85.png' %}" alt="">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="page__screen screen">
+                <div class="screen__content">
+                    <div class="container-fluid h-100">
+                        <div class="row h-100 p-5">
+                            <div class="col-6 p-5">
+                                <img src="{% static 'images/landing/Group 73.png' %}" alt="">
+                            </div>
+                            <div class="col-6 h-100 p-5" style="display: flex;align-items: center;">
+                                <div>
+                                    <h1 style="font-family: Source Sans Pro;
+                                        font-style: normal;
+                                        font-weight: bold;
+                                        font-size: 69px;
+                                        line-height: 76px;">Как это работает?</h1>
+                                    <ol class="pl-3">
+                                        <li>Добавьте 2+ социальных канала на панель управления MultiStream.</li>
+                                        <li>Запустите поток с помощью программного обеспечения для потоковой
+                                            передачи.
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="page__screen screen">
+                <div class="screen__body">
+                    <div class="screen__image">
+
+                    </div>
+                </div>
+            </div>
+            <div class="page__screen screen">
+                <div class="screen__content">
+                    <h1 class="text-center">Присоединяйся сейчас</h1>
+                    <div class="container">
+                        <div class="row mt-5">
+                            <div class="col-8">
+                                <input type="email" class="form-control" id="exampleFormControlInput1"
+                                       placeholder="name@example.com">
+                            </div>
+                            <div class="col">
+                                <button type="button" class="w-100 btn btn-primary">Присоединится</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <footer style="    position: absolute;
+                        bottom: 0;
+                        width: 100%;
+                        background-color: #597EF7;
+                        height: 80px;
+                        left: 0;">
+
+                    </footer>
+                </div>
+                <div class="screen__body">
+                    <div class="screen__image">
+                        <img src="{% static 'images/landing/Group 88 (1).png' %}" alt="">
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+        <div class="page__pagination">
+
+        </div>
+        <div class="page__scroll">
+            <div class="page__drag-scroll">
+
+            </div>
+        </div>
+    </main>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/swiper.js' %}"></script>
+<script src="{% static 'js/landing.js' %}"></script>
+
 {% endblock %}
