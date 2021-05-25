@@ -1,0 +1,105 @@
+
+/** list view **/
+ul.list {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    list-style: none;
+    width: 100%;
+}
+
+ul.list li {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+
+ul.list li section.left {
+    display: block;
+    width: 100%;
+}
+
+ul.list li section.right {
+    display: block;
+    width: 100%;
+    text-align: right;
+}
+
+
+ul.list h3 {
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #707375;
+    font-size: 1.4em;
+    line-height: 1.6em;
+}
+
+ul.list li span.meta {
+    color: #93989b;
+    font-weight: normal;
+    font-size: 1.1em;
+}
+
+/** grid view **/
+ul.grid {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    list-style: none;
+    width: 100%;
+}
+
+ul.grid li {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+ul.grid li.third {
+    border: 0;
+}
+
+ul.grid li section.left {
+    position: relative;
+}
+
+ul.grid li section.right {
+    /* nothing */
+}
+
+
+ul.grid li section.left h3 {
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #707375;
+    font-size: 1.4em;
+    line-height: 1.5em;
+}
+
+ul.grid li section.left span.meta {
+    display: block;
+    color: #93989b;
+    font-weight: normal;
+    font-size: 1.1em;
+    margin-bottom: 7px;
+}
+
+ul.grid li section.right span.darkview a.firstbtn {
+    display: block;
+    margin-bottom: 10px;
+}
