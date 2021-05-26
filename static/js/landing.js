@@ -24,7 +24,7 @@ let pageSlider = new Swiper('.page', {
     observer: true,
     observeParents: true,
     observeSlideChildren: true,
-    
+
     pagination: {
         el: '.page__pagination',
         type: 'bullets',
@@ -38,3 +38,7 @@ let pageSlider = new Swiper('.page', {
         draggable: true,
     },
 })
+
+function go_reg(){
+    document.location.href ="/register/?email="+$('#email').value;
+}

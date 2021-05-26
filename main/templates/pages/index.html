@@ -14,9 +14,9 @@
                 <div class="screen__content">
                     <div style="width: 100%;height: 100%;position: absolute;top: 0;left: 0;">
                         <img style="    top: 0;
-                            right: 0;
+                            right: 0;z-index: -10000;
                             position: absolute;" src="{% static 'images/landing/bg/Group 91 (1).png' %}" alt="">
-                        <img style="    position: absolute;
+                        <img style="    position: absolute;z-index: -10000;
                             top: 60%;" src="{% static 'images/landing/bg/Mosaics.png' %}" alt="">
 
                     </div>
@@ -56,9 +56,9 @@
                 <div class="screen__content">
                     <div style="width: 100%;height: 100%;position: absolute;top: 0;left: 0;">
                         <img style="    top: 0;
-                            right: 0;
+                            right: 0;z-index: -10000;
                             position: absolute;" src="{% static 'images/landing/bg/Mosaics2.png' %}" alt="">
-                        <img style="    position: absolute;
+                        <img style="    position: absolute;z-index: -10000;
                             top: 60%;" src="{% static 'images/landing/bg/Group 92.png' %}" alt="">
 
                     </div>
@@ -81,7 +81,7 @@
                     <div class="container-fluid h-100">
                         <div class="row h-100 p-5">
                             <div class="col-6 p-5 align-self-center">
-                                <img style="width: 100%;" src="{% static 'images/landing/Group 73.png' %}" alt="">
+                                <img style="width: 100%;z-index: -10000;" src="{% static 'images/landing/Group 73.png' %}" alt="">
                             </div>
                             <div class="col-6 h-100 p-5 d-flex align-items-center justify-content-center">
                                 <div>
@@ -107,9 +107,9 @@
                 <div class="screen__content">
                     <h1 class="text-center display-2">Присоединяйся сейчас</h1>
                     <div class="container">
-                        <div class="row mt-5">
+                            <div class="row mt-5">
                             <div class="col-8">
-                                <input type="email" class="form-control" id="exampleFormControlInput1"
+                                <input type="email" name="email" class="form-control" id="email"
                                        placeholder="name@example.com">
                             </div>
                             <div class="col">
