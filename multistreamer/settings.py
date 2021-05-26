@@ -175,3 +175,5 @@ DEBUG_TOOLBAR_PANELS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+PRODUCTION_HOST = 'localhost'

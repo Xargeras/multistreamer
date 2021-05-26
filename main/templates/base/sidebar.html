@@ -1,0 +1,70 @@
+{% load static %}
+
+<div class="sidebar">
+    <div class="sidebar__logo">
+        <a href="{% url 'list_stream' %}"><img class="logo" width="50px" src="{% static 'images/logo/2.png' %}" alt=""></a>
+        <a href="{% url 'list_stream' %}"><img class="logo big-logo" height="50px" src="{% static 'images/logo/2+.png' %}" alt=""></a>
+        <a href="{% url 'list_stream' %}"><img class="logo dark-logo" width="50px" src="{% static 'images/logo/3.png' %}" alt=""></a>
+        <a href="{% url 'list_stream' %}"><img class="logo big-logo dark-logo" height="50px" src="{% static 'images/logo/1+.png' %}" alt=""></a>
+    </div>
+    <div class="sidebar-content">
+        <a href="{% url 'list_stream' %}" class="btn sidebar__item active">
+            <div class="sidebar__item__icon"><i class="fas fa-stream"></i></div>
+            <div class="sidebar__item__text">
+                Список трансляций
+            </div>
+        </a>
+        <a class="btn sidebar__item disabled">
+            <div class="sidebar__item__icon"><i class="fas fa-cloud"></i></div>
+            <div class="sidebar__item__text">
+                Записи стримов
+            </div>
+        </a>
+        <a class="btn sidebar__item disabled">
+            <div class="sidebar__item__icon"><i class="fas fa-chart-bar"></i></div>
+            <div class="sidebar__item__text">
+                Аналитика
+            </div>
+        </a>
+    </div>
+    <div class="sidebar__user">
+        <div class="sidebar__header-item">
+            <div class="avatar-content" onclick="toggle_sidebar()">
+                <div class="avatar">
+                    {% if request.user.avatar.image %}
+                    <img  height="44px" width="44px" src="{{ request.user.avatar.image.url }}" alt="">
+                    {% else %}
+                    <img  height="44px" width="44px" src="{% static 'default_avatar.jpg' %}" alt="">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="block-names">
+                <span class="nickname">@{{ user.username }}</span>
+                <span class="username">{{ user.first_name }} {{ user.last_name }}</span>
+            </div>
+            <a href="{% url 'setting' %}" class="btn" style=" color: rgba(var(--text), 1)">
+                <i class="fas fa-cog"></i>
+            </a>
+        </div>
+    </div>
+    <div class="sidebar__footer">
+        <button class="btn sidebar__item p-0" onclick="toggleTheme()">
+            <div class="sidebar__item__icon"><i class="fas fa-moon fa-sm fa-fw mr-2 text-gray-400"></i></div>
+            <div class="sidebar__item__text">
+                Темная тема
+            </div>
+        </button>
+        <a class="btn sidebar__item disabled p-0">
+            <div class="sidebar__item__icon"><i class="far fa-question-circle"></i></div>
+            <div class="sidebar__item__text">
+                Помощь
+            </div>
+        </a>
+        <a href="{% url 'logout' %}"  class="btn sidebar__item p-0">
+            <div class="sidebar__item__icon"><i class="fas fa-sign-out-alt"></i></div>
+            <div class="sidebar__item__text">
+                Выйти
+            </div>
+        </a>
+    </div>
+</div>

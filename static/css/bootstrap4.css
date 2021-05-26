@@ -12,6 +12,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 :root {
+  --color-input: 255, 255, 255;
   --color-hr: rgb(201, 201, 201);
   --card-bg: 255, 255, 255;
   --bg-main:rgb(252, 252, 252);
