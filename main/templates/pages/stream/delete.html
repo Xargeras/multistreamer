@@ -2,11 +2,16 @@
 
 
 {% block content %}
-<div class="row px-5">
-        <h1>Удаление трансляции</h1>
-        <form action="" method="post">{% csrf_token %}
-            <p>Вы действительно хотите эту трансляцию "{{ object.name }}"?</p>
-        <input type="submit" value="Подтвердить" />
-    </form>
+<div class="row text-center ">
+    <div class="mt-4 col-12">
+        <h1 class="text-center">Удаление трансляции</h1>
     </div>
+    <div class="mt-4 col-12">
+        <form action="" method="post">
+            {% csrf_token %}
+            <p>Вы действительно хотите эту трансляцию "{{ object.name }}"?</p>
+            <input type="submit" class="btn btn-primary" value="Подтвердить" />
+        </form>
+    </div>
+</div>
 {% endblock %}

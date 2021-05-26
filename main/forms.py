@@ -77,7 +77,7 @@ class AvatarSettings(forms.ModelForm):
 class BroadcastSettings(forms.ModelForm):
     class Meta:
         model = OutputBroadcast
-        exclude = ['name', 'url', 'key', 'author', 'bitrate']
+        fields = ['name', 'url', 'key', 'author', 'bitrate']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',

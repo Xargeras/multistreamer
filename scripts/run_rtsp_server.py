@@ -3,11 +3,12 @@ from time import sleep
 
 
 def run_rtsp_server():
-    server_uid = subprocess.Popen(['docker', 'run', '--rm', '--network=host', 'aler9/rtsp-simple-server'])
+    run_command = ['./rtsp-server/rtsp-simple-server', './rtsp-server/rtsp-simple-server.yml']
+    server_uid = subprocess.Popen(run_command)
     try:
         while True:
             if server_uid.poll() is not None:
-                server_uid = subprocess.Popen(['docker', 'run', '--rm', '--network=host', 'aler9/rtsp-simple-server'])
+                server_uid = subprocess.Popen(run_command)
                 sleep(2)
     except KeyboardInterrupt:
         server_uid.terminate()

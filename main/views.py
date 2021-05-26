@@ -9,7 +9,8 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.urls import reverse
 
-from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings, InputBroadcastSettings
+from main.forms import (UserSettings, AvatarSettings, PasswordSettings,
+                        BroadcastSettings, InputBroadcastSettings)
 from main.models import Avatar, OutputBroadcast, InputBroadcast
 from scripts.run import Server
 
@@ -137,7 +138,7 @@ class DetailBroadcast(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['server_url'] = Server.get_instance().get_url(self.object.type)
+        context['server_url'] = Server.get_instance().get_url(self.object.type) + '/'
         context['outputs'] = OutputBroadcast.objects.filter(input_broadcast=self.object)
         context['is_online'] = Server.get_instance().is_broadcast_online_list(context['outputs'])
         return context
