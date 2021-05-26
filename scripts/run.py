@@ -1,5 +1,6 @@
 import subprocess
 from signal import SIGINT
+from multistreamer.settings import PRODUCTION_HOST
 
 
 class Server:
@@ -8,7 +9,7 @@ class Server:
     broadcasts = {}
     RTSP = 1
     RTMP = 2
-    host = 'localhost'
+    host = PRODUCTION_HOST
     rtsp_url = f'rtsp://{host}:8554'
     rtmp_url = f'rtmp://{host}'
 
