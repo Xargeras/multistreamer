@@ -15,7 +15,7 @@ body {
 
 .wrapper-sidebar{
     background-color: var(--bg-main);
-}   
+}
 
 .theme-dark .sidebar--open .sidebar__header-item{
     box-shadow: 0 4.5px 5px #121319;
@@ -64,4 +64,23 @@ body {
 .streams>.stream.active {
     background: rgba(var(--card-bg), 0.88);
     box-shadow: var(--shadow-inset-stream-1)
+}
+
+.dark-logo{
+    display: none !important;
+}
+.theme-dark .logo:not(.dark-logo){
+     display: none !important;
+
+}
+
+.theme-dark .sidebar--open .dark-logo.logo:not(.big-logo){
+    display: none !important;
+}
+.theme-dark .dark-logo.logo:not(.big-logo){
+    display: block !important;
+}
+
+.theme-dark .sidebar--open .dark-logo.big-logo{
+    display: block !important;
 }

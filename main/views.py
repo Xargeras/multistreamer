@@ -79,10 +79,7 @@ class IndexPage(View):
     }
 
     def get(self, request):
-        if request.user.is_authenticated:
-            return redirect(reverse('list_stream'))
-        else:
-            return render(request, 'pages/index.html', self.context)
+        return render(request, 'pages/index.html', self.context)
 
 
 class StreamStorageView(View):

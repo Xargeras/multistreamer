@@ -78,6 +78,21 @@ body {
     padding: 25px 0;
     min-height: 80px;
 }
+.logo{
+    weight:100%;
+}
+.big-logo{
+    weight:100%;
+    display: none;
+}
+
+.sidebar--open .logo:not(.big-logo){
+    display: none;
+}
+
+.sidebar--open .big-logo{
+    display: block;
+}
 
 .sidebar-content{
     overflow-x: hidden;
