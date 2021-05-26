@@ -4,19 +4,20 @@ import json
 
 import googleapiclient.discovery
 import googleapiclient.errors
-from google.auth.exceptions import RefreshError
+from google.auth import exceptions
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-
+import google_auth_oauthlib.flow
+from django.shortcuts import redirect
 
 scopes = ["https://www.googleapis.com/auth/youtube", "https://www.googleapis.com/auth/youtube.force-ssl"]
 
 
 def get_user_credentials():
     flow = InstalledAppFlow.from_client_secrets_file('./scripts/client_secrets.json', scopes)
-    flow.run_local_server(port=4000,
+    flow.run_local_server(port=0,
                           kwargs=flow.authorization_url(access_type='offline', include_granted_scopes='true'))
     credentials = flow.credentials
     print(credentials.to_json())
@@ -86,16 +87,18 @@ def refresh_token(credentials):
             credentials.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file('./scripts/client_secrets.json', scopes)
-            credentials = flow.run_local_server(port=4000)
+            credentials = flow.run_local_server(port=0)
     return credentials
 
 
 def check_token(credentials):
-    credentials["refresh_token"] = None
     try:
+        credentials["refresh_token"] = None
         credentials = Credentials.from_authorized_user_info(credentials, scopes)
-    except RefreshError:
-        print(1)
+    except:
+        pass
+    else:
+        credentials = refresh_token(credentials)
     return credentials
 
 
