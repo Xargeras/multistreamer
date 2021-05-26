@@ -4,6 +4,7 @@ import json
 
 import googleapiclient.discovery
 import googleapiclient.errors
+from google.auth.exceptions import RefreshError
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -14,10 +15,10 @@ scopes = ["https://www.googleapis.com/auth/youtube", "https://www.googleapis.com
 
 
 def get_user_credentials():
-    credentials = None
     flow = InstalledAppFlow.from_client_secrets_file('./scripts/client_secrets.json', scopes)
-    credentials = flow.run_local_server(port=4000)
-    flow.authorization_url(access_type="offline", include_granted_scopes="true")
+    flow.run_local_server(port=4000,
+                          kwargs=flow.authorization_url(access_type='offline', include_granted_scopes='true'))
+    credentials = flow.credentials
     print(credentials.to_json())
     return credentials.to_json()
 
@@ -80,7 +81,6 @@ def bind_broadcast(youtube, broadcast, stream):
 
 
 def refresh_token(credentials):
-    credentials = None
     if not credentials or not credentials.valid:
         if credentials and credentials.expired and credentials.refresh_token:
             credentials.refresh(Request())
@@ -90,8 +90,17 @@ def refresh_token(credentials):
     return credentials
 
 
+def check_token(credentials):
+    credentials["refresh_token"] = None
+    try:
+        credentials = Credentials.from_authorized_user_info(credentials, scopes)
+    except RefreshError:
+        print(1)
+    return credentials
+
+
 def stream(credentials, settings):
-    credentials = refresh_token(credentials)
+    credentials = check_token(credentials)
     api_service_name = "youtube"
     api_version = "v3"
     youtube = build(api_service_name, api_version, credentials=credentials)
@@ -115,8 +124,8 @@ def main(settings):
     print(settings)
     credentials = get_user_credentials()
     youtube = build(api_service_name, api_version, credentials=credentials)
-    broadcast = start_broadcast(youtube, settings)
-    stream = start_stream(youtube, settings)
-    bind_broadcast(youtube, broadcast, stream)
-    key = stream["cdn"]["ingestionInfo"]["streamName"]
-    return key
+    # broadcast = start_broadcast(youtube, settings)
+    # stream = start_stream(youtube, settings)
+    # bind_broadcast(youtube, broadcast, stream)
+    # key = stream["cdn"]["ingestionInfo"]["streamName"]
+    # return key
