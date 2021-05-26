@@ -2,9 +2,10 @@
 
 
 {% block content %}
-<div class="bg-light h-100">
-    <div class="container">
-        <h3 class="mb-4">Регистрация успешно завершена</h3>
-    </div>
+<div class="h-100 text-center d-flex align-items-center justify-content-center flex-column ">
+    <h1 class="display-5 w-100 ">Регистрация успешно завершена</h1>
+    <a href="{% url 'list_stream' %}" class="btn btn-link h-2 w-100">Далее <i class="fas fa-arrow-right"></i></a>
 </div>
+
+
 {% endblock %}

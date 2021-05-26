@@ -2,20 +2,31 @@
 
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/streams_list.css' %}">
+{% endblock %}
+
 {% block extra_js %}
 <script src="{% static 'js/list.js' %}"></script>
 {% endblock %}
 
+{% block header %}
+<div class="row">
+        <div class="col">
+            <h1>{{pagename}}</h1>
+        </div>
+{% endblock %}
+
 {% block content %}
 <div class="row">
-    <div class="col-12 mt-lg-5 mt-2">
+    <div class="col-12">
         <div class="d-flex justify-content-between">
             <div>
                 <a href="{% url 'create_input_key' %}" class="btn btn-outline-primary">Создать</a>
             </div>
             <div class="d-none d-sm-block">
-                <a type="button"  class="btn btn-secondary switcher active" id="listview"><i class="fa fa-bars"></i></a>
-                <a type="button"  class="btn btn-secondary switcher" id="gridview"><i class="fa fa-th-large"></i></a>
+                <a type="button" class="btn btn-secondary switcher active" id="listview"><i class="fa fa-bars"></i></a>
+                <a type="button" class="btn btn-secondary switcher" id="gridview"><i class="fa fa-th-large"></i></a>
             </div>
         </div>
     </div>
@@ -25,23 +36,23 @@
             {% for el in object_list %}
             <a class="card-link" href="{% url 'stream_detail' el.id %}">
                 <li class="clearfix mt-3">
-                    <div class="card">
-                    <section class="left">
-                        <h3>{{el.name}}</h3>
-                        <span class="meta">Возможно тут будет ваш комментарий</span>
-                    </section>
-                    <section class="row no-gutters w-100">
-                        <div class="mt-4 col-md-6 pr-2">
-                            <a class="w-100 btn btn-outline-primary" href="{% url 'update_input_key' el.id %}">
-                                Изменить
-                            </a>
-                        </div>
-                        <div class="mt-4 col-md-6 pl-2" >
-                            <a class="w-100 btn btn-outline-danger" href="{% url 'delete_input_key' el.id %}">
-                                Удалить
-                            </a>
-                        </div>
-                    </section>
+                    <div class="card hover">
+                        <section class="left">
+                            <h3>{{el.name}}</h3>
+                            <!--<span class="meta">Возможно тут будет ваш комментарий</span>-->
+                        </section>
+                        <section class="row no-gutters w-100">
+                            <div class="mt-4 col-md-6 pr-2">
+                                <a class="w-100 btn btn-outline-primary" href="{% url 'update_input_key' el.id %}">
+                                    Изменить
+                                </a>
+                            </div>
+                            <div class="mt-4 col-md-6 pl-2">
+                                <a class="w-100 btn btn-outline-danger" href="{% url 'delete_input_key' el.id %}">
+                                    Удалить
+                                </a>
+                            </div>
+                        </section>
                     </div>
                 </li>
             </a>

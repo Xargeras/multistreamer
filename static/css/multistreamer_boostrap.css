@@ -1,0 +1,18 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.48);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    border: none;
+    box-shadow: inset 10px 10px 20px #D3DBE6, inset -10px -10px 20px #FFFFFF, inset -1px -1px 1px rgba(255, 255, 255, 0.6);
+    transition: all 0.5s ease;
+}
+
+.card.hover:hover{
+    transform: translateY(-5px);
+    background: rgba(var(--card-bg), 0.88);
+    box-shadow: inset 10px 10px 20px #d3dbe600, inset -10px -10px 20px #ffffff00, inset -1px -1px 1px rgba(255, 255, 255, 0), 20px 20px 40px #D3DBE6, -20px -10px 40px #FFFFFF;
+}

@@ -2,10 +2,14 @@
 
 {% load crispy_forms_tags %}
 
+{% block header %}
+    <h1>{{ pagename }}</h1>
+    <a href="{% url 'list_stream' %}"><i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Назад</a>
+{% endblock %}
+
 {% block content %}
-    <h1 class="mt-4">Новая трансляция</h1>
-    <form class="mt-4" action="" method="post">{% csrf_token %}
+    <form class="" action="" method="post">{% csrf_token %}
       {{ form|crispy }}
-      <input class="btn btn-primary" type="submit" value="Save" />
+      <input class="btn btn-primary" type="submit" value="Сохранить" />
     </form>
 {%endblock%}

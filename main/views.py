@@ -70,7 +70,7 @@ class ProfileSettingView(View):
             form = UserSettings(request.POST, instance=request.user)
             if form.is_valid():
                 form.save()
-        return redirect(reverse('profile', kwargs={'id': request.user.id}))
+        return redirect(reverse('setting'))
 
 
 class IndexPage(View):

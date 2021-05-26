@@ -12,100 +12,87 @@
         <div class="page__wrapper">
             <div class="page__screen screen">
                 <div class="screen__content">
-                    <div class="bg">
+                    <div style="width: 100%;height: 100%;position: absolute;top: 0;left: 0;">
                         <img style="    top: 0;
-                            right: 0;
+                            right: 0;z-index: -10000;
                             position: absolute;" src="{% static 'images/landing/bg/Group 91 (1).png' %}" alt="">
-                        <img  style="    position: absolute;
+                        <img style="    position: absolute;z-index: -10000;
                             top: 60%;" src="{% static 'images/landing/bg/Mosaics.png' %}" alt="">
 
                     </div>
                     <div class="container-fluid h-100">
                         <div class="row h-100">
-                            <div class="col-6 h-100" style="display: flex;align-items: center;">
-                                <div class="p-5">
-                                    <h1 class="mb-4">
-                                        MultiStream.io</h1>
-                                    <p class="mt-4" style="font-family: Source Sans Pro;
-                                            font-style: normal;
-                                            font-weight: normal;
-                                            font-size: 36px;
-                                            line-height: 52px;">С нами вести трансляци на нескольких платформах быстрее
+                            <div class="col-12 h-100 text-center" style="display: flex;align-items: center;">
+                                <div class="w-100 p-5">
+                                    <h1 class="mb-4 display-1">
+                                        MultiStreamer </h1>
+                                    <p class="mt-4 blockquote">С нами вести трансляци на нескольких платформах
+                                        быстрее
                                         и
                                         удобние.</p>
-                                    <div class="row">
-                                        <div class="col-auto">
-                                            <a href="{% url 'login' %}">
-                                                <button type="button"
-                                                        class="btn btn-outline-primary w-100">Войти</button>
+                                    <div class="row justify-content-center">
+                                        <div class="col-3">
+                                            <a class="btn btn-outline-primary w-100" href="{% url 'login' %}">
+                                                Войти
                                             </a>
                                         </div>
-                                        <div class="col-auto">
-                                            <a href="{% url 'django_registration_register' %}">
-                                                <button type="button"
-                                                        class="btn btn-primary w-100">Зарегистрироваться</button>
+                                        <div class="col-4">
+                                            <a href="{% url 'django_registration_register' %}" class="btn btn-primary w-100">Зарегистрироваться</button>
                                             </a>
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
-                            <div class="col-6 h-100 p-5" style="display: flex;align-items: center;">
-                                <div class="p-5">
-                                    <img src="{% static 'images/landing/Slide 16_9 - 39 (3).png' %}" alt="" class="w-100"
-                                                      style="border-radius: 25px;filter: drop-shadow(0px 5px 15px rgba(0, 0, 0, 0.15));">
-                                </div>
-                            </div>
                         </div>
                     </div>
-
+                    <div class="position-absolute arrow-down" style="bottom: 50px; left: 50%; ">
+                        <span></span>
+                        <span></span>
+                    </div>
                 </div>
             </div>
             <div class="page__screen screen">
                 <div class="screen__content">
-                    <div class="bg">
+                    <div style="width: 100%;height: 100%;position: absolute;top: 0;left: 0;">
                         <img style="    top: 0;
-                            right: 0;
+                            right: 0;z-index: -10000;
                             position: absolute;" src="{% static 'images/landing/bg/Mosaics2.png' %}" alt="">
-                        <img  style="    position: absolute;
+                        <img style="    position: absolute;z-index: -10000;
                             top: 60%;" src="{% static 'images/landing/bg/Group 92.png' %}" alt="">
 
                     </div>
                     <div class="container-fluid h-100">
                         <div class="h-100">
-                            <h1 class="text-center">Будьте везде и сразу</h1>
-                            <p class="text-center" style="font-family: Source Sans Pro;
-                                font-style: normal;
-                                font-weight: normal;
-                                font-size: 20px;
-                                line-height: 24px;">Увеличьте свою аудиторию с помощью одного потока на несколько
+                            <h1 class="text-center display-2">Будьте везде и сразу</h1>
+                            <p class="text-center blockquote">Увеличьте свою аудиторию с помощью одного потока на
+                                несколько
                                 платформ.
                             </p>
                             <div class="d-flex justify-content-center mt-5">
-                                <img src="{% static 'images/landing/Group 85.png' %}" alt="">
+                                <img style="width: 100%;max-width: 1000px;" src="{% static 'images/landing/Group 85.png' %}" alt="">
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="page__screen screen">
                 <div class="screen__content">
                     <div class="container-fluid h-100">
                         <div class="row h-100 p-5">
-                            <div class="col-6 p-5">
-                                <img src="{% static 'images/landing/Group 73.png' %}" alt="">
+                            <div class="col-6 p-5 align-self-center">
+                                <img style="width: 100%;z-index: -10000;" src="{% static 'images/landing/Group 73.png' %}" alt="">
                             </div>
-                            <div class="col-6 h-100 p-5" style="display: flex;align-items: center;">
+                            <div class="col-6 h-100 p-5 d-flex align-items-center justify-content-center">
                                 <div>
-                                    <h1 style="font-family: Source Sans Pro;
-                                        font-style: normal;
-                                        font-weight: bold;
-                                        font-size: 69px;
-                                        line-height: 76px;">Как это работает?</h1>
-                                    <ol class="pl-3">
-                                        <li>Добавьте 2+ социальных канала на панель управления MultiStream.</li>
-                                        <li>Запустите поток с помощью программного обеспечения для потоковой
+                                    <h1 class="display-2">Как это работает?</h1>
+                                    <ol class="pl-3 mt-5">
+                                        <li class="blockquote">Добавьте 2+ социальных канала на панель управления
+                                            MultiStream.
+                                        </li>
+                                        <li class="blockquote mt-3">Запустите поток с помощью программного обеспечения
+                                            для
+                                            потоковой
                                             передачи.
                                         </li>
                                     </ol>
@@ -117,19 +104,12 @@
                 </div>
             </div>
             <div class="page__screen screen">
-                <div class="screen__body">
-                    <div class="screen__image">
-
-                    </div>
-                </div>
-            </div>
-            <div class="page__screen screen">
                 <div class="screen__content">
-                    <h1 class="text-center">Присоединяйся сейчас</h1>
+                    <h1 class="text-center display-2">Присоединяйся сейчас</h1>
                     <div class="container">
-                        <div class="row mt-5">
+                            <div class="row mt-5">
                             <div class="col-8">
-                                <input type="email" class="form-control" id="exampleFormControlInput1"
+                                <input type="email" name="email" class="form-control" id="email"
                                        placeholder="name@example.com">
                             </div>
                             <div class="col">
@@ -149,7 +129,7 @@
                 </div>
                 <div class="screen__body">
                     <div class="screen__image">
-                        <img src="{% static 'images/landing/Group 88 (1).png' %}" alt="">
+                        <img src="{% static 'images/landing/Group 88 (1).png' %}"  alt="">
                     </div>
                 </div>
             </div>
