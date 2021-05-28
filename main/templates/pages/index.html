@@ -37,7 +37,8 @@
                                             </a>
                                         </div>
                                         <div class="col-4">
-                                            <a href="{% url 'django_registration_register' %}" class="btn btn-primary w-100">Зарегистрироваться</button>
+                                            <a href="{% url 'django_registration_register' %}"
+                                               class="btn btn-primary w-100">Зарегистрироваться</button>
                                             </a>
                                         </div>
                                     </div>
@@ -63,14 +64,15 @@
 
                     </div>
                     <div class="container-fluid h-100">
-                        <div class="h-100">
+                        <div class="h-100" style="display: flex;flex-direction: column;align-content: center;justify-content: center; align-items: center;">
                             <h1 class="text-center display-2">Будьте везде и сразу</h1>
                             <p class="text-center blockquote">Увеличьте свою аудиторию с помощью одного потока на
                                 несколько
                                 платформ.
                             </p>
                             <div class="d-flex justify-content-center mt-5">
-                                <img style="width: 100%;max-width: 1000px;" src="{% static 'images/landing/Group 85.png' %}" alt="">
+                                <img style="width: 100%;max-width: 1000px;"
+                                     src="{% static 'images/landing/Group 85.png' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -81,14 +83,15 @@
                     <div class="container-fluid h-100">
                         <div class="row h-100 p-5">
                             <div class="col-6 p-5 align-self-center">
-                                <img style="width: 100%;z-index: -10000;" src="{% static 'images/landing/Group 73.png' %}" alt="">
+                                <img style="width: 100%;z-index: -10000;"
+                                     src="{% static 'images/landing/Group 73.png' %}" alt="">
                             </div>
                             <div class="col-6 h-100 p-5 d-flex align-items-center justify-content-center">
                                 <div>
                                     <h1 class="display-2">Как это работает?</h1>
                                     <ol class="pl-3 mt-5">
                                         <li class="blockquote">Добавьте 2+ социальных канала на панель управления
-                                            MultiStream.
+                                            MultiStreamer.
                                         </li>
                                         <li class="blockquote mt-3">Запустите поток с помощью программного обеспечения
                                             для
@@ -107,7 +110,7 @@
                 <div class="screen__content">
                     <h1 class="text-center display-2">Присоединяйся сейчас</h1>
                     <div class="container">
-                            <div class="row mt-5">
+                        <div class="row mt-5">
                             <div class="col-8">
                                 <input type="email" name="email" class="form-control" id="email"
                                        placeholder="name@example.com">
@@ -118,18 +121,26 @@
                         </div>
                     </div>
 
-                    <footer style="    position: absolute;
+                    <footer style="position: absolute;
                         bottom: 0;
                         width: 100%;
                         background-color: #597EF7;
                         height: 80px;
                         left: 0;">
-
+                        <div style="    display: flex;
+    width: 100%;
+    height: 100%;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    color: white;">
+                            <h3>&copy; ШП, {% now "Y" %}</h3>
+                        </div>
                     </footer>
                 </div>
                 <div class="screen__body">
                     <div class="screen__image">
-                        <img src="{% static 'images/landing/Group 88 (1).png' %}"  alt="">
+                        <img src="{% static 'images/landing/Group 88 (1).png' %}" alt="">
                     </div>
                 </div>
             </div>
