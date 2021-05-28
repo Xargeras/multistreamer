@@ -54,3 +54,38 @@ class OutputBroadcast(models.Model):
     input_broadcast = models.ForeignKey(to=InputBroadcast,
                                         on_delete=models.CASCADE,
                                         blank=False, default=1)
+
+
+class YoutubeSettings(models.Model):
+    p1440 = 0
+    p1080 = 1
+    p720 = 2
+    p480 = 3
+    p360 = 4
+    public = 0
+    private = 1
+    choices = [
+        (p1440, '1440p'),
+        (p1080, '1080p'),
+        (p720, '720p'),
+        (p480, '480p'),
+        (p360, '360p'),
+    ]
+    privacy_choices = [
+        (public, 'public'),
+        (private, 'private'),
+    ]
+    #youtube
+    title = models.CharField(max_length=128)
+    description = models.CharField(max_length=1024)
+    resolution = models.IntegerField(choices=choices, default=0)
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    privacy = models.IntegerField(choices=privacy_choices, default=0)
+    user_credentials = models.JSONField(null=True)
+    #broadcast
+    name = models.CharField(max_length=128)
+    bitrate = models.IntegerField(default=20000)
+    is_active = models.BooleanField(default=False)
+    url = models.CharField(max_length=128, default='rtmp://a.rtmp.youtube.com/live2')
+    key = models.CharField(max_length=128, default='')
+    input_broadcast = models.ForeignKey(to=InputBroadcast, on_delete=models.CASCADE, blank=False, default=1)
