@@ -37,15 +37,26 @@
                     <i class="fa fa-plus mr-md-2 mr-0" aria-hidden="true"></i>Создать новый исходящий поток
                 </button>
             </a>
+            <a href="{% url 'youtube_create' object.id %}">
+                <button type="button" class="btn btn-outline-primary">
+                    <i class="fa fa-plus mr-md-2 mr-0" aria-hidden="true"></i>YouTube
+                </button>
+            </a>
         </div>
         <ul class="streams">
             {% for output in outputs %}
             <li class="stream mt-4">
                 <div class="stream__body row">
                     <div class="stream__body-img col-auto align-self-center">
+                        {% if output in youtube %}
+                        <img
+                            src="https://clipart.info/images/ccovers/1590430872small-youtube-logo.png"
+                            alt="" height="45">
+                        {% else %}
                         <img
                             src="https://www.pinclipart.com/picdir/big/88-881439_twitch-png-logo-twitch-logo-png-clipart.png"
                             alt="" height="45">
+                        {% endif %}
                     </div>
                     <div class="stream__body-main col-6">
                         <h5>{{output.name}}</h5>
@@ -53,14 +64,18 @@
                     </div>
                     <div class="stream__body-actions col mt-3">
                         <div>
+                            {% if output in youtube %}
+                            <a href="{% url 'youtube_update' object.id output.id%}">Изменить</a>
+                        {% else %}
                             <a href="{% url 'stream_update' object.id output.id%}">Изменить</a>
+                        {% endif %}
                         </div>
                         <div {% if is_online %} data-toggle="tooltip" data-placement="top"
                              title="Для применения настроек потребуется перезапуск трансляции" {% endif %}
                              class="">
                             <label class="switch" style="float: right;">
                                 <input type="checkbox" {% if output.is_active %} checked {% endif %}
-                                       name="{{ output.id }}">
+                                       name="{{ output.id }}" {% if output in youtube %}class="youtube"{% endif %}>
                                 <div>
                                     <span></span>
                                 </div>
@@ -148,8 +163,15 @@
             $('.switch input:checked').parent().parent().parent().parent().parent().addClass('active')
         }
         $('.switch input').click(function (e) {
+            let url = ''
+            console.log(e.currentTarget)
+            if (e.currentTarget.classList.contains('youtube')) {
+                url = '{% url "stream_change_state_youtube" object.id %}'
+            } else {
+                url = '{% url "stream_change_state" object.id %}'
+            }
             $.ajax({
-                url: '{% url "stream_change_state" object.id %}',
+                url: url,
                 data: {
                     'out_id': e.currentTarget.name
                 },

@@ -1,18 +1,23 @@
+import json
 import string
+from itertools import chain
 
-from django.utils.crypto import get_random_string
-from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.urls import reverse
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
 
 from main.forms import (UserSettings, AvatarSettings, PasswordSettings,
                         BroadcastSettings, InputBroadcastSettings)
+from main.forms import YoutubeBroadcastSettings
 from main.models import Avatar, OutputBroadcast, InputBroadcast
+from main.models import YoutubeSettings
 from scripts.run import Server
+from scripts.youtube import get_user_credentials, stream
 
 
 def get_menu_context():
@@ -106,9 +111,20 @@ class StartBroadcast(View):
         server = Server.get_instance()
         broadcast = get_object_or_404(InputBroadcast, id=id, author=request.user)
         outputs = OutputBroadcast.objects.filter(input_broadcast=broadcast, is_active=True)
+        youtubes = YoutubeSettings.objects.filter(input_broadcast=broadcast, is_active=True)
+        outputs = list(chain(youtubes, outputs))
         if server.is_broadcast_online_list(outputs):
             server.stop_broadcast_list(outputs)
         else:
+            for youtube in youtubes:
+                settings = {
+                    "title": youtube.title,
+                    "description": "Restream via MultiStream https://multistream.io " + youtube.description,
+                    "resolution": youtube.choices[youtube.resolution][1],
+                    "privacy": youtube.privacy_choices[youtube.privacy][1]
+                }
+                youtube.key = stream(youtube.user_credentials, settings)
+                youtube.save()
             server.start_broadcast_list(outputs, broadcast.key, broadcast.type)
         return redirect(reverse('stream_detail', kwargs={'id': id}))
 
@@ -139,7 +155,8 @@ class DetailBroadcast(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['server_url'] = Server.get_instance().get_url(self.object.type) + '/'
-        context['outputs'] = OutputBroadcast.objects.filter(input_broadcast=self.object)
+        context['youtube'] = YoutubeSettings.objects.filter(input_broadcast=self.object)
+        context['outputs'] = list(chain(OutputBroadcast.objects.filter(input_broadcast=self.object), context['youtube']))
         context['is_online'] = Server.get_instance().is_broadcast_online_list(context['outputs'])
         return context
 
@@ -154,6 +171,53 @@ class CreateBroadcast(CreateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.author = self.request.user
+        self.object.input_broadcast_id = self.kwargs['id']
+        self.object.save()
+        return redirect('stream_detail', self.kwargs['id'])
+
+
+class CreateYoutubeBroadcast(CreateView):
+    template_name = 'pages/stream/create.html'
+    model = YoutubeSettings
+    model_form = YoutubeBroadcastSettings
+    fields = ['name', 'title', 'description', 'resolution', 'privacy']
+    extra_context = {'pagename': 'Создание Трансляции'}
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        # settings = {
+        #     "title": self.object.title,
+        #     "description": "Restream via MultiStream https://multistream.io " + self.object.description,
+        #     "resolution": self.object.choices[self.object.resolution][1],
+        #     "privacy": self.object.privacy_choices[self.object.privacy][1]
+        # }
+        self.object.author = self.request.user
+        # if YoutubeSettings.objects.filter(author=self.object.author):
+        #     user = YoutubeSettings.objects.filter(author=self.object.author)
+        #     token = user[0].user_credentials
+        # else:
+        #     token = get_user_credentials()
+        token = get_user_credentials()
+        self.object.user_credentials = json.loads(token)
+        print(type(json.loads(token)))
+        self.object.input_broadcast_id = self.kwargs['id']
+        self.object.save()
+        return redirect('stream_detail', self.kwargs['id'])
+
+
+class UpdateYoutubeBroadcast(UpdateView):
+    template_name = 'pages/stream/update.html'
+    model = YoutubeSettings
+    model_form = YoutubeBroadcastSettings
+    pk_url_kwarg = 'out_id'
+    fields = ['name', 'title', 'description', 'resolution', 'privacy']
+    extra_context = {'pagename': 'Обновление трансляции'}
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
         self.object.input_broadcast_id = self.kwargs['id']
         self.object.save()
         return redirect('stream_detail', self.kwargs['id'])
@@ -198,10 +262,14 @@ class ChangeState(View):
     context = {
         'pagename': 'Смена статуса',
     }
+    is_youtube = False
 
     def get(self, request, id):
         out_id = request.GET.get('out_id', -1)
-        output = get_object_or_404(OutputBroadcast, id=out_id)
+        if self.is_youtube:
+            output = get_object_or_404(YoutubeSettings, id=out_id)
+        else:
+            output = get_object_or_404(OutputBroadcast, id=out_id)
         output.is_active = not output.is_active
         output.save()
         return redirect(reverse('stream_detail', kwargs={'id': id}))

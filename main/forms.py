@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.backends import UserModel
 
-from main.models import Avatar, OutputBroadcast, InputBroadcast
+from main.models import Avatar, OutputBroadcast, InputBroadcast, YoutubeSettings
 
 
 class DateInput(forms.DateInput):
@@ -98,6 +98,32 @@ class BroadcastSettings(forms.ModelForm):
                 'class': 'form-control',
                 'id': 'broadcast',
                 'placeholder': 'Битрейт',
+            }),
+        }
+
+
+class YoutubeBroadcastSettings(forms.ModelForm):
+    class Meta:
+        model = YoutubeSettings
+        exclude = ['title', 'description', 'resolution', 'privacy', 'author']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'broadcast_name',
+                'placeholder': "Название трансляции",
+            }),
+            'description': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'youtube_description',
+                'placeholder': "Описание трансляции",
+            }),
+            'resolution': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'type',
+            }),
+            'privacy': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'type',
             }),
         }
 
