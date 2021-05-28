@@ -262,17 +262,16 @@ class ChangeState(View):
     context = {
         'pagename': 'Смена статуса',
     }
+    is_youtube = False
 
     def get(self, request, id):
         out_id = request.GET.get('out_id', -1)
-        try:
-            youtube_output = YoutubeSettings.objects.get(id=out_id)
-            youtube_output.is_active = not youtube_output.is_active
-            youtube_output.save()
-        except YoutubeSettings.DoesNotExist:
+        if self.is_youtube:
+            output = get_object_or_404(YoutubeSettings, id=out_id)
+        else:
             output = get_object_or_404(OutputBroadcast, id=out_id)
-            output.is_active = not output.is_active
-            output.save()
+        output.is_active = not output.is_active
+        output.save()
         return redirect(reverse('stream_detail', kwargs={'id': id}))
 
 

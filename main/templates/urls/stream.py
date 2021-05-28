@@ -18,6 +18,7 @@ class Stream:
                 path('<int:id>/output/<int:out_id>/update/', login_required(views.UpdateBroadcast.as_view()), name='stream_update'),
                 path('<int:id>/output/<int:out_id>/delete/', login_required(views.DeleteBroadcast.as_view()), name='stream_delete'),
                 path('<int:id>/output/change/', login_required(views.ChangeState.as_view()), name='stream_change_state'),
+                path('<int:id>/output/change/youtube', login_required(views.ChangeState.as_view(is_youtube=True)), name='stream_change_state_youtube'),
             ]))]
 
     def get_url_list(self):
