@@ -112,19 +112,19 @@ class StartBroadcast(View):
         broadcast = get_object_or_404(InputBroadcast, id=id, author=request.user)
         outputs = OutputBroadcast.objects.filter(input_broadcast=broadcast, is_active=True)
         youtubes = YoutubeSettings.objects.filter(input_broadcast=broadcast, is_active=True)
-        for youtube in youtubes:
-            settings = {
-                "title": youtube.title,
-                "description": "Restream via MultiStream https://multistream.io " + youtube.description,
-                "resolution": youtube.choices[youtube.resolution][1],
-                "privacy": youtube.privacy_choices[youtube.privacy][1]
-            }
-            youtube.key = stream(youtube.user_credentials, settings)
-            youtube.save()
         outputs = list(chain(youtubes, outputs))
         if server.is_broadcast_online_list(outputs):
             server.stop_broadcast_list(outputs)
         else:
+            for youtube in youtubes:
+                settings = {
+                    "title": youtube.title,
+                    "description": "Restream via MultiStream https://multistream.io " + youtube.description,
+                    "resolution": youtube.choices[youtube.resolution][1],
+                    "privacy": youtube.privacy_choices[youtube.privacy][1]
+                }
+                youtube.key = stream(youtube.user_credentials, settings)
+                youtube.save()
             server.start_broadcast_list(outputs, broadcast.key, broadcast.type)
         return redirect(reverse('stream_detail', kwargs={'id': id}))
 
