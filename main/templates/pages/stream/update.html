@@ -1,9 +1,18 @@
 {% extends 'base/base.html' %}
 
+{% load crispy_forms_tags %}
+
+{% block header %}
+     <h1>{{ pagename }}</h1>
+     <a href="#" onclick="window.history.back()"><i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Назад</a>
+{% endblock %}
 
 {% block content %}
-<form action="" method="post">{% csrf_token %}
-      {{ form.as_p }}
-    <input type="submit" value="Обновить" />
-</form>
+<div class="">
+    <form action=""  method="post">{% csrf_token %}
+        {{ form|crispy }}
+
+        <input type="submit" class="btn btn-primary mt-3" value="Обновить"/>
+  </form>
+</div>
 {% endblock %}

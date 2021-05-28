@@ -1,77 +1,53 @@
 {% extends 'base/base.html' %}
 
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/streams_detail.css' %}">
+{% endblock %}
+
+{% block header %}
+<div class="row">
+    <div class="col">
+        <h1>{{ object.name }}</h1>
+    </div>
+    <div class="col-md-auto col-12">
+        <form action="{% url 'stream_start' object.id %}" method="POST">
+            {% csrf_token %}
+            <button class="w-100 btn btn-danger" type="submit"><i
+                class="bi bi-power"></i>{% if is_online %}<i class="fas fa-pause mr-md-2 mr-0"></i>Остановить трансляцию{% else %}<i class="fas fa-play mr-md-2 mr-0"></i>Запустить
+                трансляцию{% endif %}
+            </button>
+        </form>
+    </div>
+    <div class="col-12">
+        <a href="{% url 'list_stream' %}"><i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Назад</a>
+    </div>
+</div>
+{% endblock %}
 
 {% block content %}
 
 <div class="row ">
-    <div class="mt-lg-5 mt-2 col-12">
-        <div class="row">
-            <div class="col-12">
-                <a href="{% url 'list_stream' %}">
-                    <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Назад
-                </a>
-            </div>
-            <div class="col-md col-12">
-                <h1>{{ object.name }}</h1>
-                <a href="{% url 'update_input_key' object.id %}">Изменить трансляцию</a>
-            </div>
-            <div class="col-md-auto col-12">
-                <form action="{% url 'stream_start' object.id %}" method="POST">
-                    {% csrf_token %}
-                    <button class="w-100 btn btn-danger" type="submit"><i class="bi bi-power"></i>{% if is_online %}Остановить трансляцию{% else %}Запустить трансляцию{% endif %}
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <div class="col-lg-7 col-12 mt-lg-0 mt-5">
         <div style="display: flex;justify-content: space-between;">
             <h3>Аккаунты</h3>
             <a href="{% url 'stream_create' object.id %}">
-                <button type="button" class="btn btn-primary">
-                    <i class="fa fa-plus mr-md-2 mr-0" aria-hidden="true"></i><span class="d-none d-md-inline-block">Создать новый исходящий поток</span>
+                <button type="button" class="btn btn-outline-primary">
+                    <i class="fa fa-plus mr-md-2 mr-0" aria-hidden="true"></i>Создать новый исходящий поток
                 </button>
             </a>
             <a href="{% url 'youtube_create' object.id %}">
-                <button type="button" class="btn btn-primary">
+                <button type="button" class="btn btn-outline-primary">
                     <i class="fa fa-plus mr-md-2 mr-0" aria-hidden="true"></i><span class="d-none d-md-inline-block">YouTube</span>
                 </button>
             </a>
         </div>
         <ul class="streams">
             {% for output in outputs %}
-            <!--
-            <li class="stream">
-                <div class="row">
-                    <div class="col-auto">
-                        <img
-                            src="https://www.pinclipart.com/picdir/big/88-881439_twitch-png-logo-twitch-logo-png-clipart.png"
-                            alt="" height="45">
-                    </div>
-                    <div class="col">
-                        <div style="display: flex;flex-direction: column;">
-                            <h5>twitch - nickname</h5>
-                            <p class="m-0">offline</p>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="{% url 'stream_update' object.id output.id%}">Изменить</a>
-                    </div>
-                    <div class="col-12 mt-2 mt-md-0 col-md-auto">
-                        <label class="switch" style="float: right;">
-                            <input type="checkbox">
-                            <div>
-                                <span></span>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </li>
-            -->
-            <li class="stream">
-                <div class="row">
-                    <div class="col-auto">
+            <li class="stream mt-4">
+                <div class="stream__body row">
+                    <div class="stream__body-img col-auto align-self-center">
                         {% if output in youtube %}
                         <img
                             src="https://clipart.info/images/ccovers/1590430872small-youtube-logo.png"
@@ -82,54 +58,56 @@
                             alt="" height="45">
                         {% endif %}
                     </div>
-                    <div class="col">
-                        <div style="display: flex;flex-direction: column;">
-                            <h5>{{output.name}}</h5>
-                            <p class="m-0">{{output.url}}</p>
-                        </div>
+                    <div class="stream__body-main col-6">
+                        <h5>{{output.name}}</h5>
+                        <p class="m-0">{{output.url}}</p>
                     </div>
-                    <div class="col-auto">
-                        {% if output in youtube %}
+                    <div class="stream__body-actions col mt-3">
+                        <div>
+                            {% if output in youtube %}
                             <a href="{% url 'youtube_update' object.id output.id%}">Изменить</a>
                         {% else %}
                             <a href="{% url 'stream_update' object.id output.id%}">Изменить</a>
                         {% endif %}
+                        </div>
+                        <div {% if is_online %} data-toggle="tooltip" data-placement="top"
+                             title="Для применения настроек потребуется перезапуск трансляции" {% endif %}
+                             class="">
+                            <label class="switch" style="float: right;">
+                                <input type="checkbox" {% if output.is_active %} checked {% endif %}
+                                       name="{{ output.id }}">
+                                <div>
+                                    <span></span>
+                                </div>
+                            </label>
+                        </div>
                     </div>
-                    <div {% if is_online %} data-toggle="tooltip" data-placement="top" title="Для применения настроек потребуется перезапуск трансляции" {% endif %} class="col-12 mt-2 mt-md-0 col-md-auto">
-                        <label class="switch" style="float: right;">
-                            <input type="checkbox" {% if output.is_active %} checked {% endif %} name="{{ output.id }}">
-                            <div>
-                                <span></span>
-                            </div>
-                        </label>
-                    </div>
+
                 </div>
             </li>
             {% endfor %}
         </ul>
     </div>
     <div class="col-lg-5 col-12">
-        <div class="card">
-            <div class="preview_video">
-                <div class="status" data-text="{% if is_online %}LIVE{% else %}PREVIEW{% endif %}">
-                </div>
-                <video width="100%" controls="controls">
-                    <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
-                </video>
+        <div class="preview_video">
+            <div class="status" data-text="{% if is_online %}LIVE{% else %}PREVIEW{% endif %}">
             </div>
+            <video width="100%" controls="controls">
+                <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+            </video>
 
         </div>
         <div class="card mt-3">
             <h4>Потоковое программное обеспечение ({% if object.type == 1 %}RTSP{% else %}RTMP{% endif %})</h4>
-            <div>
+            <div class="w-100 mt-2">
                 <div class="row">
                     <div class="col">
                         <p>Используйте программы, такие как OBS, Zoom и т. д.</p>
                     </div>
                     <div class="col-auto">
-                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#exampleModal">
-                            <i class="fa fa-cog d-md-none d-inline-block" aria-hidden="true"></i> <span class="d-none d-md-inline-block">Настройки {% if object.type == 1 %}RTSP{% else %}RTMP{% endif %}</span>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                            <i class="fa fa-cog d-md-none d-inline-block" aria-hidden="true"></i> Настройки
+                                {% if object.type == 1 %}RTSP{% else %}RTMP{% endif %}
                         </button>
                     </div>
                 </div>
@@ -148,22 +126,24 @@
                 <h5>{% if object.type == 1 %}RTSP{% else %}RTMP{% endif %} URL</h5>
                 <div class="input-group mb-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="" id="stream_url"
-                               aria-label="" aria-describedby="basic-addon2" readonly
-                               value="{{ server_url }}/{{ object.key }}">
+                        <input type="text" class="form-control" placeholder="" id="stream_url" disabled readonly
+                               value="{{ server_url }}">
                         <div class="input-group-prepend">
-                            <button class="btn btn-outline-secondary" data-copy="stream_url" type="button"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+                            <button class="btn btn-outline-secondary" data-copy="stream_url" type="button">
+                                <i class="fa fa-clipboard" aria-hidden="true"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
                 <h5>Ключ потока</h5>
                 <div class="input-group mb-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="" id="stream_key"
-                               aria-label="" aria-describedby="basic-addon2" readonly disabled
-                               value="">
+                        <input type="text" class="form-control" placeholder="" id="stream_key" aria-label=""
+                               aria-describedby="basic-addon2" readonly disabled value="{{ object.key }}">
                         <div class="input-group-prepend">
-                            <button class="btn btn-outline-secondary" type="button" data-copy="stream_key"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
+                            <button class="btn btn-outline-secondary" type="button" data-copy="stream_key">
+                                <i class="fa fa-clipboard" aria-hidden="true"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -177,31 +157,34 @@
 {% endblock %}
 
 {% block extra_js %}
-    <script>
-        $(document).ready(function () {
-            if ($('.switch input').is(':checked')) {
-                $('.switch input:checked').parent().parent().parent().parent().addClass('active')
-            }
-            $('.switch input').click(function (e) {
-                $.ajax({
-                    url: '{% url "stream_change_state" object.id %}',
-                    data: {'out_id': e.currentTarget.name},
-                    success: () => {
-                        if ($(this).is(':checked')) {
-                            $(this).parent().parent().parent().parent().addClass('active')
-                        } else {
-                            $(this).parent().parent().parent().parent().removeClass('active')
-                        }
+<script>
+    $(document).ready(function () {
+        if ($('.switch input').is(':checked')) {
+            $('.switch input:checked').parent().parent().parent().parent().parent().addClass('active')
+        }
+        $('.switch input').click(function (e) {
+            $.ajax({
+                url: '{% url "stream_change_state" object.id %}',
+                data: {
+                    'out_id': e.currentTarget.name
+                },
+                success: () => {
+                    if ($(this).is(':checked')) {
+                        $(this).parent().parent().parent().parent().parent().addClass('active')
+                    } else {
+                        $(this).parent().parent().parent().parent().parent().removeClass('active')
                     }
-                })
-            });
-            $('[data-copy]').click(function(){
-                let copyText = document.getElementById($(this).attr('data-copy'));
-                copyText.select();
-                document.execCommand("copy");
-                alert("Copied the text: " + copyText.value);
-            });
+                }
+            })
         });
+        $('[data-copy]').click(function () {
+            let copyText = document.getElementById($(this).attr('data-copy'));
+            copyText.select();
+            document.execCommand("copy");
+        });
+    });
 
-    </script>
+
+
+</script>
 {% endblock %}

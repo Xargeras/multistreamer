@@ -30,7 +30,7 @@ from multistreamer import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('profile/<int:id>/', views.profile_page, name='profile'),
-    path('', login_required(views.IndexPage.as_view()), name='index'),
+    path('', views.IndexPage.as_view(), name='index'),
     path('setting/', views.ProfileSettingView.as_view(), name='setting'),
 ]
 

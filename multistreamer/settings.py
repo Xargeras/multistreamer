@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'main',
     'debug_toolbar',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -153,3 +154,7 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.redirects.RedirectsPanel',
     'debug_toolbar.panels.profiling.ProfilingPanel',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+PRODUCTION_HOST = 'localhost'

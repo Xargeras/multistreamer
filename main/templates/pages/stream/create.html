@@ -1,10 +1,15 @@
 {% extends 'base/base.html' %}
 
+{% load crispy_forms_tags %}
+
+{% block header %}
+    <h1>{{ pagename }}</h1>
+    <a href="{% url 'list_stream' %}"><i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Назад</a>
+{% endblock %}
 
 {% block content %}
-    <h1>Новая трансляция</h1>
-    <form action="" method="post">{% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="Save" />
+    <form class="" action="" method="post">{% csrf_token %}
+      {{ form|crispy }}
+      <input class="btn btn-primary" type="submit" value="Сохранить" />
     </form>
 {%endblock%}

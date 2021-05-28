@@ -1,59 +1,62 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="dark-theme">
 
 {% load bootstrap4 %}
 {% load static %}
 
 <head>
     <meta charset="UTF-8">
-    <title>{{ pagename }} - MultiStream.io</title>
+    <title>{{ pagename }} - MultiStream</title>
 
+    <link type="image/x-icon" rel="shortcut icon" href="{% static 'images/logo/3.ico' %}">
 
+    <link rel="stylesheet" href="{% static 'css/color.css' %}">
     <link href="{% static 'fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/multistreamer_boostrap.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+
     <script src="{% static 'jquery.3.5.1.min.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     {% bootstrap_javascript%}
     {% block extra_css %}
     {% endblock %}
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
 </head>
 
 
-<body id="page-top">
+<body>
 {% bootstrap_messages %}
-<header>
-{% include 'base/Header.html' %}
-</header>
-<main class="container">
-{% block content %} {% endblock %}
-</main>
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-       aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Вы действительно хотите выйти?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Выберите "Выход" ниже, если вы готовы завершить текущий сеанс.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Отмена</button>
-          <a class="btn btn-primary" href="{% url 'logout' %}">Выйти</a>
-        </div>
-      </div>
+
+
+<div class="wrapper">
+    <div class="wrapper-sidebar">
+        {% include 'base/sidebar.html' %}
     </div>
-  </div>
+    <div class="wrapper-content" onclick="close_sidebar()">
+        <header class="container-fluid p-lg-5 p-5">
+            {% block header %} {% endblock %}
+        </header>
+        <main class="container-fluid pl-lg-5 pr-lg-5 pl-5 pr-5">
+            {% block content %} {% endblock %}
+        </main>
+    </div>
+</div>
 
+<script>
+    function toggle_sidebar(){
+        $('.wrapper-sidebar').toggleClass('sidebar--open')
+    }
+    function close_sidebar(){
+        $('.wrapper-sidebar').removeClass('sidebar--open')
+    }
+
+</script>
 {% block extra_js %}
-
 {% endblock %}
 </body>
-
 
 </html>

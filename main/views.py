@@ -1,21 +1,23 @@
 import json
 import string
-
 from itertools import chain
-from django.utils.crypto import get_random_string
-from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
+
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.urls import reverse
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
 
-from main.forms import UserSettings, AvatarSettings, PasswordSettings, BroadcastSettings, InputBroadcastSettings, \
-    YoutubeBroadcastSettings
-from main.models import Avatar, OutputBroadcast, InputBroadcast, YoutubeSettings
+from main.forms import (UserSettings, AvatarSettings, PasswordSettings,
+                        BroadcastSettings, InputBroadcastSettings)
+from main.forms import YoutubeBroadcastSettings
+from main.models import Avatar, OutputBroadcast, InputBroadcast
+from main.models import YoutubeSettings
 from scripts.run import Server
-from scripts.youtube import main as youtube, get_user_credentials, refresh_token, stream
+from scripts.youtube import get_user_credentials, stream
 
 
 def get_menu_context():
@@ -73,7 +75,7 @@ class ProfileSettingView(View):
             form = UserSettings(request.POST, instance=request.user)
             if form.is_valid():
                 form.save()
-        return redirect(reverse('profile', kwargs={'id': request.user.id}))
+        return redirect(reverse('setting'))
 
 
 class IndexPage(View):
@@ -82,7 +84,10 @@ class IndexPage(View):
     }
 
     def get(self, request):
-        return render(request, 'pages/index.html', self.context)
+        if request.user.is_authenticated:
+            return redirect(reverse('list_stream'))
+        else:
+            return render(request, 'pages/index.html', self.context)
 
 
 class StreamStorageView(View):
@@ -103,7 +108,6 @@ class StartBroadcast(View):
         return redirect(reverse('stream_detail', kwargs={'id': id}))
 
     def post(self, request, id):
-
         server = Server.get_instance()
         broadcast = get_object_or_404(InputBroadcast, id=id, author=request.user)
         outputs = OutputBroadcast.objects.filter(input_broadcast=broadcast, is_active=True)
@@ -150,7 +154,7 @@ class DetailBroadcast(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['server_url'] = Server.get_instance().get_url(self.object.type)
+        context['server_url'] = Server.get_instance().get_url(self.object.type) + '/'
         context['youtube'] = YoutubeSettings.objects.filter(input_broadcast=self.object)
         context['outputs'] = list(chain(OutputBroadcast.objects.filter(input_broadcast=self.object), context['youtube']))
         context['is_online'] = Server.get_instance().is_broadcast_online_list(context['outputs'])

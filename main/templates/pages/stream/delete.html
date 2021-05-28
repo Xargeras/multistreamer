@@ -1,12 +1,18 @@
 {% extends 'base/base.html' %}
 
+{% block header %}
+     <h1 class="text-center">{{ pagename }}</h1>
+{% endblock %}
 
 {% block content %}
-<div class="row px-5">
-        <h1>Удаление трансляции</h1>
-        <form action="" method="post">{% csrf_token %}
+<div class="row text-center ">
+    <div class="mt-4 col-12">
+        <form action="" method="post">
+            {% csrf_token %}
             <p>Вы действительно хотите эту трансляцию "{{ object.name }}"?</p>
-        <input type="submit" value="Подтвердить" />
-    </form>
+            <button type="button" class="btn btn-outline-primary mr-3" onclick="window.history.back()">Отменить</button>
+            <input type="submit" class="btn btn-primary" value="Подтвердить" />
+        </form>
     </div>
+</div>
 {% endblock %}
