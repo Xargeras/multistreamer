@@ -43,7 +43,7 @@ body {
     transition: all .25s ease;
     --sidebar-width:60px;
     width: var(--sidebar-width);
-    position: absolute !important;
+    position: fixed !important;
     z-index: 101;
     height: 100%;
     background-color: #E9EDF0;
