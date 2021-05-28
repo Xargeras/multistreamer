@@ -126,7 +126,7 @@
                 <h5>{% if object.type == 1 %}RTSP{% else %}RTMP{% endif %} URL</h5>
                 <div class="input-group mb-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="" id="stream_url" disabled readonly
+                        <input type="text" class="form-control" placeholder="" id="stream_url" readonly
                                value="{{ server_url }}">
                         <div class="input-group-prepend">
                             <button class="btn btn-outline-secondary" data-copy="stream_url" type="button">
@@ -139,7 +139,7 @@
                 <div class="input-group mb-3">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="" id="stream_key" aria-label=""
-                               aria-describedby="basic-addon2" readonly disabled value="{{ object.key }}">
+                               aria-describedby="basic-addon2" readonly value="{{ object.key }}">
                         <div class="input-group-prepend">
                             <button class="btn btn-outline-secondary" type="button" data-copy="stream_key">
                                 <i class="fa fa-clipboard" aria-hidden="true"></i>

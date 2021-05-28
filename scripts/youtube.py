@@ -1,24 +1,21 @@
 from datetime import datetime
-import os
-import json
 
-import googleapiclient.discovery
-import googleapiclient.errors
-from google.auth import exceptions
-from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-import google_auth_oauthlib.flow
-from django.shortcuts import redirect
+from googleapiclient.discovery import build
 
-scopes = ["https://www.googleapis.com/auth/youtube", "https://www.googleapis.com/auth/youtube.force-ssl"]
+scopes = ["https://www.googleapis.com/auth/youtube",
+          "https://www.googleapis.com/auth/youtube.force-ssl"]
 
 
 def get_user_credentials():
     flow = InstalledAppFlow.from_client_secrets_file('./scripts/client_secrets.json', scopes)
     flow.run_local_server(port=0,
-                          kwargs=flow.authorization_url(access_type='offline', include_granted_scopes='true'))
+                          kwargs=flow.authorization_url(
+                              access_type='offline',
+                              include_granted_scopes='true'
+                          ))
     credentials = flow.credentials
     print(credentials.to_json())
     return credentials.to_json()
@@ -86,7 +83,8 @@ def refresh_token(credentials):
         if credentials and credentials.expired and credentials.refresh_token:
             credentials.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file('./scripts/client_secrets.json', scopes)
+            flow = InstalledAppFlow.from_client_secrets_file(
+                './scripts/client_secrets.json', scopes)
             credentials = flow.run_local_server(port=0)
     return credentials
 
@@ -117,7 +115,7 @@ def stream(credentials, settings):
 def main(settings):
     api_service_name = "youtube"
     api_version = "v3"
-    if settings == None:
+    if settings is None:
         settings = {
             "title": "Stream",
             "description": "Restream via Multistream https://multistream.io",
