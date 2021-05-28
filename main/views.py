@@ -118,7 +118,6 @@ class StartBroadcast(View):
             youtube.key = stream(youtube.user_credentials, settings)
             youtube.save()
         outputs = list(chain(youtubes, outputs))
-        print(youtubes[0].key)
         if server.is_broadcast_online_list(outputs):
             server.stop_broadcast_list(outputs)
         else:
