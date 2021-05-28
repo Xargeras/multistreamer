@@ -34,13 +34,14 @@
         <ul id="products" class="p-0 list">
             <!-- row 1 -->
             {% for el in object_list %}
-            <a class="card-link" href="{% url 'stream_detail' el.id %}">
                 <li class="clearfix mt-3">
                     <div class="card hover">
-                        <section class="left">
+                         <a class="card-link w-100" href="{% url 'stream_detail' el.id %}">
+                        <section class="left w-100">
                             <h3>{{el.name}}</h3>
                             <!--<span class="meta">Возможно тут будет ваш комментарий</span>-->
                         </section>
+                         </a>
                         <section class="row no-gutters w-100">
                             <div class="mt-4 col-md-6 pr-2">
                                 <a class="w-100 btn btn-outline-primary" href="{% url 'update_input_key' el.id %}">
@@ -55,7 +56,6 @@
                         </section>
                     </div>
                 </li>
-            </a>
             {% endfor %}
         </ul>
     </div>
