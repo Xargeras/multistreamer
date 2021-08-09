@@ -10,6 +10,7 @@ scopes = ["https://www.googleapis.com/auth/youtube",
 
 
 def get_user_credentials():
+    #a
     flow = InstalledAppFlow.from_client_secrets_file('./scripts/client_secrets.json', scopes)
     flow.run_local_server(port=0,
                           kwargs=flow.authorization_url(
